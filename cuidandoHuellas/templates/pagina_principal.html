@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuidando Huellas</title>
+    <link rel="stylesheet" href="{% static 'css/pagina_principal.css' %}">
+</head>
+    <header>
+
+        <div class="logo">
+            <a href="{% url 'pagina_principal' %}">
+                <img src="{% static 'img/logo_ch.png' %}" alt="Logo Cuidando Huellas">
+             </a>
+        </div>
+
+       <div class="botones_centro">
+        <button><a href="{% url 'mascotas_perdidas' %}">Mascotas Perdidas</a></button>
+        <button><a href="Productos.html">Productos</a></button>
+        <button><a href="{% url 'adopciones' %}">Adopciones</a></button> 
+       </div>
+       <div class="botones_derecha">
+        <a type="submit" href="iniciarSesion.html"><img src="{% static 'img/Icono_login.png' %}" alt="Login">Iniciar Sesion</a>
+        <a type="submit" href="registrarse.html"><img src="{% static 'img/Icono_registrarse.png' %}" alt="register">Registrarse</a>
+       </div>
+    </header>
+    <main>
+        <section  class="contenedor_1">
+            <div class="navegacion">
+                 <ul>
+                    <li>
+                        <a href="servicios.html">Servicios</a>
+                        <a href="about.html">About</a>
+                        <a href="contactos.html">Contactos</a>
+                    </li>
+                 </ul>
+            </div>
+            <div class="publicidad">
+                <img src="{% static 'img/publicidad.png' %}" alt="Publicidad">
+            </div>
+        </section>
+        <section class="contenedor_2">
+    
+
+            <div class="principal">
+                <div class="titulo_apartado">
+                    <h1>Mascotas perdidas</h1>
+                </div>
+                <div class="imagenes">
+                    <div class="interactivo">
+                        <img src="{% static 'img/dog.png' %}" alt="Perro">
+                        <button>Andres</button>
+                    </div>
+                    <div class="interactivo">
+                        <img src="{% static 'img/dog.png' %}" alt="Gato">
+                        <button>Max</button>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="principal">
+                <div class="titulo_apartado">
+                    <h1>Mascotas perdidas</h1>
+                </div>
+                <div class="imagenes">
+                    <div class="interactivo">
+                        <img src="{% static 'img/dog.png' %}" alt="Perro">
+                        <button>Andres</button>
+                    </div>
+                    <div class="interactivo">
+                        <img src="{% static 'img/cat.png' %}" alt="Gato">
+                        <button>Max</button>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="titulo_footer">
+            <h1>Nuestras redes</h1>
+            <h2>Siguenos y descubre nuestro contenido de interes:</h2>
+        </div>
+        <div class="redes">
+            <img src="{% static 'img/facebook.png' %}" alt="facebook">
+            <img src="{% static 'img/instagram.png' %}" alt="instagram">
+            <img src="{% static 'img/tiktok.png' %}" alt="tiktok">
+        </div>
+    </footer>
+<body>
+    
+</body>
+</html>

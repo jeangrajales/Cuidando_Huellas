@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopciones - Huellas</title>
+    <link rel="stylesheet" href="{% static 'css/adopciones.css' %}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="landingPage.html">
+                <img src="{% static 'img/logo_ch.png' %}" alt=" Logo Cuidando Huellas">
+            </a>
+        </div>
+           
+        <div class="search-container">
+            <input type="text" placeholder="Buscar" class="search-bar">
+            <button type="submit" class="search-btn">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Servicios</a></li>
+                <li><a href="blogs.html">Blogs</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="filtro">
+            <form action="">
+               <h1>Filtrar Por:</h1>
+               <input type="radio">
+               <label for="">Perros</label><br>
+               <input type="radio">
+               <label for="">Gatos</label><br>
+               <input type="radio">
+               <label for="">todos</label><br>
+               <h1>Sexo</h1>
+               <input type="radio">
+               <label for="">Hembra</label><br>
+               <input type="radio">
+               <label for="">Macho</label><br>
+               <h1>Tamaño</h1>
+               <input type="radio">
+               <label for="">Grande</label><br>
+               <input type="radio">
+               <label for="">Mediano</label><br>
+               <input type="radio">
+               <label for="">Pequeños</label><br>
+            </form>
+            
+        </section>
+
+        <section class="adoption-section">
+            <div class="bonones_menu">
+                <button>Mascotas Perdidas</button>
+                <button>Productos</button>
+                <button class="active">Adopciones</button>
+                <button>Veterinaria Asociada</button>
+            </div>
+
+            <div class="adoption-tarjeta">
+                <div class="tarjeta">
+                    <img src="{% static 'img/img_perro_adopcion.png' %}" alt="Perrito">
+                    <p>Edad: 2</p>
+                    <p>Sexo: Hembra</p>
+                </div>
+                <div class="tarjeta">
+                    <img src="{% static 'img/img_perro_adopcion.png' %}" alt="Perrito">
+                    <p>Edad: 3</p>
+                    <p>Sexo: Hembra</p>
+                </div>
+                <div class="tarjeta">
+                    <img src="{% static 'img/img_perro_adopcion.png' %}" alt="Perrito">
+                    <p>Edad: 4</p>
+                    <p>Sexo: Hembra</p>
+                </div>
+                <div class="tarjeta">
+                    <img src="{% static 'img/img_perro_adopcion.png' %}" alt="Perrito">
+                    <p>Edad: 2</p>
+                    <p>Sexo: Hembra</p>
+                </div>
+                <div class="tarjeta">
+                    <img src="{% static 'img/img_perro_adopcion.png' %}" alt="Perrito">
+                    <p>Edad: 3</p>
+                    <p>Sexo: Hembra</p>
+                </div>
+                <div class="tarjeta">
+                    <img src="{% static 'img/img_perro_adopcion.png' %}" alt="Perrito">
+                    <p>Edad: 4</p>
+                    <p>Sexo: Hembra</p>
+                </div>
+                <div class="tarjeta">
+                    <img src="{% static 'img/img_perro_adopcion.png' %}" alt="Perrito">
+                    <p>Edad: 5</p>
+                    <p>Sexo: Hembra</p>
+                </div>
+                <div class="tarjeta">
+                    <img src="{% static 'img/img_perro_adopcion.png' %}" alt="Perrito">
+                    <p>Edad: 2</p>
+                    <p>Sexo: Hembra</p>
+                </div>
+                <div class="tarjeta">
+                    <img src="{% static 'img/img_perro_adopcion.png' %}" alt="Perrito">
+                    <p>Edad: 2</p>
+                    <p>Sexo: Hembra</p>
+                </div>
+                
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>La adopción de nuestra plataforma refleja su eficacia y confianza. Miles de usuarios ya la prefieren, demostrando su valor y relevancia. ¡Únete y experimenta la diferencia!</p>
+        <div class="footer_logo">
+            <img src="{% static 'img/logo_ch.png' %}" alt="logo Cuidando Huellas">
+        </div> 
+    </footer>
+</body>
+</html>

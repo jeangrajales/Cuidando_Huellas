@@ -1,0 +1,362 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    color: #000000;
+    cursor: cell;
+}
+
+
+header {
+    background-color: #519be4;
+    color: rgb(212, 172, 172);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+header .logo img {
+    width: 80px;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+header nav ul li a {
+    color: rgb(248, 248, 248);
+    text-decoration: none;
+    font-size: 16px;
+}
+/* Estilos para la barra de búsqueda */
+.search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.search-bar {
+    padding: 10px 20px;
+    width: 250px; /* Ancho de la barra de búsqueda */
+    border-radius: 50px;
+    border: none;
+    outline: none;
+}
+
+.search-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.search-btn i {
+    font-size: 16px;
+    color: #595959;
+}
+
+.bonones_menu {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.bonones_menu button {
+    padding: 20px;
+    border: none;
+    background-color: #855efa;
+    color: white;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+.bonones_menu button.active {
+    background-color: #865dad;
+}
+.principal ll {
+    display: block;
+    background-color: #855efa;
+}
+.logo img {
+    height: 80px;
+}
+
+h1 {
+    color: white;
+}
+
+nav ul {
+    list-style-type: none;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+main {
+    padding: 20px;
+}
+
+.pet-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.pet-card {
+    background-color: #8cc6ff;
+    border-radius: 10px;
+    padding: 20px;
+    
+}
+
+.pet-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pet-details {
+    width: 60%;
+}
+
+.pet-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.etiquetas {
+    display: flex;
+    align-items: center;
+    background-color: #1a2a43; /* Fondo oscuro en el lado derecho */
+    border-radius: 15px;
+    overflow: hidden;
+    width: 80%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-left: 150px;
+}
+
+
+.etiquetas-content {
+    background-color: #6499e8; /* Fondo azul claro */
+    padding: 20px;
+    width: 70%;
+    color: #333;
+}
+
+.etiquetas-content h2 {
+    font-size: 25px;
+    color: #000;
+    margin-bottom: 15px;
+}
+
+.info {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.label {
+    background-color: #e3dbd7; /* Color las etiquetas */
+    color: #000000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.etiquetas-content p {
+    margin-top: 5px;
+    font-size: 20px;
+    color: #333;
+}
+
+/* imagenes*/
+.etiquetas-image {
+    
+    width: 4%;
+    background-color: #1a2a43;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+}
+
+.etiquetas-image img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #b3daff;
+    margin-top: 20px;
+}
+
+footer .social-icons img {
+    width: 30px;
+    margin: 0 10px;
+}
+
+.huellas-1{
+    position: absolute;
+    top: 8em;
+    left: 0em;
+}
+
+.huellas-2{
+    position: absolute;
+    left: 4.5em;
+}
+
+.huellitas-3{
+    margin-top: 4em;
+}
+
+.huellitas-4{
+    margin-top: 4.5em;
+}
+
+.huellas-3{
+    position: absolute;
+    right: 0em;
+    top: 8em;
+}
+
+.huellas-4{
+    position: absolute;
+    right: 4em;
+}
+
+/* Estilos existentes ... */
+
+/* Media Queries para diseño responsive */
+
+/* Para tablets y dispositivos medianos */
+@media screen and (max-width: 768px) {
+    header {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .search-bar {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    .etiquetas {
+        width: 90%;
+        margin-left: 5%;
+        flex-direction: column;
+    }
+
+    .etiquetas-content {
+        width: 100%;
+    }
+
+    .etiquetas-image {
+        width: 100%;
+        padding: 20px 0;
+    }
+
+    .bonones_menu {
+        flex-wrap: wrap;
+    }
+
+    .bonones_menu button {
+        flex: 1 1 40%;
+    }
+}
+
+/* Para smartphones y dispositivos pequeños */
+@media screen and (max-width: 480px) {
+    header .logo img {
+        width: 60px;
+    }
+
+    .pet-info {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .pet-details {
+        width: 100%;
+        text-align: center;
+    }
+
+    .pet-image img {
+        width: 120px;
+        height: 120px;
+        margin-top: 10px;
+    }
+
+    .etiquetas-content h2 {
+        font-size: 20px;
+    }
+
+    .label {
+        font-size: 12px;
+    }
+
+    .etiquetas-content p {
+        font-size: 16px;
+    }
+
+    .bonones_menu button {
+        flex: 1 1 100%;
+    }
+
+    .huellas-1, .huellas-2, .huellas-3, .huellas-4 {
+        display: none; /* Ocultar huellas en dispositivos muy pequeños para ahorrar espacio */
+    }
+}
+
+/* Ajustes adicionales para mejorar la legibilidad en dispositivos pequeños */
+@media screen and (max-width: 320px) {
+    body {
+        font-size: 14px;
+    }
+
+    header nav ul li a {
+        font-size: 14px;
+    }
+
+    .etiquetas-content h2 {
+        font-size: 18px;
+    }
+
+    .label {
+        font-size: 11px;
+    }
+
+    .etiquetas-content p {
+        font-size: 14px;
+    }
+}

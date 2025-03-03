@@ -1,0 +1,209 @@
+/* Base styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #427093;
+}
+
+/* Header styles */
+header {
+    background-color: #519be4;
+    color: rgb(212, 172, 172);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+header .logo img {
+    width: 80px;
+    height: 80px;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 0;
+}
+
+header nav ul li a {
+    color: rgb(248, 248, 248);
+    text-decoration: none;
+    font-size: 16px;
+}
+
+/* Search container styles */
+.search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 10px 0;
+}
+
+.search-bar {
+    padding: 10px 20px;
+    width: 100%;
+    max-width: 250px;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+}
+
+.search-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.search-btn i {
+    font-size: 16px;
+    color: #595959;
+}
+
+/* Main content styles */
+main {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Filter styles */
+.filtro {
+    width: 100%;
+    background-color: #84a5c9;
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.filtro h1 {
+    margin-bottom: 10px;
+    color: white;
+}
+
+.filtro label {
+    color: white;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+/* Adoption section styles */
+.adoption-section {
+    width: 100%;
+}
+
+.bonones_menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.bonones_menu button {
+    padding: 10px;
+    border: none;
+    background-color: #84a5c9;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.bonones_menu button.active {
+    background-color: #5a7f9b;
+}
+
+.adoption-tarjeta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.tarjeta {
+    background-color: #d9e7f1;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.tarjeta img {
+    width: 100%;
+    max-width: 200px;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.tarjeta p {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+/* Footer styles */
+footer {
+    background-color: #72c0ff;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+}
+
+.footer_logo img {
+    width: 80px;
+    max-width: 100%;
+}
+
+/* Responsive */
+@media screen and (min-width: 768px) {
+    main {
+        flex-direction: row;
+    }
+
+    .filtro {
+        width: 25%;
+        margin-right: 20px;
+        margin-bottom: 0;
+    }
+
+    .adoption-section {
+        width: 75%;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .adoption-tarjeta {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+:focus {
+    outline: 2px solid #519be4;
+    outline-offset: 2px;
+}
+
