@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/iniciar_sesion.css' %}">
+    <title>Iniciar Sesion</title>
+</head>
+<body>
+    <main>
+
+        <section class="contenedor-registrarse">
+          
+            <div class="img-sesion">  
+                <img src="{% static 'img/img_inicio_sesion.png' %}" alt="Img Sesion">
+            </div>
+            <div class="icono-sesion">
+                <img src="{% static 'img/icono_usuario.png' %}" alt="Icono login">
+                <h1>INICIAR SESION</h1>
+            </div>
+            <div class="label-sesion">
+                <input type="text" name="" id="" placeholder="Telefono o Correo electronico" required>
+                <input type="password" placeholder="Contraseña" required>
+            </div>
+
+            <div class="recuperar-check">
+                <p>¿Recuperar Contraseña?</p>
+                <input type="checkbox" name="checkbox" id="">
+                <label for="checkbox">Recuerdame</label>
+            </div>
+            <div class="label-entrar">
+                <a href="">Entrar</a>
+            </div>
+
+            <div class="enlaces">
+                <a href="https://accounts.google.com/v3/signin/identifier?service=CPanel&continue=https%3A%2F%2Fadmin.google.com%2Fctech.mx%2FDashboard&hl=es&ddm=1&flowName=GlifWebSignIn&flowEntry=AccountChooser">Iniciar Sesion con Google</a>
+                <a href="https://es-la.facebook.com/login/device-based/regular/login/">Iniciar Sesion con Facebook</a>
+            </div>
+
+            <div class="registrar">
+                <a href="registrarse.html">¿No estas registrado?</a>
+            </div>
+
+        </section>
+
+
+    </main>
+</body>
+</html>

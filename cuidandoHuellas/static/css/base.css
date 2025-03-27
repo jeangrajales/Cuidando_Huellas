@@ -1,0 +1,138 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    background-color: white;
+    font-family: 'Gupter', serif;
+    font-size: 1.2em;
+}
+
+header {
+    background-color: #B79C6F;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 12%;
+    padding: 10px;
+    align-items: center;
+}
+
+.logo {
+    width: 8%;
+    height: 90%;
+}
+
+.logo img {
+    width: 80%;
+    height: 130%;
+    margin-top: -1em;
+}
+
+.botones_centro {
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.botones_centro a {
+    color: white;
+    text-decoration: none;
+}
+
+.botones_centro a:hover{
+    background-color: #7F694A ;
+    border-radius: 1em;
+}
+.botones_derecha {
+    width: 27%;
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.botones_derecha a {
+    border-radius: 12px;
+    border: 1px solid #000;
+    background: #807A6C;
+    display: inline-flex;
+    padding: 4% 16px;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.btn-registrarse{
+    background-color: #403D36 !important;
+}
+
+.navegar{
+    /* background-color: red; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    gap: 20em;
+}
+
+.btn-nav button{
+    background-color: #B79C6F;
+    color: white;
+    border: none;
+    width: 150px;
+    height: 50px;
+    border-radius: 6px;
+    box-shadow: 10px 5px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+.btn-nav button:hover{
+    background-color: #7F694A;
+}
+
+footer {
+    margin-top: 8em;
+    text-align: center;
+    background-size: cover;
+    background-image: url("/static/img/imagen_footer_pg.png");
+    height: 190px;
+}
+
+.img-libre {
+    position: absolute;
+    top: 63.3em;  /* Distancia desde la parte superior */
+    left: 45em; /* Distancia desde la izquierda */
+    width: 150px; /* Tamaño personalizado */
+    height: auto;
+}
+
+.img_gato_izq{
+    position: absolute;
+    top: 69.3em;  /* Distancia desde la parte superior */
+    left: 12em; /* Distancia desde la izquierda */
+    width: 150px; /* Tamaño personalizado */
+    height: auto;
+}
+.img_gato_der{
+    position: absolute;
+    top: 69.3em;  /* Distancia desde la parte superior */
+    left: 84em; /* Distancia desde la izquierda */
+    width: 150px; /* Tamaño personalizado */
+    height: auto;
+}
+
+.redes{
+    top: 72em;
+    left: 36em;
+    position: absolute;
+    width: 28%;
+}
+
+.redes img{
+    margin: 1em;
+}

@@ -1,0 +1,71 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Gupter:wght@400;500;700&display=swap" rel="stylesheet">
+    {% block estilos_unicos %}{% endblock %}
+    <title>CH - {% block titulo %} ... {% endblock %} </title>
+</head> 
+<body>
+    <header>
+
+        <div class="logo">
+            <a href="{% url 'pagina_principal' %}">
+                <img src="{% static 'img/logo_ch.png' %}" alt="Logo Cuidando Huellas">
+             </a>
+        </div>
+
+       <div class="botones_centro">
+        <a href="{% url 'nuestros_servicios' %}">Nuestros Servicios</a>
+        <a href="#">Quiénes Somos</a>
+        <a href="#">Contactos</a>
+       </div>
+       <div class="botones_derecha">
+        <a href="{% url 'iniciar_sesion' %}">
+            <img src="{% static 'img/icono_login.png' %}" alt="Login">Iniciar Sesion
+        </a>
+
+        <a href="{% url 'registrarse' %}" class="btn-registrarse">
+            <img src="{% static 'img/icono_register.png' %}" alt="register">Registrarse</a>
+       </div>
+
+    </header>
+    <main>
+        <section class="navegar">
+            <a href="{% url 'mascotas_perdidas' %}" class="btn-nav">
+                <button>Mascotas Perdidas</button>
+            </a>
+            <a href="#" class="btn-nav">
+                <button>Productos</button>
+            </a>
+            <a href="{% url 'nuestros_servicios' %}" class="btn-nav">
+                <button>Servicios</button>
+            </a>
+            <a href="#" class="btn-nav">
+                <button>Veterinarias Asociadas</button>
+            </a>
+        </section>
+    </main>
+
+        {% block contenido %}
+
+        {% endblock %}
+
+    <footer>
+        <img src="{% static 'img/Silueta_perro.png' %}" alt="Imagen posicionada" class="img-libre">
+        <img src="{% static 'img/Silueta_gato_der.png' %}" alt="Imagen gato derecha " class="img_gato_izq">
+        <img src="{% static 'img/silueta_gato_izq.png' %}" alt="Imagen gato izquierda" class="img_gato_der">
+        <div class="redes">
+            <img src="{% static 'img/facebook.png' %}" alt="Facebook">
+            <img src="{% static 'img/instagram.png' %}" alt="Instagram">
+            <img src="{% static 'img/tiktok.png' %}" alt="TikTok">
+            <p>@ CuidandoHuellas - 2021 - Todos los derechos reservados</p>
+        </div>
+     </footer>
+    
+</body>
+</html>

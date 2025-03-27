@@ -1,0 +1,165 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    background-image: linear-gradient(to right, #B7E9FF, #8d8987);
+}
+
+
+.contenedor-registrarse {
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    width: 60%;
+    height: auto; /* Cambia a auto para que se ajuste al contenido */
+    padding: 18%;
+    background-color: #B79C6F;
+}
+
+.imagen-registrarse img {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    width: 42%;
+    height: 100%;
+}
+
+.logo-registrarse {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    gap: 20%;
+    position: absolute;
+    top: 30px;
+    left: 100px;
+    width: 10%;
+}
+
+.logo-registrarse img {
+    width: 100%;
+    height: 50%;
+}
+
+.contenedor-labels {
+    position: absolute;
+    top: 10em;
+    left: 6.5em;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.label [type="text"],
+.label [type="number"],
+.label [type="email"],
+.label [type="password"] {
+    width: 25em;
+    padding: 0.5em;
+    border-radius: 1em;
+    border-style: solid;
+    text-align: center;
+}
+
+.label [type="checkbox"] {
+    background-color: red;
+    margin-left: 1em;
+    transform: scale(1.3);
+}
+
+.label [for="check"] {
+    margin-left: 2.5em;
+    color: white;
+    font-size: 0.8em;
+}
+
+.label [type="submit"] {
+    background-color: #403D36;
+    color: white;
+    margin-left: 12em;
+    margin-top: 2em;
+    width: 10em;
+    padding: 1em;
+    border-style: none;
+    border-radius: 0.5em;
+}
+
+/* Media Queries para hacerlo responsive */
+
+/* Pantallas medianas (tablets) */
+@media (max-width: 768px) {
+    .contenedor-registrarse {
+        left: 10%;
+        width: 80%;
+        padding: 10%;
+    }
+
+    .imagen-registrarse img {
+        width: 50%;
+    }
+
+    .logo-registrarse {
+        left: 50px;
+    }
+
+    .contenedor-labels {
+        left: 3em;
+    }
+
+    .label [type="text"],
+    .label [type="number"],
+    .label [type="email"],
+    .label [type="password"] {
+        width: 20em;
+    }
+
+    .label [type="submit"] {
+        margin-left: 8em;
+    }
+}
+
+/* Pantallas pequeñas (móviles) */
+@media (max-width: 480px) {
+    .contenedor-registrarse {
+        left: 5%;
+        width: 90%;
+        padding: 5%;
+    }
+
+    .imagen-registrarse img {
+        display: none; /* Oculta la imagen en móviles para ahorrar espacio */
+    }
+
+    .logo-registrarse {
+        left: 20px;
+        top: 10px;
+    }
+
+    .contenedor-labels {
+        top: 6em;
+        left: 1em;
+    }
+
+    .label [type="text"],
+    .label [type="number"],
+    .label [type="email"],
+    .label [type="password"] {
+        width: 15em;
+    }
+
+    .label [type="submit"] {
+        margin-left: 5em;
+    }
+
+    .label [for="check"] {
+        font-size: 0.4em; /* Reduce el tamaño del texto en móviles */
+    }
+}

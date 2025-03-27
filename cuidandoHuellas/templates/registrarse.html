@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/registrarse.css' %}">
+    <title>Registrarse</title>
+</head>
+<body>
+    <main>
+
+        <section class="contenedor-registrarse">
+            
+            <section class="logo-info">
+                <div class="logo-registrarse">
+                    <img src="{% static 'img/logo_ch.png' %}" alt="Logo Cuidando Huellas">
+                    <h1>BIENVENIDO REGISTRATE</h1>
+                </div>
+            <section>
+
+            <section class="imagen-registrarse">
+                <img src="{% static 'img/image_registrarse.png' %}" alt="Imagen Perro Registrarse">
+            </section>
+            <div class="contenedor-labels">
+                <form action="">
+                    <div class="label">
+                        <img src="{% static 'img/frame_user.png' %} " alt="Usuario">
+                        <input type="text" name="" id="" placeholder="Nombre Completo" required>  
+                    </div>
+                    <div class="label">
+                        <img src="{% static 'img/frame_ciudad.png' %}" alt="Ciudad">
+                        <input type="text" name="" id="" placeholder="Ciudad" required>  
+                    </div>
+                    <div class="label">
+                        <img src="{% static 'img/frame_telefono.png' %}" alt="Telefono">
+                        <input type="number" name="" id="" placeholder="Telefono" required>  
+                    </div>
+                    <div class="label">
+                        <img src="{% static 'img/frame_email.png' %}" alt="Email">
+                        <input type="email" name="" id="" placeholder="Correo Electronico" required>  
+                    </div>
+                    <div class="label">
+                        <img src="{% static 'img/contraseña.png' %}" alt="Contraseña">
+                        <input type="password" name="" id="" placeholder="Contraseña Nueva" required>  
+                    </div>
+                    <div class="label">
+                        <img src="{% static 'img/contraseña.png' %}" alt="Contraseña">
+                        <input type="password" name="" id="" placeholder="Confirmar Contraseña" required>  
+                    </div>
+                    <div class="label">
+                        <input type="checkbox" name="check" id="" required>
+                        <label for="check">Al registrarme, acepto los términos y condiciones, política <br> de privacidad y condiciones de uso de acuerdo <br> a la normativa vigente para la protección de datos personales.</label>  
+                    </div>
+                    <div class="label">
+                        <input type="submit" value="Registrarse">  
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+
+
+    </main>
+</body>
+</html>

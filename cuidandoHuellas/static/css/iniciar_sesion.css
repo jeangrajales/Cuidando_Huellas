@@ -1,0 +1,114 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    background-color: white;
+    font-family: 'Gupter', serif;
+    font-size: 1.2em;
+}
+
+.contenedor-registrarse{
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    width: 60%;
+    height: 100px;
+    padding: 18%;
+    overflow: hidden;
+    background-color: #B79C6F;
+}
+
+.img-sesion img{
+    position: absolute;
+    width: 50%;
+    top: 0em;
+    left: 0em;
+}
+
+.icono-sesion img{
+    width: 30%;
+}
+
+.icono-sesion{
+    position: absolute;
+    right: 9em;
+    top: 3em;
+    text-align: center;
+    color: #000000;
+}
+
+.label-sesion{
+    position: absolute;
+    left: 34em;
+    display: flex;
+    flex-direction: column;
+    top: 8em;
+}
+
+.label-sesion [type="text"], [type="password"]{
+    text-align: center;
+    width: 200%;
+    padding: 1em;
+    margin-top: 2em;
+    border-radius: 1em;
+    border-style: none;
+}
+
+.recuperar-check p{
+    text-decoration: underline;
+}
+
+.recuperar-check{
+    position: absolute;
+    right: 16em;
+    color: white;
+    top: 17em;
+}
+
+.recuperar-check [type="checkbox"],[ for="checkbox"]{
+    margin-top: 1em;
+    transform: scale(1.5);
+    margin-left: 0.5em;
+}
+
+.label-entrar{
+    position: absolute;
+    text-align: center;
+    top: 23em;
+    right: 9em;
+    background-color:#403D36;
+    width: 10em;
+    padding: 1em;
+    border-style: none;
+    border-radius: 0.5em;
+}
+
+.label-entrar a{
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.enlaces{
+    display: flex;
+    position: absolute;
+    flex-direction: column; 
+    top: 27em;
+    right: 8em;
+}
+.enlaces a{
+    color: white;
+    margin-top: 1em;
+}
+
+.registrar a{
+    position: absolute;
+    color: white;
+    top: 34em;
+    right: 10em;
+}
