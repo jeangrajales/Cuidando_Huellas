@@ -14,7 +14,6 @@ class Usuario(models.Model):
         (3, "Empleado")
     )
     rol = models.IntegerField(choices=ROLES, default=2)
-    foto = models.CharField(max_length=10)      # cambiar a ImageField -> Pillow
-
+    
     def __str__(self):
         return f"{self.nombre_completo} - {self.correo}"
