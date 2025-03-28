@@ -6,66 +6,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css.map' %}">
     <link href="https://fonts.googleapis.com/css2?family=Gupter:wght@400;500;700&display=swap" rel="stylesheet">
     {% block estilos_unicos %}{% endblock %}
     <title>CH - {% block titulo %} ... {% endblock %} </title>
 </head> 
 <body>
     <header>
-
-        <div class="logo">
-            <a href="{% url 'pagina_principal' %}">
-                <img src="{% static 'img/logo_ch.png' %}" alt="Logo Cuidando Huellas">
-             </a>
-        </div>
-
-       <div class="botones_centro">
-        <a href="{% url 'nuestros_servicios' %}">Nuestros Servicios</a>
-        <a href="#">Quiénes Somos</a>
-        <a href="#">Contactos</a>
-       </div>
-       <div class="botones_derecha">
-        <a href="{% url 'iniciar_sesion' %}">
-            <img src="{% static 'img/icono_login.png' %}" alt="Login">Iniciar Sesion
-        </a>
-
-        <a href="{% url 'registrarse' %}" class="btn-registrarse">
-            <img src="{% static 'img/icono_register.png' %}" alt="register">Registrarse</a>
-       </div>
+        <nav class="navbar navbar-expand-lg  bg_header">
+            <div class="container-fluid">
+              <a href="{% url 'pagina_principal' %}" class="ctnd-logo">
+                <img src="{% static 'img/logo_ch.png' %}" class="width_logo" alt="logo cuidando Huellas">
+              </a>   
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse list_center" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active text-white" href="{% url 'nuestros_servicios' %}">Nuestros Servicios</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active text-white" href="#">Contactos</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active text-white" href="#">Quienes Somos</a>
+                  </li>
+                </ul>
+                <button type="button" class="btn btn-primary btn-lg me-3 text-nowrap btn-sm">Iniciar Sesion</button>
+                <button type="button" class="btn btn-secondary btn-lg btn-sm">Registrarse</button>
+              </div>
+            </div>
+          </nav>
 
     </header>
-    <main>
-        <section class="navegar">
-            <a href="{% url 'mascotas_perdidas' %}" class="btn-nav">
-                <button>Mascotas Perdidas</button>
-            </a>
-            <a href="#" class="btn-nav">
-                <button>Productos</button>
-            </a>
-            <a href="{% url 'nuestros_servicios' %}" class="btn-nav">
-                <button>Servicios</button>
-            </a>
-            <a href="#" class="btn-nav">
-                <button>Veterinarias Asociadas</button>
-            </a>
-        </section>
-    </main>
+    <div class="container text-center mt-4">
+        <div class="btn_container">
+            <div class="col-md-3">
+                <button class="btn btn-outline-secondary text-nowrap width_boton ">Mascotas Perdidas</button>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-outline-secondary text-nowrap width_boton">Productos</button>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-outline-secondary text-nowrap width_boton">Servicios</button>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-outline-secondary text-nowrap width_boton">Veterinarias Asociadas</button>
+            </div>
+        </div>
+    </div>
+    
+    
 
         {% block contenido %}
 
         {% endblock %}
 
-    <footer>
-        <img src="{% static 'img/Silueta_perro.png' %}" alt="Imagen posicionada" class="img-libre">
-        <img src="{% static 'img/Silueta_gato_der.png' %}" alt="Imagen gato derecha " class="img_gato_izq">
-        <img src="{% static 'img/silueta_gato_izq.png' %}" alt="Imagen gato izquierda" class="img_gato_der">
-        <div class="redes">
-            <img src="{% static 'img/facebook.png' %}" alt="Facebook">
-            <img src="{% static 'img/instagram.png' %}" alt="Instagram">
-            <img src="{% static 'img/tiktok.png' %}" alt="TikTok">
-            <p>@ CuidandoHuellas - 2021 - Todos los derechos reservados</p>
-        </div>
-     </footer>
-    
+        <footer class="text-light py-4 mt-5" style="background-color: #B79C6F;">
+            <div class="container text-center">
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <h5>Contacto</h5>
+                  <p>Email: cuidandohuellas@hotmail.com</p>
+                  <p>Tel: +57 302 575 5799</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <img src="{% static 'img/logo_ch.png' %}" class="w-25 " alt="">
+                </div>
+                <div class="col-md-4">
+                  <h5>© 2025 Cuidando Huellas</h5>
+                  <p>Todos los derechos reservados</p>
+                </div>
+              </div>
+            </div>
+          </footer>
+
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.bundle.min.js.map' %}"></script>
 </body>
 </html>

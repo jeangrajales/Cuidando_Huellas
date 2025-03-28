@@ -8,30 +8,66 @@
 {% block titulo %} Pagina Principal {% endblock %}
 
 {% block contenido %}
-    <section class="ctnd-principal">
-        <section class="img-publicidad">
-                <img src="{% static 'img/imagen_publicidad_pg.png' %}" alt="Imagen Publicidad">
-        </section>
-        <section class="tarjetas-img">
-            <div class="tarjeta-1">
-                <h1>Mascotas en adopcion</h1>
-                <img src="{% static 'img/imagen_perro1_pg.png' %}" alt=" Imagen perro 1">
-            </div> 
-            <div class="tarjeta-1">
-                <h1>Adopciones</h1>
-                <img src="{% static 'img/imagen_gato_pg.png' %}" alt=" Imagen Gato">
-            </div> 
-            <div class="tarjeta-1">
-                <h1>Mascotas en adopcion</h1>
-                <img src="{% static 'img/imagen_perro2_pg.png' %}" alt="Imagen Perro 2">
-            </div> 
-            <div class="tarjeta-1">
-                <h1>Adopciones</h1>
-                <img src="{% static 'img/imagen_perro3_pg.png' %}" alt="Imagen Perro 3">
-            </div> 
-         </section>
-            
-    </section>
+<div class="container text-center mt-4" style="max-width: 900px;">
+    <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="10000">
+            <img src=" {% static 'img/imagen_publicidad_pg.png' %}" class="d-block w-100" alt="Publicidad 1">
+        </div>
+        <div class="carousel-item" data-bs-interval="2000">
+            <img src=" {% static 'img/imagen_publicidad_pg.png' %}" class="d-block w-100" alt="Publicidad 2">
+        </div>
+        <div class="carousel-item">
+            <img src=" {% static 'img/imagen_publicidad_pg.png' %}" class="d-block w-100" alt="Publicidad 3">
+        </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <div class="container mt-4 mx-auto">
+        <div class="row">
+            <div class="col-md-6 mb-4 card_center ">
+                <div class="card text-center bg-light border-0 fixed-width">
+                    <div class="card-header bg-brown text-white fw-bold">
+                        Mascotas en Adopción
+                    </div>
+                    <img src="{% static 'img/mascota_adopcion.jpg' %}" class="card-img-top rounded img-fixed" alt="Mascotas en Adopción">
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 card_center ">
+                <div class="card text-center bg-light border-0 fixed-width">
+                    <div class="card-header bg-brown text-white fw-bold">
+                        Mascotas Perdidas
+                    </div>
+                    <img src="{% static 'img/mascota_perdida.jpg' %}" class="card-img-top rounded img-fixed" alt="Mascota Perdida">
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 card_center ">
+                <div class="card text-center bg-light border-0 fixed-width">
+                    <div class="card-header bg-brown text-white fw-bold">
+                        Mascotas Rescatadas
+                    </div>
+                    <img src="{% static 'img/gato.jpg' %}" class="card-img-top rounded img-fixed" alt="Adopciones">
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 card_center ">
+                <div class="card text-center bg-light border-0 fixed-width">
+                    <div class="card-header bg-brown text-white fw-bold">
+                        Mascotas en adopcion
+                    </div>
+                    <img src="{% static 'img/gato2.jpg' %}" class="card-img-top rounded img-fixed" alt="Adopciones">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div> 
     
 {% endblock %}
     

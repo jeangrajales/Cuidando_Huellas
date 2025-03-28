@@ -1,61 +1,23 @@
-
-.ctnd-principal{
-    background-color: #B79C6F;
-    width: 92%;
-    max-width: 2000px; 
-    height: 50em;
-    margin: 0 auto;
-}
-
-.img-publicidad{
-    background-color: blue;
-    width: 100%;
-    height: 22em; /* Ajusta según lo que necesites */
-    position: relative;
-    overflow: hidden;
-}
-
-.img-publicidad img{
-    width: 100%;
-    height: 100%;
-}
-
-
-.tarjetas-img {
-    color: white;
-    width: 87%;
-    height: auto;
-    margin: 30px auto;
-    display: grid;
-    margin-left: 7em;
-    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-    gap: 50px; /* Espacio entre tarjetas */
-    justify-content: center;
-}
-
-.tarjeta-1 {
-    margin-left: 8em;
-    text-align: center;
-    width: 50%;
-    height: 200px;
-    /* background-color: #574B8E; */
+.fixed-width {
+    width: 300px; 
+    background-color: #D5C3A3; 
     border-radius: 10px;
     padding: 10px;
 }
 
-.tarjeta-1 h1 {
-    margin-left: 0.6em;
-    width: 14em;
-    padding: 0.2em;
-    border-radius: 0.5em;
+.img-fixed {
+    width: 100%; 
+    height: 180px;
+    object-fit: cover; 
+    border-radius: 0 0 10px 10px;
+}
+
+.bg-brown{
     background-color: #654823;
 }
 
-.tarjeta-1 img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* Ajuste sin recorte */
+.card_center{
+    display: flex;
+    justify-content: center !important;
 }
-
-
 

@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block estilos_unicos %}
+  <link rel="stylesheet" href="{% static 'css/nuestros_servicios.css' %}">
+{% endblock %}
+
+{% block titulo %} Nuestro Servicios {% endblock %}
+
+
+  {% block contenido %}
+    <figure class="text-center mt-5">
+        <blockquote class="blockquote">
+          <h5>Nuestro Servicios</h5>
+        </blockquote>
+        <figcaption>
+          <p>En nuestra aplicacion podras encontrar una amplia variedad <br> de servicios diseñados para facilitar el cuidado y bienestar de tu mascota</p>
+        </figcaption>
+      </figure>
+
+    <div class="row g-0 mt-5 w-50  mx-auto text-center "> 
+  
+        <div class="col-12 col-md-4"> 
+          <div class="card h-100 w-100"> <!-- Tarjeta ocupa todo el ancho de la columna -->
+            <img src="{% static 'img/chip_collar.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
+            <div class="card-body text-center">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+            </div>
+          </div>
+        </div>
+      
+        <div class="col-12 col-md-4"> 
+          <div class="card h-100 w-100">
+            <img src="{% static 'img/chip_collar.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
+            <div class="card-body text-center">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">This is a short card.</p>
+            </div>
+          </div>
+        </div>
+      
+        <div class="col-12 col-md-4"> 
+          <div class="card h-100 w-100">
+            <img src="..." class="card-img-top w-50 d-block mx-auto" alt="...">
+            <div class="card-body text-center">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4"> 
+            <div class="card h-100 w-100"> <!-- Tarjeta ocupa todo el ancho de la columna -->
+              <img src="{% static 'img/chip_collar.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
+              <div class="card-body text-center">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-12 col-md-4"> 
+            <div class="card h-100 w-100">
+              <img src="{% static 'img/chip_collar.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
+              <div class="card-body text-center">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a short card.</p>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-12 col-md-4"> 
+            <div class="card h-100 w-100">
+              <img src="..." class="card-img-top w-50 d-block mx-auto" alt="...">
+              <div class="card-body text-center">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+              </div>
+            </div>
+          </div>
+      
+      </div>
+    
+  {% endblock %}
+      
+ 
+
