@@ -53,13 +53,13 @@
       <button class="post-nav-button">Veterinarias asociadas</button>
     </div>
     
-    <div class="text-center" style="padding-top: 20%;">
+    <!-- <div class="text-center" style="padding-top: 20%;">
       {% if request.session.pista %}
       
       
       Bienvenido, si hay Sesion
       {{ request.session.pista }} 
-      <br> <!-- Mostrar true-->
+      <br> Mostrar true
       <br>
       <a href="{% url 'cerrar_sesion' %}" class="btn btn-success mt-3">Cerrar Sesion</a>
       
@@ -67,9 +67,9 @@
       {% else %}
       
       No hay sesion, vaya al login primero 
-      {{ request.session.pista }}  <!-- Mostrar None -->
+      {{ request.session.pista }}  Mostrar None 
 
-      {% endif %}
+      {% endif %} -->
     
 
         {% block contenido %}

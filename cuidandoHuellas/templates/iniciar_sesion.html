@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -24,49 +25,33 @@
               <div class="container">
                 <div class="row">
                   <div class="col-lg-7 col-xl-6 mx-auto">
-                    <h3 class="display-4 text-nowrap text-center">INICIAR SESION!</h3>
+                    <h3 class="text-center fw-bold mb-4 fs-1">Iniciar Sesión</h3>
                     <br />
-                    <form>
+                    <form method="post">
+                      {% csrf_token %}
                       <div class="form-group mb-3">
-                        <input id="inputEmail" type="email" placeholder="Email address" required="" autofocus=""class="form-control rounded-pill border-0 shadow-sm px-4"/>
+                        <input id="inputEmail" type="email" name="correo" placeholder="Correo electronico" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4 text-center"/>
                       </div>
                       <div class="form-group mb-3">
-                        <input
-                          id="inputPassword"
-                          type="password"
-                          placeholder="Password"
-                          required=""
-                          class="form-control rounded-pill border-0 shadow-sm px-4 text-danger"
-                        /><br />
-                      </div>
-                      <div class="custom-control custom-checkbox mb-3">
-                        <input
-                          id="customCheck1"
-                          type="checkbox"
-                          checked
-                          class="custom-control-input"
-                        />
-                        <label for="customCheck1" class="custom-control-label"
-                          >Remember password</label
-                        >
-                      </div>
+                        <input id="inputPassword" type="password" name="contraseña" placeholder="Contraseña" required="" class="form-control rounded-pill border-0 shadow-sm px-4 text-danger text-center"/><br />
+                        <div class="text-start mb-3">
+                            <a href="#" class="text-muted small">¿Olvidaste tu contraseña?</a>
+                        </div>
+            
+                        <div class="form-check text-start mb-3">
+                            <input class="form-check-input" type="checkbox" id="rememberCheck">
+                            <label class="form-check-label" for="rememberCheck">Recordar contraseña</label>
+                        </div>
                       <button
-                        type="submit"
-                        class="btn btn-danger btn-block text-uppercase mb-2 rounded-pill shadow-sm"
-                      >
-                        Registrarse
+                          type="submit"class="btn btn-danger btn-block text-uppercase mb-2 rounded-pill shadow-sm">Iniciar sesion
                       </button>
-                      <div
-                        class="text-center d-flex justify-content-between mt-4"
-                      >
-                        <p>
-                          <a href=" " class="font-italic text-muted">
-                            <u>Crear Cuenta</u></a
-                          >
-                        </p>
-                      </div>
+                      
                     </form>
-                  </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+                        <a href="{% url 'pagina_principal' %}" class="btn btn-danger btn-sm"> Volver</a>
+                        <a href="{% url 'registrarse' %}" class="text-muted small"><u>Crear cuenta</u></a>
+                    </div>
+                   
                 </div>
               </div>
             </div>
@@ -76,6 +61,3 @@
     </main>
   </body>
 </html>
-
-
-

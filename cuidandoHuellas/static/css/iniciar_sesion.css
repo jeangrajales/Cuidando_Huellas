@@ -1,2 +1,2 @@
 .login, .image{min-height: 81vh}
-.bg-image{background-image: url('/static/img/img_inicio_sesion.png');background-size: none;background-position: center}
+.bg-image{background-image: url('/static/img/gato_perro.jpg');background-size: cover;background-position: center}

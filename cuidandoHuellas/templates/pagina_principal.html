@@ -66,8 +66,12 @@
             </div>
         </div>
     </div>
-    
 </div> 
+{% if request.session.pista %}
+Bienvenido, si hay sesión!
+{{ request.session.pista }}
+<a href="{% url 'cerrar_sesion' %}" class="btn btn-success">Cerrar Sesión</a>
+{% endif %}
     
 {% endblock %}
     
