@@ -16,9 +16,22 @@
 ---
 
 ### CHANGELOG
+ 
+## [ch1.3.2-Alpha.1] - 2025-03-29
+
+## Added
+- Implementación inicial del formulario de contacto con campos básicos.
+- Inclusión de Bootstrap para mejorar el diseño y la accesibilidad.
+
+## Fixed
+- Se corrigió la alineación de los íconos con la información de contacto (ubicación, teléfono y correo).
+
+### Note
+- Queda pendiente mejorar la imagen de fondo.
+- El responsive entre el footer no quedan responsive.
+- Entre el formulario y el footer queda un espacio en blanco, por estetica se queda asi o se mejora.
 
 ---
-
 ## [ch1.2.2-Alpha.1] - 2025-03-29
 
 ### Added
