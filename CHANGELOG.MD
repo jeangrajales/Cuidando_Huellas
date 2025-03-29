@@ -19,6 +19,20 @@
 
 ---
 
+## [ch1.2.2-Alpha.1] - 2025-03-29
+
+### Added
+
+- Se agrego la funcionalidad de `registrarse`
+- Se agrego el archivo decorador `utils.py`
+
+### Fixed
+
+- Se corrigió el error en el sistema de mensajes, asegurando que las notificaciones sean visibles para el usuario en lugar de solo para el administrador de Django.
+- Se ajustó la visualización del sistema de mensajes para que aparezca centrado en la interfaz.
+
+---
+
 ## [ch1.1.1-Alpha.1] - 2025-03-28
 
 ### Added
