@@ -17,7 +17,7 @@
 
 ### CHANGELOG
  
-## [ch1.3.2-Alpha.1] - 2025-03-29
+## [ch1.3.3-Alpha.1] - 2025-03-29
 
 ## Added
 - Implementación inicial del formulario de contacto con campos básicos.
