@@ -5,7 +5,7 @@ from django.db import models
 class Usuario(models.Model):
     nombre_completo = models.CharField(max_length=100)
     ciudad = models.CharField(max_length=100)
-    telefono = models.PositiveIntegerField()
+    telefono = models.PositiveIntegerField(max_length=10)
     correo = models.CharField(max_length=254)
     contraseña = models.CharField(max_length=254)
     ROLES = (

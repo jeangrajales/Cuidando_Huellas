@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from . models import *
 from django.contrib import messages
+from .utils import *
 from django.db import IntegrityError
 # Create your views here.
 
@@ -21,7 +22,7 @@ def iniciar_sesion(request):
                 "nombre_completo": q.nombre_completo
 
             }  # Autenticacion: creamos la variable session
-            messages.success(request, "Bienvenido!!")
+            messages.success(request, "Bienvenido a cuidando Huellas !!")
             return redirect("nuestros_servicios")
         
         except Usuario.DoesNotExist:
@@ -47,9 +48,41 @@ def cerrar_sesion(request):
         messages.error(request, "Ocurrio un error")
         return redirect("pagina_principal")
 
-
 def registrarse(request):
-    return render(request,'registrarse.html')
+    # Metodo De la solicitud del formulario debe ser POST 
+    if request.method == "POST":
+        # Nos traemos los datos del formulario registrarse
+        nombre_completo = request.POST.get("nombre_completo")
+        telefono = request.POST.get("telefono")
+        ciudad = request.POST.get("ciudad")
+        correo = request.POST.get("correo")
+        contraseña = request.POST.get("contraseña")
+        
+        # Se valida si el usuario ya existe mediante el correo electronico
+        if Usuario.objects.filter(correo = correo).exists():
+            messages.error(request,"Error, el correo electronico ya se encuentra registrado")
+            return render(request, 'registrarse.html')
+        
+        #Si el usuario no existe se crea el usuario y se guarda
+        else:
+            crear_usuario = Usuario(
+                nombre_completo = nombre_completo,
+                telefono = telefono,
+                ciudad = ciudad,
+                correo = correo,
+                contraseña = contraseña
+            )
+            crear_usuario.save()
+            messages.success(request,"Se ha creado la cuenta correctamente, inicie sesion")
+    else:
+        # Si el metodo no es POST No entra por la condicion
+          return render(request, "registrarse.html")     
+              
+    if request.session.get('pista'):
+        messages.info(request, 'Ya tienes una sesion iniciada')
+        return render(request,'pagina_principal.html')
+    else:
+        return render(request,'registrarse.html')
 
 def pagina_principal(request):
     return render(request,'pagina_principal.html')
@@ -66,3 +99,4 @@ def productos(request):
 
 def adopciones(request):
     return render(request,'adopciones.html')
+

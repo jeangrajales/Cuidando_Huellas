@@ -16,6 +16,17 @@
     <title>Iniciar Sesion</title>
   </head>
   <body>
+    <div id="notificaciones">
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center"
+          role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
     <main class="ogin-container text-center d-flex justify-content-center align-items-center vh-100">
       <div class="container-lg">
         <div class="row no-gutter">
@@ -60,4 +71,6 @@
       </div>
     </main>
   </body>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js.map' %}"></script>
 </html>
