@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block estilos_unicos %}
+  <link rel="stylesheet" href="{% static 'css/contactanos.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
+{% endblock %}
+
+{% block titulo %}Contactanos{% endblock %}
+
+{% block contenido %}
+    <div class="wrapper">
+        <div class="overlay">
+            <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-md-9">
+                <div class="contact-us text-center">
+                <h3>Contactanos</h3>
+                <p class="mb-5">
+                    Estamos aquí para ayudarte en cada paso: ya sea encontrando a tu mascota perdida o brindándote información sobre adopciones. Con el apoyo de veterinarias y refugios de confianza, no dudes en contactarnos. Juntos, hacemos la diferencia          </p>
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="mt-5 text-center px-3">
+                        <div class="d-flex flex-row align-items-center">
+                        <span class="icons"><i class="fa fa-map-marker"></i></span>
+                        <div class="address text-start">
+                            <span>Ubicacion</span>
+                            <p>461, Sugar camp, San Jose, California, USA</p>
+                        </div>
+                        </div>
+                        <div class="d-flex flex-row align-items-center mt-3">
+                        <span class="icons"><i class="fa fa-phone"></i></span>
+                        <div class="address text-start">
+                            <span>telefono</span>
+                            <p>501 205 2929</p>
+                        </div>
+                        </div>
+                        <div class="d-flex flex-row align-items-center mt-3">
+                        <span class="icons"><i class="fa fa-envelope-o"></i></span>
+                        <div class="address text-start">
+                            <span>Correo electronico</span>
+                            <p>contact@bbbootstrap.com</p>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                    <div class="text-center px-1">
+                        <div class="forms p-4 py-5 bg-white">
+                        <h5>Enviar Mensaje</h5>
+                        <div class="mt-4 inputs">
+                            <input type="text" class="form-control" placeholder="Nombre">
+                            <input type="text" class="form-control" placeholder="Correo electronico">
+                            <textarea class="form-control" placeholder="Escribe tu mensaje"></textarea>
+                        </div>
+                        <div class="button mt-4 text-left">
+                            <button class="btn btn-danger">Enviar</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+
+
+{% endblock %}

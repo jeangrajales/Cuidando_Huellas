@@ -90,6 +90,8 @@ def pagina_principal(request):
 def nuestros_servicios(request):
     return render(request, 'nuestros_servicios.html')
 
+def contactanos(request):
+    return render(request,'contactanos.html')
 
 def mascotas_perdidas(request):
     return render(request,'mascotas_perdidas.html')
@@ -99,4 +101,5 @@ def productos(request):
 
 def adopciones(request):
     return render(request,'adopciones.html')
+
 
