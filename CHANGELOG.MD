@@ -13,7 +13,23 @@
 > ### Note
 > - Notas adicionales sobre los cambios realizados.
 
+---
+
 ### CHANGELOG
+
+---
+
+## [ch1.1.1-Alpha.1] - 2025-03-28
+
+### Added
+
+- Se agrego el `README.md`
+
+### Fixed
+
+- Se corrigio las extension de algunos archivos
+
+--- 
 
 ## [ch1.0.0-Alpha.1] - 2025-03-28
 
