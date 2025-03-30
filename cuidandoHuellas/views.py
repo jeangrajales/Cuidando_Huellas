@@ -85,10 +85,10 @@ def registrarse(request):
         return render(request,'registrarse.html')
 
 def pagina_principal(request):
-    return render(request,'pagina_principal.html')
+    return render(request,'pagina_principal.html', {"mostrar_fondo": True})
 
 def nuestros_servicios(request):
-    return render(request, 'nuestros_servicios.html')
+    return render(request, 'nuestros_servicios.html', {'mostrar_fondo': True})
 
 def contactanos(request):
     return render(request,'contactanos.html')

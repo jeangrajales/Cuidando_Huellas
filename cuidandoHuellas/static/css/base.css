@@ -1,5 +1,16 @@
+.fondo{
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('../img/fondo_marcadeagua2.jpg'); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
 .bg_header{
-    background-color: #B79C6F;
+    background-color: rgb(183, 156, 111);
 }
 
 .ctnd-logo{
@@ -38,43 +49,6 @@
     padding: 5%;
 }
 
-.post-navigation {
-    top: 80px; /* Ajusta según la altura del encabezado */
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    gap: 250px;
-    padding: 20px;
-    flex-wrap: wrap;
-    
-}
-
-.post-nav-button {
-    background-color: #C4B092;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    white-space: nowrap;
-    cursor: pointer;
-    
-    /* Dimensiones específicas */
-    width: 190px;
-    height: 35px;
-    
-    /* Espaciado interno */
-    padding: 24px;
-    
-    /* Centrar contenido */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    /* Transición suave para interactividad */
-    transition: background-color 0.3s ease;
-}
-
 .btn-primary{
     background-color: #807A6C!important; 
     border: none !important;
@@ -92,4 +66,90 @@
     transform: translateY(-5px); /* Mueve el botón 5px hacia arriba */
     transition: transform 0.2s ease-out; /* Hace la animación más suave */
     box-shadow: 0px 8px 15px rgba(39, 39, 39, 0.2); /* Agrega sombra */
+}
+
+.post-navigation {  
+    position: relative;
+    top: 15px !important; /* Ajusta según la altura del encabezado */
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 15px;
+    gap: 20px; /* Espacio entre botones más reducido */
+}
+
+.post-navigation {
+    top: 70%; /* Ajusta según la altura del encabezado */
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    flex-wrap: wrap;
+    
+    /* Modificamos el gap según el tamaño de pantalla */
+    gap: 30px;
+}
+
+.post-nav-button {
+    background-color: #C4B092;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    white-space: nowrap;
+    cursor: pointer;
+    
+    /* Mantenemos las dimensiones específicas originales */
+    width: 190px;
+    height: 35px;
+    
+    /* Espaciado interno */
+    padding: 24px;
+    
+    /* Centrar contenido */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Transición suave para interactividad */
+    transition: background-color 0.3s ease;
+}
+
+/* Media queries para diferentes tamaños de pantalla */
+
+/* Pantallas grandes */
+@media (min-width: 1200px) {
+    .post-navigation {
+        /* Aplicamos un gap menor que el original pero que mantenga la estética */
+        gap: 60px;
+    }
+}
+
+/* Pantallas medianas */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .post-navigation {
+        gap: 30px;
+    }
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 767px) {
+    .post-navigation {
+        gap: 20px;
+    }
+    
+    /* En pantallas muy pequeñas, organizamos en dos columnas */
+    @media (max-width: 575px) {
+        .post-navigation {
+            justify-content: space-around;
+        }
+        
+        .post-nav-button {
+            margin-bottom: 15px;
+        }
+    }
 }
