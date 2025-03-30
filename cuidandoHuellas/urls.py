@@ -11,5 +11,7 @@ urlpatterns = [
     path('nuestros_servicios/',views.nuestros_servicios,name="nuestros_servicios"),
     path('mascotas_perdidas/',views.mascotas_perdidas,name="mascotas_perdidas"),
     path('adopciones/',views.adopciones,name="adopciones"),
+    path('contactanos/',views.contactanos,name="contactanos"),
+    
     
 ]

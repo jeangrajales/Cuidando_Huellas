@@ -16,6 +16,25 @@
 ---
 
 ### CHANGELOG
+
+---
+
+## [ch1.4.4-Alpha.1] - 2025-03-30
+
+
+## Added
+
+- Se añadio una imagen de fondo para las paginas `Pagina_principal, Nuestro_servicios, Contactos`.
+- Se implementó una condición para mostrar el fondo solo en páginas específicas.
+
+## Fixed
+
+- Se corrigió el fondo de la página de Contactos, ajustando los colores de los iconos y la transparencia.
+- Se mejoró la adaptación responsiva de la página de Contactos.
+- Se optimizó el espaciado en la versión responsiva del menú `(Mascotas Perdidas, Productos, Servicios, Veterinaria Asociada)`.
+- Se actualizó la URL de la página Contactos.
+
+---
  
 ## [ch1.3.3-Alpha.1] - 2025-03-29
 
