@@ -12,6 +12,8 @@ urlpatterns = [
     path('mascotas_perdidas/',views.mascotas_perdidas,name="mascotas_perdidas"),
     path('adopciones/',views.adopciones,name="adopciones"),
     path('contactanos/',views.contactanos,name="contactanos"),
-    
+    #Administrador
+    path('pagina_administrador/',views.pagina_administrador, name="pagina_administrador"),
+    path('listar_usuarios/',views.listar_usuarios, name="listar_usuarios"),
     
 ]

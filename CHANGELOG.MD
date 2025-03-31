@@ -19,6 +19,20 @@
 
 ---
 
+## [ch1.5.4-Alpha.1] - 2025-03-30
+
+## Added
+
+- Se implementó la página principal para el administrador junto con su hoja de estilos (CSS).
+
+- Se organizó la estructura del proyecto creando, en la carpeta Templates, una subcarpeta denominada Administrador que alberga los archivos correspondientes a los usuarios.
+
+- Se estableció la estructura en Static mediante la creación de la carpeta Administrador/Css para los archivos de estilos.
+
+- Se añadió la funcionalidad para mostrar todos los usuarios.
+
+---
+
 ## [ch1.4.4-Alpha.1] - 2025-03-30
 
 

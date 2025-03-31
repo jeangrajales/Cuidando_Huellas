@@ -1,0 +1,50 @@
+ /* Estilo para la barra lateral */
+    .sidebar {
+      background-color: #c4b092; /* Color de fondo */
+      width: 250px;             /* Ancho fijo para pantallas grandes */
+      min-height: 100vh;        /* Altura completa de la ventana */
+      transition: width 0.3s ease;
+    }
+    .sidebar .nav-link {
+      color: #000;              /* Color del texto */
+    }
+    .sidebar .nav-link:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    /* Estilo para las imágenes de iconos */
+    .icon {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      margin-right: 10px;
+    }
+    /* Ajuste para el ícono de usuario */
+    .user-icon {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    /* Ajustes responsivos */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 60px;
+        overflow: hidden;
+      }
+      .sidebar .profile,
+      .sidebar .nav-link span {
+        display: none;
+      }
+      .sidebar .nav-link {
+        justify-content: center;
+        padding: 15px 0;
+      }
+      .main-content {
+        margin-left: 60px;
+      }
+    }
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
