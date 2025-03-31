@@ -103,3 +103,12 @@ def adopciones(request):
     return render(request,'adopciones.html')
 
 
+# Administrador
+
+def pagina_administrador(request):
+    return render(request, 'administrador/pagina_administrador.html')
+
+def listar_usuarios(request):
+    list_usuarios = Usuario.objects.all()
+    contexto = {"dato": list_usuarios}
+    return render(request, 'administrador/usuarios/listar_usuarios.html', contexto)
