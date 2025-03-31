@@ -123,6 +123,8 @@ def productos(request):
 def adopciones(request):
     return render(request,'adopciones.html')
 
+def quienes_somos(request):
+    return render(request, 'quienes_somos.html')
 
 # Administrador
 

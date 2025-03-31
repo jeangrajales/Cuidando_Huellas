@@ -18,7 +18,16 @@
 ### CHANGELOG
 
 ---
+## [ch1.7.5-Alpha.1] - 2025-03-31
 
+## Added
+
+- Se creó la página de `Quiénes_somos` con su vista y plantilla en Django.
+- Se agrego imagenes correspondientes adecuadas para los modulos.
+
+### Removed
+- Se corrigio el apartado de los botones y solo se dejo en la `pagina principal`.
+---
 ## [ch1.6.4-Alpha.1] - 2025-03-31
 
 ## Added
