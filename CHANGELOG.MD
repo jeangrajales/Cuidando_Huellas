@@ -19,6 +19,14 @@
 
 ---
 
+## [ch1.6.4-Alpha.1] - 2025-03-31
+
+## Added
+
+- Se añadido la funcionalidad de enviar correos desde la pagina contactanos
+- Se añadio nuevo archivo `forms.py`
+
+---
 ## [ch1.5.4-Alpha.1] - 2025-03-30
 
 ## Added
