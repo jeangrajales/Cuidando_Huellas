@@ -15,61 +15,78 @@
     <div class="wrapper">
         <div class="overlay">
             <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-md-9">
-                <div class="contact-us text-center">
-                <h3>Contactanos</h3>
-                <p class="mb-5">
-                    Estamos aquí para ayudarte en cada paso: ya sea encontrando a tu mascota perdida o brindándote información sobre adopciones. Con el apoyo de veterinarias y refugios de confianza, no dudes en contactarnos. Juntos, hacemos la diferencia          </p>
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="mt-5 text-center px-3">
-                        <div class="d-flex flex-row align-items-center">
-                        <span class="icons"><i class="fa fa-map-marker"></i></span>
-                        <div class="address text-start">
-                            <span>Ubicacion</span>
-                            <p>Calatrava Itagüi - Antioquia Colombia</p>
+                <div class="col-md-9">
+                    <div class="contact-us text-center">
+                        <h3>Contactanos</h3>
+                        <p class="mb-5">
+                            Estamos aquí para ayudarte en cada paso: ya sea encontrando a tu mascota perdida o brindándote información sobre adopciones. Con el apoyo de veterinarias y refugios de confianza, no dudes en contactarnos. Juntos, hacemos la diferencia.
+                        </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mt-5 text-center px-3">
+                                    <div class="d-flex flex-row align-items-center">
+                                        <span class="icons"><i class="fa fa-map-marker"></i></span>
+                                        <div class="address text-start">
+                                            <span>Ubicación</span>
+                                            <p>Calatrava Itagüí - Antioquia, Colombia</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center mt-3">
+                                        <span class="icons"><i class="fa fa-phone"></i></span>
+                                        <div class="address text-start">
+                                            <span>Teléfono</span>
+                                            <p>302 575 5799</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center mt-3">
+                                        <span class="icons"><i class="fa fa-envelope-o"></i></span>
+                                        <div class="address text-start">
+                                            <span>Correo Electrónico</span>
+                                            <p>cuidandohuellass@hotmail.com</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formulario de contacto -->
+                            <div class="col-md-6">
+                                <div class="text-center px-1">
+                                    <div class="forms p-4 py-5 bg_white">
+                                        <h5>Enviar Mensaje</h5>
+
+                                        <!-- Mensajes de error o éxito -->
+                                        {% if messages %}
+                                            <ul class="messages">
+                                                {% for message in messages %}
+                                                    <li class="{{ message.tags }}">{{ message }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <div class="mt-4 inputs">
+                                                <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
+                                                <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" required>
+                                                <textarea name="mensaje" class="form-control" placeholder="Escribe tu mensaje" rows="4" required></textarea>
+                                            </div>
+                                            <div class="button mt-4 text-left text-center">
+                                                <button type="submit" class="btn btn-danger">Enviar</button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- FIN FORMULARIO -->
                         </div>
-                        </div>
-                        <div class="d-flex flex-row align-items-center mt-3">
-                        <span class="icons"><i class="fa fa-phone"></i></span>
-                        <div class="address text-start">
-                            <span>telefono</span>
-                            <p>302 575 5799</p>
-                        </div>
-                        </div>
-                        <div class="d-flex flex-row align-items-center mt-3">
-                        <span class="icons"><i class="fa fa-envelope-o"></i></span>
-                        <div class="address text-start">
-                            <span>Correo electronico</span>
-                            <p>cuidandohuellass@hotmail.com</p>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="col-md-6">
-                    <div class="text-center px-1">
-                        <div class="forms p-4 py-5 bg_white">
-                        <h5>Enviar Mensaje</h5>
-                        <div class="mt-4 inputs">
-                            <input type="text" class="form-control" placeholder="Nombre">
-                            <input type="text" class="form-control" placeholder="Correo electronico">
-                            <textarea class="form-control" placeholder="Escribe tu mensaje"></textarea>
-                        </div>
-                        <div class="button mt-4 text-left text-center">
-                            <button class="btn btn-danger">Enviar</button>
-                        </div>
-                        </div>
-                    </div>
                     </div>
                 </div>
-                </div>
-            </div>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    
 </div>
 
 {% endblock %}

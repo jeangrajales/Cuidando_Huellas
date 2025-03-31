@@ -3,6 +3,8 @@ from . models import *
 from django.contrib import messages
 from .utils import *
 from django.db import IntegrityError
+from django.core.mail import send_mail 
+from .forms import *
 # Create your views here.
 
 
@@ -91,7 +93,26 @@ def nuestros_servicios(request):
     return render(request, 'nuestros_servicios.html', {'mostrar_fondo': True})
 
 def contactanos(request):
-    return render(request,'contactanos.html')
+    
+    if request.method == 'POST':
+        
+        nombre = request.POST.get("nombre","").strip()
+        correo = request.POST.get("correo","").strip()
+        mensaje = request.POST.get("mensaje","").strip()    
+        
+        if not nombre or not correo or not mensaje:
+            messages.error(request,"Debe llenar todos los campos")
+            return render(request, "contactanos.html")
+        else:
+            asunto = f'Nuevo mensaje de {nombre}'
+            contenido = f'Correo: {correo}\n\n Mensaje:\n {mensaje}'
+
+            send_mail(asunto, contenido, 'jean.estudio.7@gmail.com', ['cuidandohuellass@hotmail.com', "jeancg2004@hotmail.com"])
+            messages.success(request, "Se ha enviado el mensaje correctamente")
+            return redirect('contactanos')
+    else:
+        return render(request,"contactanos.html")
+
 
 def mascotas_perdidas(request):
     return render(request,'mascotas_perdidas.html')
