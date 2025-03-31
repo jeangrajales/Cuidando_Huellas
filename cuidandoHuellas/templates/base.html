@@ -44,7 +44,7 @@
                     <a class="nav-link active text-white" href="{% url 'contactanos' %}">Contactos</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active text-white" href="#">Quienes Somos</a>
+                    <a class="nav-link active text-white" href="{% url 'quienes_somos' %}">Quienes Somos</a>
                   </li>
                 </ul>
                 <a href="{% url 'iniciar_sesion' %}">
@@ -61,13 +61,7 @@
 
     <div class="{% if mostrar_fondo %} fondo {% endif %}">
 
-      <div class="post-navigation">
-        <button class="post-nav-button">Mascotas Perdidas</button>
-        <button class="post-nav-button">Productos</button>
-        <button class="post-nav-button">Servicios</button>
-        <button class="post-nav-button">Veterinarias asociadas</button>
-      </div>
-      
+     
           {% block contenido %}
   
           {% endblock %}
