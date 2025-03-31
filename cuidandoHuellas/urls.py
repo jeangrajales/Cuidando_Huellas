@@ -15,5 +15,6 @@ urlpatterns = [
     #Administrador
     path('pagina_administrador/',views.pagina_administrador, name="pagina_administrador"),
     path('listar_usuarios/',views.listar_usuarios, name="listar_usuarios"),
+    path('listar_productos/',views.listar_productos, name="listar_productos")
     
 ]

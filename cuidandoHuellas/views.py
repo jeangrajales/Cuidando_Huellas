@@ -129,7 +129,16 @@ def adopciones(request):
 def pagina_administrador(request):
     return render(request, 'administrador/pagina_administrador.html')
 
+# Usuarios
+
 def listar_usuarios(request):
     list_usuarios = Usuario.objects.all()
     contexto = {"dato": list_usuarios}
     return render(request, 'administrador/usuarios/listar_usuarios.html', contexto)
+
+#Productos
+
+def listar_productos(request):
+    list_productos = Producto.objects.all()
+    contexto = {"dato_producto": list_productos}
+    return render(request, 'administrador/productos/listar_productos.html', contexto)

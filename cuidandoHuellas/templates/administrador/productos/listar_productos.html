@@ -1,0 +1,17 @@
+
+
+<img src="{{ dato_producto.foto_producto.url }}" alt="{{ foto_producto.nombre }}">
+
+<h1>Productos</h1>
+{% for data in dato_producto %}
+    {{ data.nombre_producto }}
+    <br>
+    {{ data.precio }}
+    
+    {% if data.foto_producto %}
+        <img src="{{ data.foto_producto.url }}" alt="">
+    {% else %}
+        <p>No hay imagen disponible</p>
+    {% endif %}
+
+{% endfor %}
