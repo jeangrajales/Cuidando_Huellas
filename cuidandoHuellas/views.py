@@ -131,6 +131,12 @@ def quienes_somos(request):
 def pagina_administrador(request):
     return render(request, 'administrador/pagina_administrador.html')
 
+def pagina_usuario(request):
+    return render(request, 'pagina_usuario.html' )
+
+def mascotas_perdidas(request):
+    return render(request, 'mascotas_perdidas.html')
+
 # Usuarios
 
 def listar_usuarios(request):
