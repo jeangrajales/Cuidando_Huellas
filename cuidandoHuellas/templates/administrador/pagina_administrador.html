@@ -19,7 +19,7 @@
       <nav>
         <ul class="nav flex-column">
           <li class="nav-item mb-2">
-            <a href="#" class="nav-link d-flex align-items-center">
+            <a href="{% url 'listar_productos' %}" class="nav-link d-flex align-items-center">
               <img src="{% static 'img/foto_admin.png' %}" alt="Catálogo" class="icon w-20">
               <h5>Catálogo</h5>
             </a>
@@ -79,7 +79,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link d-flex align-items-center">
+            <a href="{% url 'pagina_principal' %}" class="nav-link d-flex align-items-center">
               <img src="{% static 'img/foto_admin.png' %}" alt="Salir" class="icon">
               <h5>Salir</h5>
             </a>

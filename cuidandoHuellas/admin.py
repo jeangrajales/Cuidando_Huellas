@@ -6,6 +6,9 @@ from . models import *
 
 
 @admin.register(Usuario)
-
 class usuarioAdmin(admin.ModelAdmin):
      list_display = ['id', 'nombre_completo', 'ciudad', 'telefono', 'correo', 'rol']
+
+@admin.register(Producto)
+class productoAdmin(admin.ModelAdmin):
+     list_display = ['id_producto', 'nombre_producto', 'precio', 'foto_producto']
