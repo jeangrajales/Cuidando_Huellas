@@ -1,0 +1,20 @@
+body {
+    background-color: #a18e81;
+    font-family: Arial, sans-serif;
+}
+.container {
+    max-width: 500px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+}
+.btn-custom {
+    background-color: #8b5e3b;
+    color: white;
+    border: none;
+}
+.btn-custom:hover {
+    background-color: #6f442a;
+}

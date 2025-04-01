@@ -19,6 +19,23 @@
 
 ---
 
+## [ch1.9.6-Alpha.1] - 2025-04-01
+
+## Added
+
+- Se Implemento la funcionalidad para eliminar productos
+- Se Implemento la Funcionalidad para editar productos
+
+## Fixed
+
+- Se soluciono problema que habia con los campos `Categoria, Estados`
+
+---
+
+### Note
+
+- Quedar por traer los datos de los productos existente al editar un producto
+
 ## [ch1.8.5-Alpha.1] - 2025-03-31
 
 ## Added 

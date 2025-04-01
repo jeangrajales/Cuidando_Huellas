@@ -16,7 +16,14 @@ urlpatterns = [
 
     #Administrador
     path('pagina_administrador/',views.pagina_administrador, name="pagina_administrador"),
+    #Usuarios
     path('listar_usuarios/',views.listar_usuarios, name="listar_usuarios"),
+    #Productos
     path('listar_productos/',views.listar_productos, name="listar_productos"),
+    path('agregar_productos/',views.agregar_productos, name="agregar_productos"),
+    path('eliminar_productos/<int:id_producto>',views.eliminar_productos, name="eliminar_productos"),
+    path('editar_productos/<int:id_producto>',views.editar_productos, name="editar_productos"),
+    
+    
     
 ]

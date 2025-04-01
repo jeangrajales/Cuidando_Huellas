@@ -144,3 +144,75 @@ def listar_productos(request):
     list_productos = Producto.objects.all()
     contexto = {"dato_producto": list_productos}
     return render(request, 'administrador/productos/listar_productos.html', contexto)
+
+def agregar_productos(request):
+    if request.method == "POST":
+        nombre_producto = request.POST.get("nombre_producto")
+        precio = request.POST.get("precio")
+        cantidad = request.POST.get("cantidad")
+        descripcion = request.POST.get("descripcion")
+        foto_producto = request.FILES.get("foto_producto")
+        categoria = request.POST.get("categoria")
+        estado = request.POST.get("estado")
+        
+        if Producto.objects.filter(nombre_producto = nombre_producto).exists():
+            messages.error(request,"Error: Ya existe un producto con este nombre")
+            return redirect('agregar_productos')
+        else:
+            crear_producto = Producto(
+                nombre_producto = nombre_producto,
+                precio = precio,
+                cantidad = cantidad,
+                descripcion = descripcion,
+                foto_producto = foto_producto,
+                categoria = categoria,
+                estado = estado
+            )
+            crear_producto.save()
+            messages.success(request, "Se agrego producto exitosamente")
+            return redirect('listar_productos')
+    else:
+        return render(request, "administrador/productos/agregar_productos.html")
+    
+def eliminar_productos(request, id_producto):
+    try:
+        traer_producto = Producto.objects.get(pk = id_producto)
+        traer_producto.delete()
+        messages.success(request, "El producto se ha eliminado correctamente")
+    except Producto.DoesNotExist:
+        messages.warning(request, "Error: El producto no existe")
+    
+    return redirect('listar_productos')
+
+def editar_productos(request, id_producto):
+    try:
+        traer_producto = Producto.objects.get(pk = id_producto)
+    
+    except Producto.DoesNotExist:
+        messages.error(request,"Error Capa 8: El producto no existe")
+        return redirect('listar productos')
+    
+    if request.method == 'POST':
+        nombre_producto = request.POST.get("nombre_producto")
+        precio = request.POST.get("precio")
+        cantidad = request.POST.get("cantidad")
+        descripcion = request.POST.get("descripcion")
+        foto_producto = request.FILES.get("foto_producto")
+        categoria = request.POST.get("categoria")
+        estado = request.POST.get("estado")
+        
+        traer_producto.nombre_producto = nombre_producto,
+        traer_producto.precio = precio,
+        traer_producto.cantidad = cantidad,
+        traer_producto.descripcion = descripcion,
+        traer_producto.foto_producto = foto_producto,
+        traer_producto.categoria = categoria
+        traer_producto.estado = estado
+        traer_producto.save()
+        messages.success(request, "Se ha actualizado el producto correctamente")
+        return redirect('listar_productos')
+        
+    else:
+        return render(request, "administrador/productos/agregar_productos.html", {"dato": traer_producto})
+        
+        

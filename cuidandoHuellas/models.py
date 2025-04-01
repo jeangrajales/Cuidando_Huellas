@@ -37,8 +37,8 @@ class Producto(models.Model):
         (2, "No Disponible")
     )
     foto_producto = models.ImageField(upload_to='foto_producto/') 
-    categoria = models.IntegerField(choices=CATEGORIAS, default=0) 
-    estado = models.IntegerField(choices=ESTADOS, default=0)
+    categoria = models.CharField(max_length=20, choices=CATEGORIAS, default=0) 
+    estado = models.CharField(max_length=20, choices=ESTADOS, default=0)
 
     def __str__(self):
         return f"{self.id_producto} - {self.nombre_producto} - {self.descripcion} - {self.precio} - {self.foto_producto}"
