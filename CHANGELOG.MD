@@ -19,6 +19,18 @@
 
 ---
 
+## [ch1.10.6-Alpha.1] - 2025-04-01
+
+## Added
+
+- Se agregó la página productos_usuarios.html junto con su archivo de estilos CSS.
+
+- Se agregó la página mascotas_perdidas.html junto con su archivo de estilos CSS.
+
+- Se agregó la página pagina_usuarios.html junto con su archivo de estilos CSS.
+
+---
+
 ## [ch1.9.6-Alpha.1] - 2025-04-01
 
 ## Added

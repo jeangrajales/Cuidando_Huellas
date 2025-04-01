@@ -1,0 +1,109 @@
+body {
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+    background-image: url(../img/Frame_135.png);
+
+}
+
+
+.navbar {
+    background-color: #c1a66b;
+    padding: 10px 20px;
+}
+
+.navbar-brand img {
+    height: 60px;
+}
+
+.nav-link {
+    color: white !important;
+    margin: 0 10px;
+}
+
+.btn-login {
+    background-color: #8a7a5f;
+    color: white;
+    border: none;
+    margin-right: 10px;
+}
+
+.btn-register {
+    background-color: #4d4233;
+    color: white;
+    border: none;
+}
+
+.secondary-nav {
+    background-color: #e6d7b8;
+    padding: 10px 0;
+}
+
+.secondary-nav .nav-link {
+    color: #4d4233 !important;
+    font-weight: bold;
+}
+
+.back-button {
+    color: #4d4233;
+    font-size: 24px;
+}
+
+.paw-background {
+    position: relative;
+    background-color: #fff;
+}
+
+.paw-print {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    
+}
+
+.pet-card {
+    background-color: #c1a66b;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    color: white;
+}
+
+.pet-card h3 {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.pet-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+}
+
+.pet-details {
+    margin-top: 10px;
+}
+
+.pet-tag {
+    background-color: #8a7a5f;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    margin-right: 5px;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.footer {
+    background-color: #c1a66b;
+    color: #4d4233;
+    padding: 20px 0;
+    margin-top: 20px;
+}
+
+.footer-logo {
+    width: 80px;
+}
