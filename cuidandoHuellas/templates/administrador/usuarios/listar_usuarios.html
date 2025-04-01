@@ -1,22 +1,32 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
-    {% for datos in dato %}
-    <table class="table">
-        <table class="table">
-            <thead class="table-warning ">
-              <th>Nombre</th>
-              <th>Correo</th>
-              <th>Ciudad</th>
-              <th>Telefono</th>
-            </thead>
-            <tbody>
-              <td>{{ datos.nombre_completo }}</td>
-              <td>{{ datos.correo }}</td>
-              <td>{{ datos.ciudad }}</td>
-              <td>{{ datos.telefono }}</td>
-            </tbody>
-          </table>
-    {% endfor %}
-          
+<div class="container mt-4">
+  <h2 class="text-center">Usuarios</h2>
+  
+  <table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Ciudad</th>
+            <th>Teléfono</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for datos in dato %}
+        <tr>
+            <td>{{ datos.nombre_completo }}</td>
+            <td>{{ datos.correo }}</td>
+            <td>{{ datos.ciudad }}</td>
+            <td>{{ datos.telefono }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+</div>
+
+
     <a href="{% url 'pagina_administrador' %}" class="btn btn-danger btn-sm d-block w-25 mx-auto"> Volver</a>

@@ -19,6 +19,14 @@
 
 ---
 
+## [ch1.10.7-Alpha.1] - 2025-04-01
+
+## Fixed
+
+- Se corrigio el formulario de listar usuarios
+
+---
+
 ## [ch1.10.6-Alpha.1] - 2025-04-01
 
 ## Added
