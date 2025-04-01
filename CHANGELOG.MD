@@ -17,6 +17,12 @@
 
 ### CHANGELOG
 
+## [ch1.11.7-Alpha.1] - 2025-04-01
+
+## Added
+
+- Se agrego pagina producto_compra
+
 ---
 
 ## [ch1.10.7-Alpha.1] - 2025-04-01
