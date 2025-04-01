@@ -18,6 +18,20 @@
 ### CHANGELOG
 
 ---
+
+## [ch1.8.5-Alpha.1] - 2025-03-31
+
+## Added 
+
+- Se creó el modelo Producto.
+- Se implementó la funcionalidad para listar productos con su respectiva foto.
+
+## Fixed
+
+- Se soluciono problema que habia con el campo telefono de la tabla Usuarios
+
+---
+
 ## [ch1.7.5-Alpha.1] - 2025-03-31
 
 ## Added
