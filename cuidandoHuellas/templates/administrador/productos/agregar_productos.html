@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/administrador/agregar_productos.css' %}">
+    <title>Formulario de Productos para Mascotas</title>
+</head>
+<body>
+
+    <div class="container">
+        <h3 class="text-center text-dark">Formulario de Producto</h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Nombre del Producto</label>
+                <input type="text" name="nombre_producto" value="{{ data.nombre_producto}}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea class="form-control" name="descripcion" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Precio</label>
+                <input type="number" name="precio" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cantidad</label>
+                <input type="number" name="cantidad" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Categoría</label>
+                <select class="form-select" name="categoria">
+                    <option>Alimento Mascotas</option>
+                    <option>Accesorios Mascotas</option>
+                    <option>Ropa Mascotas</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Estado</label>
+                <select class="form-select" name="estado">
+                    <option>Disponible</option>
+                    <option>No Disponible</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Foto del Producto</label>
+                <input type="file" name="foto_producto" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-custom w-100">Guardar</button>
+        </form>
+    </div>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
