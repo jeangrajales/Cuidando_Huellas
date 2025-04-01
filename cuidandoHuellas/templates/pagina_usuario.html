@@ -1,0 +1,298 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/pagina_usuario.css' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <title>Vista Usuario</title>
+    
+    <!-- Bootstrap CSS -->
+      
+</head>
+<body>
+    <!-- Barra de navegación Bootstrap con menú hamburguesa -->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #C4B092;">
+        <div class="container-fluid">
+            <!-- Logo de la página -->
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'img/logo_ch.png' %}" alt="" class="logo img-fluid" style="height: 80px;">
+            </a>
+            <!-- Botón hamburguesa para dispositivos móviles -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Contenido que se colapsará en dispositivos móviles -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Enlaces de navegación (alineados a la izquierda) -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link post-nav-item" href="#">Mascotas Perdidas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link post-nav-item" href="#">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link post-nav-item" href="#">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link post-nav-item" href="#">Veterinarias asociadas</a>
+                    </li>
+                </ul>
+                
+                <!-- Barra de búsqueda centrada -->
+                <div class="search-container d-flex justify-content-center mx-auto ms-3" style="width: 30%;">
+                    <!-- justify-content-center: centra el contenido horizontalmente -->
+                    <!-- mx-auto: establece márgenes automáticos a los lados para centrar el elemento -->
+                    <!-- width 30%: establece un ancho del 30% del contenedor padre -->
+                    <input type="text" class="search-input" id="" placeholder="🔍 Buscar...">
+                </div>
+                
+                <!-- Información de usuario y botón de cerrar sesión (alineados a la derecha) -->
+                <div class="d-flex align-items-center">
+                    <!-- d-flex: establece display flex para alinear elementos en línea -->
+                    <!-- align-items-center: centra verticalmente los elementos -->
+                    <p class="username m-0 me-2">Nombre usuario</p> <!-- m-0: sin margen, me-2: margen a la derecha -->
+                    <button class="nav-button btn">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content container">
+        <div class="detailed-post">
+            <div class="detailed-post-header">
+                <div class="user-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="fs-3 mb-1">Jean Carlos</div>
+            </div>
+            
+            
+            <div class="detailed-post-content">
+                <input type="text" class="post-input form-control" placeholder="¿Qué estás pensando?">
+                <div class="post-actions">
+                    <div class="action-icons">
+                        <div class="action-icon location-icon"></div>
+                        <div class="action-icon camera-icon"></div>
+                        <div class="action-icon image-icon"></div>
+                    </div>
+                    <button class="publish-button btn">Publicar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="detailed-post">
+            <div class="detailed-post-header">
+                <div class="user-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                
+                <div class="d-flex flex-column mb-2">
+                    <p class="fs-3 mb-1">Ramiro</p>
+                    <p class="fw-lighter fs-6 mb-0">Publicado hace: 2 horas</p>
+                </div>
+
+
+
+            </div>
+            <div class="detailed-post-content">
+                <div class="post-actions">
+                    <div class="action-icons">
+                        <!-- Iconos eliminados -->
+                        
+                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum dolores ut numquam. Ipsa alias hic maxime, minus iure incidunt eius, sunt illum accusamus animi repellendus, cum aut quidem molestias velit?
+                         </p>
+                    </div>
+                </div>
+            </div>
+            <div id="carouselExample" class="carousel slide" style="max-width: 600px; max-height: 300px; margin: 0 auto; overflow: hidden;">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 1" style="object-fit: cover; height: 300px;">
+                    </div>
+                    <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                    </div>
+                </div>
+            
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"></button>
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2" aria-label="Diapositiva 3"></button>
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="3" aria-label="Diapositiva 3"></button>
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="4" aria-label="Diapositiva 3"></button>
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="5" aria-label="Diapositiva 3"></button>
+                </div>
+            </div>
+            
+        </div>
+    
+        <div class="detailed-post">
+            <div class="detailed-post-header">
+                <div class="user-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                
+                <div class="d-flex flex-column mb-2">
+                    <p class="fs-3 mb-1">Cristian Camilo</p>
+                    <p class="fw-lighter fs-6 mb-0">Publicado hace: 1 hora</p>
+                </div>
+
+            </div>
+            <div class="detailed-post-content">
+                <div class="post-actions">
+                    <div class="action-icons">
+                        <!-- Iconos eliminados -->
+                        
+                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum dolores ut numquam. Ipsa alias hic maxime, minus iure incidunt eius, sunt illum accusamus animi repellendus, cum aut quidem molestias velit?
+                         </p>
+                    </div>
+                </div>
+            </div>
+           <div id="carouselExample" class="carousel slide" style="max-width: 600px; max-height: 300px; margin: 0 auto; overflow: hidden;">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 1" style="object-fit: cover; height: 300px;">
+                </div>
+                <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                </div>
+            </div>
+        
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2" aria-label="Diapositiva 3"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="3" aria-label="Diapositiva 3"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="4" aria-label="Diapositiva 3"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="5" aria-label="Diapositiva 3"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="detailed-post">
+        <div class="detailed-post-header">
+            <div class="user-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            
+            <div class="d-flex flex-column mb-2">
+                <p class="fs-3 mb-1">Yoiner Andres</p>
+                <p class="fw-lighter fs-6 mb-0">Publicado hace: 2 minutos</p>
+            </div>
+
+
+
+        </div>
+        <div class="detailed-post-content">
+            <div class="post-actions">
+                <div class="action-icons">
+                    <!-- Iconos eliminados -->
+                    
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum dolores ut numquam. Ipsa alias hic maxime, minus iure incidunt eius, sunt illum accusamus animi repellendus, cum aut quidem molestias velit?
+                        </p>
+                </div>
+            </div>
+        </div>
+        <div id="carouselExample" class="carousel slide" style="max-width: 600px; max-height: 300px; margin: 0 auto; overflow: hidden;">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 1" style="object-fit: cover; height: 300px;">
+                </div>
+                <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Imagen de carrusel 2" style="object-fit: cover; height: 300px;">
+                </div>
+            </div>
+        
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2" aria-label="Diapositiva 3"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="3" aria-label="Diapositiva 3"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="4" aria-label="Diapositiva 3"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="5" aria-label="Diapositiva 3"></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS (opcional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

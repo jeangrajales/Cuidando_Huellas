@@ -1,0 +1,131 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuidando Huellas - Mascotas Perdidas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/mascotas_perdidas.css' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body>
+    <!-- Main Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="img/Logo.png" alt="Cuidando Huellas Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse ms-3" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item mx-2">
+                        <a class="nav-link active" href="#">Mascotas Perdidas</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="#">Productos</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="#">Servicios</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="#">Veterinarios Asociados</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-login me-2"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</button>
+                    <button class="btn btn-register"><i class="fas fa-user-plus"></i> Registrarse</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Secondary Navigation -->
+ 
+    
+    <!-- Main Content with Paw Background -->
+    <div class="container paw-background py-4">
+
+
+        <!-- Pet Cards -->
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- First Pet Card -->
+                <div class="pet-card">
+                    <h3>¡Se busca Maria!</h3>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-2">
+                                <span class="pet-tag">Edad: 3</span>
+                                <span class="pet-tag">Sexo: Masculino</span>
+                            </div>
+                            <p>Se perdió por el lado de la comuna 13 el día 26/08/2024.</p>
+                            <p>Ayúdalo a volver a casa.</p>
+                            <p>Para mayor información: 3027570549</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <img src="https://cdn.pixabay.com/photo/2020/01/16/09/13/cat-4769978_1280.jpg" class="pet-image" alt="Toño">
+                            <div class="mt-2">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Second Pet Card -->
+                <div class="pet-card">
+                    <h3>¡Se busca Tobi</h3>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-2">
+                                <span class="pet-tag">Edad: 3</span>
+                                <span class="pet-tag">Raza: Criollo</span>
+                                <span class="pet-tag">Sexo: Masculino</span>
+                            </div>
+                            <p>Se perdió por el lado de la comuna 13 el día 26/08/2024.</p>
+                            <p>Ayúdalo a volver a casa.</p>
+                            <p>Para mayor información: 3027570549</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <img src="https://cdn.pixabay.com/photo/2023/01/03/16/00/dog-7694676_1280.jpg" class="pet-image" alt="Toño">
+                            <div class="mt-2">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Third Pet Card -->
+                <div class="pet-card">
+                    <h3>¡Se busca Toño!</h3>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-2">
+                                <span class="pet-tag">Edad: 3</span>
+                                <span class="pet-tag">Raza: Criollo</span>
+                                <span class="pet-tag">Sexo: Masculino</span>
+                            </div>
+                            <p>Se perdió por el lado de la comuna 13 el día 26/08/2024.</p>
+                            <p>Ayúdalo a volver a casa.</p>
+                            <p>Para mayor información: 3027570549</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <img src="https://cdn.pixabay.com/photo/2018/05/11/08/10/pets-3389717_1280.jpg" class="pet-image" alt="Toño">
+                            <div class="mt-2">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
