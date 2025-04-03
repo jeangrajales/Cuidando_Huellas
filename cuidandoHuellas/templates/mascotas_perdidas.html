@@ -12,32 +12,46 @@
 </head>
 <body>
     <!-- Main Navbar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #C4B092;">
+        <div class="container-fluid">
+            <!-- Logo de la página -->
             <a class="navbar-brand" href="#">
-                <img src="img/Logo.png" alt="Cuidando Huellas Logo">
+                <img src="{% static 'img/logo_ch.png' %}" alt="" class="logo img-fluid" style="height: 80px;">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <!-- Botón hamburguesa para dispositivos móviles -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse ms-3" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item mx-2">
-                        <a class="nav-link active" href="#">Mascotas Perdidas</a>
+            <!-- Contenido que se colapsará en dispositivos móviles -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Enlaces de navegación (alineados a la izquierda) -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link post-nav-item" href="#">Mascotas Perdidas</a>
                     </li>
-                    <li class="nav-item mx-2">
-                        <a class="nav-link" href="#">Productos</a>
+                    <li class="nav-item">
+                        <a class="nav-link post-nav-item" href="#">Productos</a>
                     </li>
-                    <li class="nav-item mx-2">
-                        <a class="nav-link" href="#">Servicios</a>
+                    <li class="nav-item">
+                        <a class="nav-link post-nav-item" href="#">Servicios</a>
                     </li>
-                    <li class="nav-item mx-2">
-                        <a class="nav-link" href="#">Veterinarios Asociados</a>
+                    <li class="nav-item">
+                        <a class="nav-link post-nav-item" href="#">Veterinarias asociadas</a>
                     </li>
                 </ul>
-                <div class="d-flex">
-                    <button class="btn btn-login me-2"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</button>
-                    <button class="btn btn-register"><i class="fas fa-user-plus"></i> Registrarse</button>
+                
+                <!-- Barra de búsqueda centrada -->
+                <div class="search-container d-flex justify-content-center mx-auto ms-3" style="width: 30%;">
+                    <!-- justify-content-center: centra el contenido horizontalmente -->
+                    <!-- mx-auto: establece márgenes automáticos a los lados para centrar el elemento -->
+                    <!-- width 30%: establece un ancho del 30% del contenedor padre -->
+                    <input type="text" class="search-input rounded-pill" id="" placeholder="🔍 Buscar...">
+                </div>
+                
+                <!-- Información de usuario y botón de cerrar sesión (alineados a la derecha) -->
+                <div class="d-flex"> 
+                    <button class="btn btn-login me-2"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</button> 
+                    <button class="btn btn-register"><i class="fas fa-user-plus"></i> Registrarse</button> 
                 </div>
             </div>
         </div>
@@ -55,7 +69,8 @@
             <div class="col-md-8">
                 <!-- First Pet Card -->
                 <div class="pet-card">
-                    <h3>¡Se busca Maria!</h3>
+                    <span class="search-badge">Se busca ¡Maria!</span>
+                    
                     <div class="row">
                         <div class="col-md-8">
                             <div class="mb-2">
@@ -77,7 +92,8 @@
                 
                 <!-- Second Pet Card -->
                 <div class="pet-card">
-                    <h3>¡Se busca Tobi</h3>
+                    <span class="search-badge">Se busca ¡Tobi!</span>
+                    
                     <div class="row">
                         <div class="col-md-8">
                             <div class="mb-2">
@@ -100,7 +116,8 @@
                 
                 <!-- Third Pet Card -->
                 <div class="pet-card">
-                    <h3>¡Se busca Toño!</h3>
+                    <span class="search-badge">Se busca ¡Toño! </span>
+                   
                     <div class="row">
                         <div class="col-md-8">
                             <div class="mb-2">

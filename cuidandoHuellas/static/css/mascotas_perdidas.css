@@ -6,43 +6,72 @@ body {
 }
 
 
-.navbar {
-    background-color: #c1a66b;
-    padding: 10px 20px;
-}
-
-.navbar-brand img {
+.logo {
     height: 60px;
+    object-fit: contain;
+    max-width: 100%;
 }
 
-.nav-link {
-    color: white !important;
+.search-container {
+    display: flex;
+    flex-grow: 1;
+    min-width: 200px;
     margin: 0 10px;
 }
 
-.btn-login {
-    background-color: #8a7a5f;
-    color: white;
+.search-input {
+    flex-grow: 1;
+    padding: 8px;
     border: none;
+    border-radius: 20%;
     margin-right: 10px;
 }
 
-.btn-register {
-    background-color: #4d4233;
-    color: white;
+.search-button {
+    background-color: #f0f0f0;
     border: none;
+    padding: 8px 15px;
+    border-radius: 30px;
 }
 
-.secondary-nav {
-    background-color: #e6d7b8;
-    padding: 10px 0;
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.secondary-nav .nav-link {
-    color: #4d4233 !important;
-    font-weight: bold;
+.nav-button {
+    background-color: #ffffff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    white-space: nowrap;
 }
 
+.content {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-top: 20px; /* Ajustado ya que el post-navigation está ahora en la navbar */
+}
+        
+.post-nav-item {
+    background-color: #C4B092;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 4px;
+    white-space: nowrap;
+    cursor: pointer;
+    width: 190px;
+    text-align: center;
+    margin: 0 5px;
+    padding: 8px 15px;
+    transition: background-color 0.3s ease;
+}
+
+.post-nav-item:hover {
+    background-color: #AB9B7E;
+}
 .back-button {
     color: #4d4233;
     font-size: 24px;
@@ -61,25 +90,40 @@ body {
 }
 
 .pet-card {
-    background-color: #c1a66b;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    position: relative;
     padding: 15px;
-    color: white;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .pet-card h3 {
-    font-size: 22px;
-    text-align: center;
-    margin-bottom: 15px;
+    margin-top: 0;
+    font-size: 1.2rem;
+    padding-left: 80px; /* Espacio para el "Se busca" */
 }
 
 .pet-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid white;
+    max-width: 100%;
+    height: auto;
+    max-height: 150px; /* Reducido para hacer las tarjetas más pequeñas */
+    border-radius: 6px;
+}
+
+.search-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff6b6b;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
 }
 
 .pet-details {
@@ -97,13 +141,3 @@ body {
     margin-bottom: 5px;
 }
 
-.footer {
-    background-color: #c1a66b;
-    color: #4d4233;
-    padding: 20px 0;
-    margin-top: 20px;
-}
-
-.footer-logo {
-    width: 80px;
-}
