@@ -41,6 +41,11 @@ header {
     color: white;
 }
 
+.post-nav-item:hover{
+    background-color: #AB9B7E;
+}
+
+
 .nav-button {
     background-color: #333;
     color: white;
@@ -142,29 +147,3 @@ header {
     flex: 0 0 30%;
 }
 
-footer {
-    background-color: #c5b190;
-    padding: 20px 0;
-    margin-top: 40px;
-    position: relative;
-}
-
-.footer-silhouette {
-    position: absolute;
-    bottom: 0;
-    height: 40px;
-}
-
-.left-cat {
-    left: 10%;
-}
-
-.center-dog {
-    left: 50%;
-    transform: translateX(-50%);
-    height: 60px;
-}
-
-.right-cat {
-    right: 10%;
-}

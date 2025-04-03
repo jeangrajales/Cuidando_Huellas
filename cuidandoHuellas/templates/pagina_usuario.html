@@ -6,18 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/pagina_usuario.css' %}">
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <title>Vista Usuario</title>
+    <title>Pagina Usuario</title>
     
     <!-- Bootstrap CSS -->
       
 </head>
 <body>
-    <!-- Barra de navegación Bootstrap con menú hamburguesa -->
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #C4B092;">
         <div class="container-fluid">
             <!-- Logo de la página -->
             <a class="navbar-brand" href="#">
-                <img src="{% static 'img/logo_ch.png' %}" alt="" class="logo img-fluid" style="height: 80px;">
+                <img src="{% static 'img/logo_ch.png' %}" alt="Cuidando Huellas Logo" class="logo img-fluid" style="height: 80px;">
             </a>
             <!-- Botón hamburguesa para dispositivos móviles -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +45,7 @@
                     <!-- justify-content-center: centra el contenido horizontalmente -->
                     <!-- mx-auto: establece márgenes automáticos a los lados para centrar el elemento -->
                     <!-- width 30%: establece un ancho del 30% del contenedor padre -->
-                    <input type="text" class="search-input rounded-pill" id="" placeholder="🔍 Buscar...">
+                    <input type="text" class="search-input form-control" placeholder="🔍 Buscar...">
                 </div>
                 
                 <!-- Información de usuario y botón de cerrar sesión (alineados a la derecha) -->
