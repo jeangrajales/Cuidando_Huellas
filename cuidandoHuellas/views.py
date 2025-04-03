@@ -25,7 +25,13 @@ def iniciar_sesion(request):
 
             }  # Autenticacion: creamos la variable session
             messages.success(request, "Bienvenido a cuidando Huellas !!")
-            return redirect("nuestros_servicios")
+            
+            if q.rol == 1:
+                return render(request, 'administrador/pagina_administrador.html')
+            elif q.rol == 2:
+                return render(request, 'pagina_usuario.html')
+            else:
+                return render(request, 'quienes_somos.html')
         
         except Usuario.DoesNotExist:
             #Usuario y contraseña incorrectos
@@ -89,6 +95,7 @@ def registrarse(request):
 def pagina_principal(request):
     return render(request,'pagina_principal.html', {"mostrar_fondo": True})
 
+
 def nuestros_servicios(request):
     return render(request, 'nuestros_servicios.html', {'mostrar_fondo': True})
 
@@ -126,19 +133,18 @@ def adopciones(request):
 def quienes_somos(request):
     return render(request, 'quienes_somos.html')
 
-# Administrador
-
 def pagina_administrador(request):
     return render(request, 'administrador/pagina_administrador.html')
 
 def pagina_usuario(request):
     return render(request, 'pagina_usuario.html' )
 
-def mascotas_perdidas(request):
-    return render(request, 'mascotas_perdidas.html')
+def productos_usuarios(request):
+    return render(request,"productos_usuarios.html")
+# Administrador
+
 
 # Usuarios
-
 def listar_usuarios(request):
     list_usuarios = Usuario.objects.all()
     contexto = {"dato": list_usuarios}

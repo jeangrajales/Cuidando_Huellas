@@ -17,6 +17,15 @@
 
 ### CHANGELOG
 
+---
+
+## [ch1.12.7-Alpha.1] - 2025-04-03
+
+## Added
+
+- Se ha agregado la funcionalidad que redirige a las páginas correspondientes tanto a administradores como a usuarios registrados al iniciar sesión.
+
+---
 ## [ch1.11.7-Alpha.1] - 2025-04-01
 
 ## Added

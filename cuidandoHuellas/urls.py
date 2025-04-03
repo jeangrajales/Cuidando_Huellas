@@ -14,7 +14,9 @@ urlpatterns = [
     path('contactanos/',views.contactanos,name="contactanos"),
     path('quienes_somos/',views.quienes_somos,name="quienes_somos"),
     path('pagina_usuario/',views.pagina_usuario,name="pagina_usuario"),
-    path('mascotas_perdidas',views.mascotas_perdidas,name="mascotas_perdidas"),
+    path('mascotas_perdidas/',views.mascotas_perdidas,name="mascotas_perdidas"),
+    path('productos_usuarios/',views.productos_usuarios,name="productos_usuarios"),
+    
 
     #Administrador
     path('pagina_administrador/',views.pagina_administrador, name="pagina_administrador"),
