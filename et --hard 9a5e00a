@@ -1,0 +1,30 @@
+[33me2bb411[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjean[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33mf15990c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{1}: reset: moving to HEAD~1
+[33m9a5e00a[m HEAD@{2}: commit: ch1.14.8
+[33mf15990c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{3}: pull origin main: Fast-forward
+[33me2bb411[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjean[m[33m)[m HEAD@{4}: checkout: moving from main to jean
+[33mf15990c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{5}: pull origin main: Fast-forward
+[33me2bb411[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjean[m[33m)[m HEAD@{6}: checkout: moving from jean to main
+[33me2bb411[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjean[m[33m)[m HEAD@{7}: reset: moving to HEAD
+[33me2bb411[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjean[m[33m)[m HEAD@{8}: checkout: moving from main to jean
+[33me2bb411[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjean[m[33m)[m HEAD@{9}: checkout: moving from jean to main
+[33me2bb411[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjean[m[33m)[m HEAD@{10}: checkout: moving from main to jean
+[33me2bb411[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjean[m[33m)[m HEAD@{11}: checkout: moving from jean to main
+[33me2bb411[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjean[m[33m)[m HEAD@{12}: pull origin main: Fast-forward
+[33mb36cdc1[m[33m ([m[1;33mtag: [m[1;33mch1.10.7-Alpha.1[m[33m, [m[1;31morigin/jean[m[33m)[m HEAD@{13}: checkout: moving from main to jean
+[33me2bb411[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjean[m[33m)[m HEAD@{14}: pull origin main: Fast-forward
+[33m3ff7243[m HEAD@{15}: checkout: moving from jean to main
+[33mb36cdc1[m[33m ([m[1;33mtag: [m[1;33mch1.10.7-Alpha.1[m[33m, [m[1;31morigin/jean[m[33m)[m HEAD@{16}: commit: ch1.10.7-Alpha.1
+[33m3ff7243[m HEAD@{17}: pull origin main: Fast-forward
+[33m2435651[m HEAD@{18}: checkout: moving from main to jean
+[33m3ff7243[m HEAD@{19}: pull origin main: Fast-forward
+[33m2435651[m HEAD@{20}: checkout: moving from jean to main
+[33m2435651[m HEAD@{21}: pull origin main: Fast-forward
+[33m093fd14[m[33m ([m[1;33mtag: [m[1;33mch1.8.5-Alpha.1[m[33m)[m HEAD@{22}: checkout: moving from main to jean
+[33m2435651[m HEAD@{23}: pull origin main: Fast-forward
+[33m931d263[m HEAD@{24}: checkout: moving from jean to main
+[33m093fd14[m[33m ([m[1;33mtag: [m[1;33mch1.8.5-Alpha.1[m[33m)[m HEAD@{25}: commit: ch1.8.5-Alpha.1
+[33m412e3f2[m[33m ([m[1;33mtag: [m[1;33mch1.6.4-Alpha.1[m[33m)[m HEAD@{26}: checkout: moving from main to jean
+[33m931d263[m HEAD@{27}: checkout: moving from jean to main
+[33m412e3f2[m[33m ([m[1;33mtag: [m[1;33mch1.6.4-Alpha.1[m[33m)[m HEAD@{28}: checkout: moving from main to jean
+[33m931d263[m HEAD@{29}: clone: from https://github.com/jeangrajales/Cuidando_Huellas.git
