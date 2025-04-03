@@ -8,37 +8,38 @@ header {
     padding: 10px 0;
 }
 
-.logo img {
-    height: 80px; /* Aumentado el tamaño del logo */
-    width: auto;
+.logo {
+    height: 60px;
+    object-fit: contain;
+    max-width: 100%;
 }
 
-.navbar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.navbar li {
-    margin-right: 20px;
-}
-
-.navbar a {
-    text-decoration: none;
-    color: white;
-    font-weight: 500;
+.search-container {
+    display: flex;
+    flex-grow: 1;
+    min-width: 200px;
+    margin: 0 10px;
 }
 
 .search-input {
     flex-grow: 1;
     padding: 8px;
     border: none;
-    border-radius: 60px;
+    border-radius: 20%;
     margin-right: 10px;
 }
 
-.post-nav-item {
-    color: white;
+.search-button {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 30px;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .post-nav-item:hover{
@@ -47,13 +48,37 @@ header {
 
 
 .nav-button {
-    background-color: #333;
-    color: white;
+    background-color: #ffffff;
     border: none;
-    border-radius: 5px;
-    padding: 5px 15px;
+    padding: 8px 15px;
+    border-radius: 4px;
+    white-space: nowrap;
 }
 
+.content {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-top: 20px; /* Ajustado ya que el post-navigation está ahora en la navbar */
+}
+        
+.post-nav-item {
+    background-color: #C4B092;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 4px;
+    white-space: nowrap;
+    cursor: pointer;
+    width: 190px;
+    text-align: center;
+    margin: 0 5px;
+    padding: 8px 15px;
+    transition: background-color 0.3s ease;
+}
+
+.post-nav-item:hover {
+    background-color: #AB9B7E;
+}
 /* Podemos ocultar los botones originales ya que ahora están en la navbar */
 .category-buttons {
     display: none;

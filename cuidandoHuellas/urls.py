@@ -16,7 +16,9 @@ urlpatterns = [
     path('pagina_usuario/',views.pagina_usuario,name="pagina_usuario"),
     path('mascotas_perdidas/',views.mascotas_perdidas,name="mascotas_perdidas"),
     path('productos_usuarios/',views.productos_usuarios,name="productos_usuarios"),
-    
+    path('producto_compra/',views.producto_compra,name="producto_compra"),
+    path('productos_usuarios/',views.productos_usuarios,name="productos_usuarios"),
+    path('adopciones/',views.adopciones, name="adopciones"),
 
     #Administrador
     path('pagina_administrador/',views.pagina_administrador, name="pagina_administrador"),

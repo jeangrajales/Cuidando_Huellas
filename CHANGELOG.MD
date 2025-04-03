@@ -19,6 +19,16 @@
 
 ---
 
+## [ch1.13.7-Alpha.1] - 2025-04-03
+
+## Added
+
+- Se agrego la pagina adopciones
+
+- Se modifico el diseño de las paginas productos_usuarios y mascotas_perdidas
+
+---
+
 ## [ch1.12.7-Alpha.1] - 2025-04-03
 
 ## Added

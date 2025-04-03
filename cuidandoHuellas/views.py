@@ -144,6 +144,17 @@ def productos_usuarios(request):
 # Administrador
 
 
+def producto_compra(request):
+    return render(request, 'producto_compra.html')
+
+def productos_usuarios(request):
+    return render(request, 'productos_usuarios.html')
+
+def adopciones(request):
+    return render(request, "adopciones.html"),
+
+# Usuarios
+
 # Usuarios
 def listar_usuarios(request):
     list_usuarios = Usuario.objects.all()
