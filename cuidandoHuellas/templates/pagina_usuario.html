@@ -25,7 +25,7 @@
             <!-- Contenido que se colapsará en dispositivos móviles -->
             <div class="collapse navbar-collapse" id="navbarContent">
                 <!-- Enlaces de navegación (alineados a la izquierda) -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link post-nav-item" href="#">Mascotas Perdidas</a>
                     </li>
@@ -41,19 +41,18 @@
                 </ul>
                 
                 <!-- Barra de búsqueda centrada -->
-                <div class="search-container d-flex justify-content-center mx-auto ms-3" style="width: 30%;">
-                    <!-- justify-content-center: centra el contenido horizontalmente -->
-                    <!-- mx-auto: establece márgenes automáticos a los lados para centrar el elemento -->
-                    <!-- width 30%: establece un ancho del 30% del contenedor padre -->
-                    <input type="text" class="search-input form-control" placeholder="🔍 Buscar...">
+                <div class="search-container d-flex justify-content-center mx-auto" style="width: 40%;">
+                    <input type="text" class="search-input form-control rounded-5" placeholder="🔍 Buscar...">    
                 </div>
-                
-                <!-- Información de usuario y botón de cerrar sesión (alineados a la derecha) -->
+           
                 <div class="d-flex align-items-center">
-                    <!-- d-flex: establece display flex para alinear elementos en línea -->
-                    <!-- align-items-center: centra verticalmente los elementos -->
-                    <p class="username m-0 me-2">Nombre usuario</p> <!-- m-0: sin margen, me-2: margen a la derecha -->
-                    <button class="nav-button btn">Cerrar Sesión</button>
+                    {% if request.session.pista %}
+                        {{ request.session.pista.nombre_completo }}
+                        <a href="{% url 'cerrar_sesion' %}" class="btn btn-success ms-4">Cerrar Sesión</a>
+                    {% else %}
+                        No hay sesion, vaya al login primero 
+                        {{ request.session.pista }}  Mostrar None
+                    {% endif %}
                 </div>
             </div>
         </div>
