@@ -8,33 +8,33 @@
 {% block titulo %} Pagina Principal {% endblock %}
 
 {% block contenido %}
-     <div class="post-navigation">
+
+    <div class="post-navigation">
         <button class="post-nav-button">Mascotas Perdidas</button>
         <button class="post-nav-button">Productos</button>
         <button class="post-nav-button">Servicios</button>
         <button class="post-nav-button">Veterinarias asociadas</button>
       </div>
-      
-    <div class="container text-center mt-4" style="max-width: 900px;">
-        <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-            <div class="carousel-item active" data-bs-interval="10000">
-                <img src=" {% static 'img/imagen_publicidad_pg.png' %}" class="d-block w-100" alt="Publicidad 1">
-            </div>
-            <div class="carousel-item" data-bs-interval="2000">
-                <img src=" {% static 'img/publicidad2 (1).jpg' %}" class="d-block w-100" alt="Publicidad 2">
+      <div class="container text-center mt-4" style="max-width: 900px;">
+          <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                  <div class="carousel-item active" data-bs-interval="50000">
+                      <img src=" {% static 'img/imagen_publicidad_pg.png' %}" class="d-block w-100" alt="Publicidad 1">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="200">
+                        <img src=" {% static 'img/publicidad2 (1).jpg' %}" class="d-block w-100" alt="Publicidad 2">
             </div>
             <div class="carousel-item">
                 <img src=" {% static 'img/publicidad_gato.jpg' %}" class="d-block w-100" alt="Publicidad 3">
             </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
             </button>
             
         </div>
@@ -76,14 +76,5 @@
         </div>
     </div> 
 
-    {% if request.session.pista %}
-        Bienvenido, si hay sesión!
-        {{ request.session.pista }}
-    <a href="{% url 'cerrar_sesion' %}" class="btn btn-success">Cerrar Sesión</a>
-    {% else %}
-         No hay sesion, vaya al login primero 
-        {{ request.session.pista }}  Mostrar None
-    {% endif %}
     
 {% endblock %}
-    

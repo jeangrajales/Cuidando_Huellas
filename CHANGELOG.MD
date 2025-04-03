@@ -19,6 +19,18 @@
 
 ---
 
+## [ch1.14.8] - 2025-04-03
+
+## Added
+
+- Se agrego funcionalidad cuando el usuario ya esta registrado no puede acceder a cierta paginas
+
+## Fixed
+
+- Se corrigio error de espacios en el header de pagina_usuario
+
+---
+
 ## [ch1.13.7-Alpha.1] - 2025-04-03
 
 ## Added

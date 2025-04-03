@@ -18,7 +18,7 @@ def iniciar_sesion(request):
             #Todo Ok si existe el usuario, crear sesion y ir al principal
             
             request.session["pista"] = {
-
+                "telefono": q.telefono,
                 "id": q.id,
                 "rol": q.rol,
                 "nombre_completo": q.nombre_completo
@@ -92,10 +92,13 @@ def registrarse(request):
     else:
         return render(request,'registrarse.html')
 
+@session_rol_permission([1,2,3])
 def pagina_principal(request):
-    return render(request,'pagina_principal.html', {"mostrar_fondo": True})
-
-
+    try:       
+        return render(request,'pagina_usuario.html', {"mostrar_fondo": True})
+    except:
+        return render(request, 'pagina_principal.html')
+    
 def nuestros_servicios(request):
     return render(request, 'nuestros_servicios.html', {'mostrar_fondo': True})
 
@@ -133,15 +136,18 @@ def adopciones(request):
 def quienes_somos(request):
     return render(request, 'quienes_somos.html')
 
-def pagina_administrador(request):
-    return render(request, 'administrador/pagina_administrador.html')
 
 def pagina_usuario(request):
     return render(request, 'pagina_usuario.html' )
 
 def productos_usuarios(request):
     return render(request,"productos_usuarios.html")
+
 # Administrador
+
+@session_rol_permission([1,3])
+def pagina_administrador(request):
+    return render(request, 'administrador/pagina_administrador.html')
 
 
 def producto_compra(request):
@@ -156,18 +162,20 @@ def adopciones(request):
 # Usuarios
 
 # Usuarios
+
+@session_rol_permission([1])
 def listar_usuarios(request):
     list_usuarios = Usuario.objects.all()
     contexto = {"dato": list_usuarios}
     return render(request, 'administrador/usuarios/listar_usuarios.html', contexto)
 
-#Productos
-
+@session_rol_permission([1])
 def listar_productos(request):
     list_productos = Producto.objects.all()
     contexto = {"dato_producto": list_productos}
     return render(request, 'administrador/productos/listar_productos.html', contexto)
 
+@session_rol_permission([1])
 def agregar_productos(request):
     if request.method == "POST":
         nombre_producto = request.POST.get("nombre_producto")
@@ -196,7 +204,7 @@ def agregar_productos(request):
             return redirect('listar_productos')
     else:
         return render(request, "administrador/productos/agregar_productos.html")
-    
+@session_rol_permission([1])
 def eliminar_productos(request, id_producto):
     try:
         traer_producto = Producto.objects.get(pk = id_producto)
@@ -206,7 +214,7 @@ def eliminar_productos(request, id_producto):
         messages.warning(request, "Error: El producto no existe")
     
     return redirect('listar_productos')
-
+@session_rol_permission([1])
 def editar_productos(request, id_producto):
     try:
         traer_producto = Producto.objects.get(pk = id_producto)
