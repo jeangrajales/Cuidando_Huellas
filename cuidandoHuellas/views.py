@@ -143,6 +143,9 @@ def pagina_usuario(request):
 def productos_usuarios(request):
     return render(request,"productos_usuarios.html")
 
+
+def veterinarias_asociadas(request):
+    return render(request,'veterinarias_asociadas.html')
 # Administrador
 
 @session_rol_permission([1,3])

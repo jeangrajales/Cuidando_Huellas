@@ -19,6 +19,8 @@ urlpatterns = [
     path('producto_compra/',views.producto_compra,name="producto_compra"),
     path('productos_usuarios/',views.productos_usuarios,name="productos_usuarios"),
     path('adopciones/',views.adopciones, name="adopciones"),
+    path('veterinarias_asociadas/', views.veterinarias_asociadas,name="veterinaria_asociadas"),
+
 
     #Administrador
     path('pagina_administrador/',views.pagina_administrador, name="pagina_administrador"),

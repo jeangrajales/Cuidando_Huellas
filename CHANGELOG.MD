@@ -17,6 +17,16 @@
 
 ### CHANGELOG
 
+## [ch1.15.9-Alpha.1] - 2025-04-03
+
+## Added
+
+- Se agrego la carpeta `veterinarias_asoviadas`
+
+## Fixed
+
+-Se corrigio algunas imagenes que no tenian nada que ver con lo planeado en `Nuestro_servicios`.
+
 ---
 
 ## [ch1.14.8-Alpha.1] - 2025-04-03
