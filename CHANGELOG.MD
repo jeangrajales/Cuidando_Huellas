@@ -17,6 +17,14 @@
 
 ### CHANGELOG
 
+---
+## [ch1.15.10-Alpha.1] - 2025-04-04
+
+## Fixed
+
+-Se corrigio algunas tarjetas, se implemento un diseño mas claro para el usuario.
+
+---
 ## [ch1.15.9-Alpha.1] - 2025-04-03
 
 ## Added
