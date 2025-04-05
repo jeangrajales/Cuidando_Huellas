@@ -1,0 +1,99 @@
+.navbar {
+    background-color: #C4A675;
+    padding: 10px 15px;
+}
+
+/* 🔹 Ajustar logo sin afectar la altura del header */
+.navbar-brand {
+    margin-left: -10px;
+}
+.navbar-brand img {
+    height: 80px;
+}
+
+/* 🔹 Menú ocupa el espacio disponible hasta el último texto */
+.navbar-nav {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+/* 🔹 Cada enlace ocupa espacio uniformemente */
+.nav-item {
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* 🔹 Estilo de los enlaces */
+.nav-link {
+    color: white !important;
+    font-size: 16px !important;
+    height: 40px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    transition: 0.3s !important;
+}
+
+/* 🔹 Hover con efecto de botón */
+.nav-link:hover {
+    background-color: rgb(124, 117, 117);
+    color: #C4A675;
+    border-radius: 5px;
+}
+
+/* 🔹 Buscador más ancho */
+.search-container {
+    max-width: 320px;
+}
+.search-input {
+    margin-right: 70px !important;
+    width: 100%;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+/* 🔹 Botón de Cerrar Sesión */
+.nav-button {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+.nav-button:hover {
+    background-color: white;
+    color: #C4A675;
+}
+
+.username {
+    color: white;
+    margin: 0 10px;
+}
+
+/* 🔹 Asegurar distribución correcta en responsive */
+.navbar-collapse {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+@media (max-width: 992px) {
+    .navbar-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .search-container {
+        width: 100%;
+        text-align: center;
+    }
+
+    .navbar-collapse {
+        flex-direction: column;
+        align-items: center;
+    }
+}

@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Usuario(models.Model):
+    id_usuario = models.AutoField(primary_key= True)
     nombre_completo = models.CharField(max_length=100)
     ciudad = models.CharField(max_length=100)
     telefono = models.PositiveIntegerField()

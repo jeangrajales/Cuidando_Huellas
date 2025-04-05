@@ -18,6 +18,15 @@
 ### CHANGELOG
 
 ---
+
+## [ch1.15.11-Alpha.1] - 2025-04-04
+
+## Fixed
+
+- Se ajustaron y organizaron los diseños predeterminados de varias páginas que presentaban desorden en su estructura.
+- Se mejoró la lógica del inicio de sesión para restringir correctamente el acceso a determinadas secciones.
+
+---
 ## [ch1.15.10-Alpha.1] - 2025-04-04
 
 ## Fixed

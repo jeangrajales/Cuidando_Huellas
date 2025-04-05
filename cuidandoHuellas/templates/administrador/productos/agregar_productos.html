@@ -10,6 +10,12 @@
 </head>
 <body>
 
+{% if dato %}
+    <h1 class="text-center"> Actualizar Producto</h1>
+{% else %}
+    <h1>Agregar Producto</h1>
+{% endif %}
+
     <div class="container">
         <h3 class="text-center text-dark">Formulario de Producto</h3>
         <form method="post" enctype="multipart/form-data">
@@ -17,23 +23,23 @@
 
             <div class="mb-3">
                 <label class="form-label">Nombre del Producto</label>
-                <input type="text" name="nombre_producto" value="{{ data.nombre_producto}}" class="form-control" required>
+                <input type="text" name="nombre_producto" value="{{ dato.nombre_producto}}" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Descripción</label>
-                <textarea class="form-control" name="descripcion" rows="3" required></textarea>
+                <textarea class="form-control" name="descripcion" rows="3" required>{{ dato.descripcion }}</textarea>
             </div>
             <div class="mb-3">
                 <label class="form-label">Precio</label>
-                <input type="number" name="precio" class="form-control" required>
+                <input type="number" name="precio" value="{{ dato.precio }}" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cantidad</label>
-                <input type="number" name="cantidad" class="form-control" required>
+                <input type="number" name="cantidad" value="{{ dato.cantidad }}" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Categoría</label>
-                <select class="form-select" name="categoria">
+                <select class="form-select" name="categoria" value="{{ dato.categoria }}">
                     <option>Alimento Mascotas</option>
                     <option>Accesorios Mascotas</option>
                     <option>Ropa Mascotas</option>
@@ -41,15 +47,18 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Estado</label>
-                <select class="form-select" name="estado">
+                <select class="form-select" name="estado" value="{{ dato.estado }}">
                     <option>Disponible</option>
                     <option>No Disponible</option>
                 </select>
             </div>
             <div class="mb-3">
-                <label class="form-label">Foto del Producto</label>
+                <label class="form-label"></label>
+                {% if dato.foto_producto %}
+                    <img src="{{ dato.foto_producto.url }}" alt="Foto actual" class="img-thumbnail mb-2" style="max-width: 200px;">
+                {% endif %}
                 <input type="file" name="foto_producto" class="form-control">
-            </div>
+            </div>            
             <button type="submit" class="btn btn-custom w-100">Guardar</button>
         </form>
     </div>

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'administrador/base.html' %}
 {% load static %}
 
 {% block estilos_unicos %}
@@ -10,10 +10,18 @@
 {% block contenido %}
 
     <div class="post-navigation">
-        <button class="post-nav-button">Mascotas Perdidas</button>
-        <button class="post-nav-button">Productos</button>
-        <button class="post-nav-button">Servicios</button>
-        <button class="post-nav-button">Veterinarias asociadas</button>
+        <a href="{% url 'mascotas_perdidas' %}">
+            <button class="post-nav-button">Mascotas Perdidas</button>
+        </a>
+        <a href="{% url 'productos_usuarios' %}">
+            <button class="post-nav-button">Productos</button>
+        </a>
+        <a href="{% url 'adopciones' %}">
+            <button class="post-nav-button">Adopciones</button>
+        </a>
+        <a href="{% url 'veterinarias_asociadas' %}">
+            <button class="post-nav-button">Veterinarias asociadas</button>
+        </a>
       </div>
       <div class="container text-center mt-4" style="max-width: 900px;">
           <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
@@ -76,5 +84,4 @@
         </div>
     </div> 
 
-    
 {% endblock %}

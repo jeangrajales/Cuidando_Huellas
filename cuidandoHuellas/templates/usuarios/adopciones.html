@@ -1,0 +1,111 @@
+{% extends 'administrador/base_sesion.html' %}
+{% load static %}
+{% block estilos_unicos %}
+    <link rel="stylesheet" href="{% static 'css/usuarios/adopciones.css' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block titulo %} Adopciones {% endblock %}
+
+
+{% block contenido %}
+    <!-- Main Content -->
+    <div class="container my-4">
+ 
+        </div>
+        
+        <div class="row">
+            <!-- Side Menu -->
+            <div class="col-md-3">
+                <div class="side-menu">
+                    <h5>Categorías</h5>
+                    <ul>
+                        <li><input type="checkbox"> Cachorros</li>
+                        <li><input type="checkbox"> Adultos</li>
+                        <li><input type="checkbox"> Mixto</li>
+                        <li><input type="checkbox"> Hembras</li>
+                        <li><input type="checkbox"> Machos</li>
+                        <li><input type="checkbox"> Pequeños</li>
+                        <li><input type="checkbox"> Medianos</li>
+                        <li><input type="checkbox"> Grandes</li>
+                        <li><input type="checkbox"> Especiales</li>
+                        <li><input type="checkbox"> Adoptados</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Dog Cards -->
+            <div class="col-md-9">
+                <div class="row">
+                    <!-- First Row -->
+                    <div class="col-md-4">
+                        <div class="dog-card">
+                            <img src="https://cdn.pixabay.com/photo/2019/08/19/07/46/pets-4415653_640.jpg" alt="Lulu 1" class="dog-image">
+                            <h5>Lulu 1</h5>
+                            <p>Raza: Mestizo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dog-card">
+                            <img src="https://cdn.pixabay.com/photo/2015/01/30/05/11/dog-617041_640.jpg" alt="Lulu 2" class="dog-image">
+                            <h5>Lulu 2</h5>
+                            <p>Raza: Mestizo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dog-card">
+                            <img src="https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_640.jpg" alt="Lulu 3" class="dog-image">
+                            <h5>Lulu 3</h5>
+                            <p>Raza: Mestizo</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Second Row -->
+                    <div class="col-md-4">
+                        <div class="dog-card">
+                            <img src="https://cdn.pixabay.com/photo/2020/04/13/20/48/dog-5040008_640.jpg" alt="Toby 1" class="dog-image">
+                            <h5>Toby 1</h5>
+                            <p>Raza: Mestizo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dog-card">
+                            <img src="https://cdn.pixabay.com/photo/2019/04/12/15/12/cat-4122355_640.jpg" alt="Toby 2" class="dog-image">
+                            <h5>Toby 2</h5>
+                            <p>Raza: Mestizo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dog-card">
+                            <img src="https://cdn.pixabay.com/photo/2021/12/17/19/15/grooming-6877250_640.jpg" alt="Toby 3" class="dog-image">
+                            <h5>Toby 3</h5>
+                            <p>Raza: Mestizo</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Third Row -->
+                    <div class="col-md-4">
+                        <div class="dog-card">
+                            <img src="https://cdn.pixabay.com/photo/2021/12/17/19/16/grooming-6877265_640.jpg" alt="Max 1" class="dog-image">
+                            <h5>Max 1</h5>
+                            <p>Raza: Mestizo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dog-card">
+                            <img src="https://cdn.pixabay.com/photo/2018/11/05/17/34/cat-3796529_640.jpg" alt="Max 2" class="dog-image">
+                            <h5>Max 2</h5>
+                            <p>Raza: Mestizo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dog-card">
+                            <img src="https://cdn.pixabay.com/photo/2019/01/30/19/52/husky-3965255_640.jpg" alt="Max 3" class="dog-image">
+                            <h5>Max 3</h5>
+                            <p>Raza: Mestizo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
