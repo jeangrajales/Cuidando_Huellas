@@ -5,72 +5,202 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/usuarios/productos_usuarios.css' %}">
 {% endblock %}
+
 {% block titulo %} Productos {% endblock %}
 
-
 {% block contenido %}
-    <!-- Primer Carrusel de productos -->
-    <div class="container mt-3">
-        <div id="carouselProductos" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                {% for productos in productos_agrupados %}
-                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <div class="container">
-                            <div class="row g-3 justify-content-center">
-                                {% for producto in productos %}
-                                    <div class="col-12 col-sm-6 col-md-3">
-                                        <div class="product-card text-center p-3 border rounded">
-                                            {% if producto.foto_producto %}
-                                                <img src="{{ producto.foto_producto.url }}" class="img-fluid rounded" alt="{{ producto.nombre_producto }}">
-                                            {% endif %}
-                                            <div class="product-name">{{ producto.nombre_producto }}</div>
-                                            <div class="product-price">{{ producto.precio }}</div>
-                                            <button class="btn btn-dark mt-2">Comprar</button>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+
+<!-- Botón para abrir el modal del carrito -->
+<div class="text-end me-5 mt-3">
+    <a href="#modalCarrito" data-bs-toggle="modal" class="btn btn-outline-primary">
+        🛒 Ver Carrito
+    </a>
+</div>
+
+<!-- Carrusel de productos -->
+<div class="container main-section mt-3">
+    <div id="productCarousel1" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {% for producto in dato_producto_usuario %}
+          {% if forloop.first or forloop.counter0|divisibleby:4 %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <div class="row">
+          {% endif %}
+
+          <div class="col-3">
+            <div class="product-card">
+              {% if producto.foto_producto %}
+                <img src="{{ producto.foto_producto.url }}" class="card-img-top" alt="{{ producto.nombre_producto }}">
+              {% endif %}
+              <div class="product-name">{{ producto.nombre_producto }}</div>
+              <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
+              <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="btn btn-primary buy-button">
+                Comprar
+              </a>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProductos" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselProductos" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Siguiente</span>
-            </button>
+          </div>
+
+          {% if forloop.counter|divisibleby:4 or forloop.last %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel1" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#productCarousel1" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+    </div>
+</div>
+
+<!-- Segundo Carrusel -->
+<div class="container main-section mt-3">
+    <div id="productCarousel2" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {% for producto in dato_producto_usuario %}
+          {% if forloop.first or forloop.counter0|divisibleby:4 %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <div class="row">
+          {% endif %}
+
+          <div class="col-3">
+            <div class="product-card">
+              {% if producto.foto_producto %}
+                <img src="{{ producto.foto_producto.url }}" class="card-img-top" alt="{{ producto.nombre_producto }}">
+              {% endif %}
+              <div class="product-name">{{ producto.nombre_producto }}</div>
+              <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
+              <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="btn btn-primary buy-button">
+                Comprar
+              </a>
+            </div>
+          </div>
+
+          {% if forloop.counter|divisibleby:4 or forloop.last %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel2" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#productCarousel2" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+    </div>
+</div>
+
+<!-- Productos populares -->
+<div class="container">
+    <div class="popular-products">
+        <h5 class="mb-3 text-center">Productos Más Vendidos</h5>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="popular-product-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdvQDIHaPcLNMFb0j-m2fhpEuBRdO5NwjSBw&s" alt="Torre para gato">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="popular-product-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaISLvwbvM8Bi4dLhyPajtzaZJSEwL0K3BLw&s" alt="Collar para perro">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="popular-product-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfV5-q9nY1Mp1_XNIwHT5WeBg4toYws-RgUA&s" alt="Juguetes para gato">
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
-    
-
-    
-
-    <!-- Productos populares -->
-    <div class="container">
-        <div class="popular-products">
-            <h5 class="mb-3 text-center">Productos Mas vendidos</h5>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="popular-product-card">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdvQDIHaPcLNMFb0j-m2fhpEuBRdO5NwjSBw&s" alt="Torre para gato">
+<!-- Modal Carrito -->
+<div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCarritoLabel">Tu carrito de compras</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        {% if carrito and carrito.items.all %}
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in carrito.items.all %}
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      {% if item.producto.foto_producto %}
+                        <img src="{{ item.producto.foto_producto.url }}" alt="{{ item.producto.nombre_producto }}" width="60" class="me-2 rounded">
+                      {% endif %}
+                      <span>{{ item.producto.nombre_producto }}</span>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="popular-product-card">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaISLvwbvM8Bi4dLhyPajtzaZJSEwL0K3BLw&s" alt="Collar para perro">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="popular-product-card">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfV5-q9nY1Mp1_XNIwHT5WeBg4toYws-RgUA&s" alt="Juguetes para gato">
-                    </div>
-                </div>
-            </div>
-        </div>
+                  </td>
+                  <td>${{ item.producto.precio|floatformat:0 }}</td>
+                  <td>{{ item.cantidad }}</td>
+                  <td>${{ item.subtotal|floatformat:0 }}</td>
+                  <td>
+                    <a href="{% url 'aumentar_cantidad' item.id %}#modalCarrito" class="btn btn-sm btn-success">+</a>
+                    <a href="{% url 'disminuir_cantidad' item.id %}#modalCarrito" class="btn btn-sm btn-warning">-</a>
+                    <a href="{% url 'eliminar_item' item.id %}#modalCarrito" class="btn btn-sm btn-danger">🗑</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="text-end fw-bold fs-5">Total: ${{ carrito.total|floatformat:0 }}</div>
+        {% else %}
+          <div class="text-center py-4">
+            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+            <p class="lead">Tu carrito está vacío.</p>
+            <p class="text-muted">Agrega productos para realizar tu compra.</p>
+          </div>
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        {% if carrito and carrito.items.all %}
+          <a href="{% url 'vaciar_carrito' %}#modalCarrito" class="btn btn-outline-danger">
+            <i class="fas fa-trash-alt me-1"></i> Vaciar carrito
+          </a>
+          <a href="{% url 'generar_factura' %}" class="btn btn-success">
+            <i class="fas fa-cash-register me-1"></i> Pagar ahora
+          </a>
+        {% endif %}
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+          <i class="fas fa-shopping-cart me-1"></i> Seguir Comprando
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- Script para mantener el modal abierto si URL contiene #modalCarrito -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    if (window.location.hash === "#modalCarrito") {
+      var modal = new bootstrap.Modal(document.getElementById('modalCarrito'));
+      modal.show();
+    }
+  });
+</script>
 
 {% endblock %}

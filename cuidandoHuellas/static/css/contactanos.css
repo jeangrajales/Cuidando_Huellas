@@ -4,7 +4,7 @@ body{
     position: relative;
     width: 100%;
     min-height: 100vh;
-    background-image: url('../img/fondo_contactanos.jpg'); 
+    background-image: url('../img/fondo_contactanos.jpg') !important; 
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

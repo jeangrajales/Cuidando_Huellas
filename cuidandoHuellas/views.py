@@ -5,6 +5,9 @@ from .utils import *
 from django.db import IntegrityError
 from django.core.mail import send_mail 
 from .forms import *
+from django.utils import timezone
+from datetime import datetime
+from decimal import Decimal
 # Create your views here.
 
 # Usuarios
@@ -140,8 +143,25 @@ def pagina_usuario(request):
 @session_required_and_rol_permission(1,2,3)
 def productos_usuarios(request):
     list_productos = Producto.objects.all()
-    contexto = {"dato_producto_usuario": list_productos}
+    
+    # Obtener el id del usuario desde la sesión
+    id_usuario = request.session.get("pista", {}).get("id")
+
+    carrito = None
+    if id_usuario:
+        try:
+            usuario = Usuario.objects.get(id_usuario=id_usuario)
+            carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
+        except Usuario.DoesNotExist:
+            carrito = None
+
+    contexto = {
+        "dato_producto_usuario": list_productos,
+        "carrito": carrito
+    }
+
     return render(request, 'usuarios/productos_usuarios.html', contexto)
+
 
 @session_required_and_rol_permission(1,2,3)
 def veterinarias_asociadas(request):
@@ -256,3 +276,143 @@ def editar_productos(request, id_producto):
         traer_producto = Producto.objects.get(pk=id_producto)
         return render(request, "administrador/productos/agregar_productos.html", {"dato": traer_producto})
         
+
+def agregar_al_carrito(request, id_producto):
+    # 1. Recuperar ID del usuario desde la sesión
+    id_usuario = request.session.get("pista", {}).get("id", None)
+    
+    # Si no hay sesión activa, redirige
+    if not id_usuario:
+        return redirect("iniciar_sesion")
+
+    try:
+        # 2. Obtener usuario y producto
+        usuario = Usuario.objects.get(id_usuario=id_usuario)
+        producto = Producto.objects.get(id_producto=id_producto)
+        
+        # 3. Obtener o crear carrito para el usuario
+        carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
+        
+        # 4. Obtener o crear ítem en el carrito
+        item, creado_item = ItemCarrito.objects.get_or_create(
+            carrito=carrito,
+            producto=producto
+        )
+        
+        # 5. Si ya existía, solo aumenta la cantidad
+        if not creado_item:
+            item.cantidad += 1
+            item.save()
+    
+    except (Usuario.DoesNotExist, Producto.DoesNotExist):
+        pass  # Puedes loguear o mostrar mensaje si quieres
+
+    return redirect("productos_usuarios")
+
+
+
+
+def aumentar_cantidad(request, item_id):
+    try:
+        item = ItemCarrito.objects.get(id=item_id)
+        item.cantidad += 1
+        item.save()
+    except ItemCarrito.DoesNotExist:
+        pass
+    return redirect('productos_usuarios')
+
+def disminuir_cantidad(request, item_id):
+    try:
+        item = ItemCarrito.objects.get(id=item_id)
+        if item.cantidad > 1:
+            item.cantidad -= 1
+            item.save()
+        else:
+            item.delete()
+    except ItemCarrito.DoesNotExist:
+        pass
+    return redirect('productos_usuarios')
+
+def eliminar_item(request, item_id):
+    try:
+        item = ItemCarrito.objects.get(id=item_id)
+        item.delete()
+    except ItemCarrito.DoesNotExist:
+        pass
+    return redirect('productos_usuarios')
+
+def vaciar_carrito(request):
+    usuario_sesion = request.session.get("pista")
+    if not usuario_sesion:
+        return redirect("iniciar_sesion")
+
+    try:
+        usuario = Usuario.objects.get(id_usuario=usuario_sesion["id"])
+        carrito = Carrito.objects.get(usuario=usuario)
+        carrito.items.all().delete()
+    except (Usuario.DoesNotExist, Carrito.DoesNotExist):
+        pass
+    return redirect('productos_usuarios')
+
+
+
+def generar_factura(request):
+    id_usuario = request.session.get('pista', {}).get('id')
+
+    if not id_usuario:
+        return redirect('iniciar_sesion')
+
+    try:
+        usuario = Usuario.objects.get(id_usuario=id_usuario)
+        # Traer el carrito
+        carrito = Carrito.objects.get(usuario=usuario)
+        items = carrito.items.all()
+
+        if not items.exists():
+            messages.warning(request, "No hay productos en el carrito para facturar")
+            return redirect('productos_usuarios')
+
+        # Calcular el total exacto como decimal
+        total = sum(item.subtotal() for item in items)
+
+        # Crear factura
+        factura = Factura.objects.create(
+            usuario=usuario,
+            fecha=timezone.now(),
+            total=Decimal(total)
+        )
+
+        # Crear detalles de factura
+        detalles = []
+        for item in items:
+            detalle = DetalleFactura.objects.create(
+                factura=factura,
+                producto=item.producto,
+                cantidad=item.cantidad,
+                subtotal=item.subtotal()
+            )
+            detalles.append(detalle)
+
+            # Descontar stock del producto
+            item.producto.cantidad -= item.cantidad
+            item.producto.save()
+
+        # Vaciar el carrito después de generar la factura
+        items.delete()
+
+        # Obtener fecha y hora formateadas
+        fecha_actual = factura.fecha.strftime('%Y-%m-%d')
+        hora_actual = factura.fecha.strftime('%H:%M:%S')
+
+        # Redirigir a la vista de factura con todos los datos necesarios
+        return render(request, 'usuarios/factura_generada.html', {
+            'factura': factura,
+            'detalles': detalles,
+            'usuario': usuario,
+            'fecha': fecha_actual,
+            'hora': hora_actual
+        })
+    
+    except (Usuario.DoesNotExist, Carrito.DoesNotExist):
+        messages.error(request, "Ocurrió un error al generar la factura")
+        return redirect('productos_usuarios')

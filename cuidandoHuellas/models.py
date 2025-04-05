@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 # Create your models here.
 
 class Usuario(models.Model):
@@ -43,4 +43,30 @@ class Producto(models.Model):
 
     def __str__(self):
         return f"{self.id_producto} - {self.nombre_producto} - {self.descripcion} - {self.precio} - {self.foto_producto}"
+    
+    
 
+class Carrito(models.Model):
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    
+    def total(self):
+        return sum(item.subtotal() for item in self.items.all())
+
+class ItemCarrito(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE, related_name='items')
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
+
+    def subtotal(self):
+        return self.producto.precio * self.cantidad
+
+class Factura(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(default=timezone.now)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+
+class DetalleFactura(models.Model):
+    factura = models.ForeignKey(Factura, on_delete=models.CASCADE, related_name='detalles')
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2)
