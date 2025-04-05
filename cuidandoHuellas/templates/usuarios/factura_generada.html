@@ -1,0 +1,155 @@
+{% extends 'administrador/base_sesion.html' %}
+{% load static %}
+
+{% block estilos_unicos %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    .factura-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .logo-factura {
+        max-width: 120px;
+    }
+    .factura-header {
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    .producto-img {
+        max-width: 80px;
+        max-height: 80px;
+        object-fit: contain;
+    }
+    .factura-footer {
+        margin-top: 30px;
+        padding-top: 15px;
+        border-top: 1px solid #dee2e6;
+    }
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block titulo %} Factura Generada {% endblock %}
+
+{% block contenido %}
+<div class="container mt-5 mb-5">
+    <div class="factura-container">
+        <div class="card shadow p-4">
+            <!-- Encabezado de la factura -->
+            <div class="factura-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        {% if logo %}
+                        <img src="{% static 'logo.png' %}" alt="Logo" class="logo-factura mb-3">
+                        {% endif %}
+                        <h4 class="fw-bold">Factura de compra</h4>
+                        <p class="text-muted mb-0">Gracias por tu compra, {{ usuario.nombre_completo }} 🎉</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p class="mb-1"><strong>Fecha:</strong> {{ fecha }}</p>
+                        <p class="mb-1"><strong>Hora:</strong> {{ hora }}</p>
+                        <p class="mb-0"><strong>Estado:</strong> <span class="badge bg-success">Pagado</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Datos del cliente -->
+            <div class="card mb-4 bg-light">
+                <div class="card-body">
+                    <h5 class="mb-3">Datos del cliente</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Nombre:</strong> {{ usuario.nombre_completo }}</p>
+                            <p class="mb-1"><strong>Ciudad:</strong> {{ usuario.ciudad }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Correo:</strong> {{ usuario.correo }}</p>
+                            <p class="mb-1"><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalle de productos -->
+            <h5 class="mb-3">Detalle de productos</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Imagen</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in detalles %}
+                        <tr>
+                            <td>{{ item.producto.nombre_producto }}</td>
+                            <td><img src="{{ item.producto.foto_producto.url }}" alt="{{ item.producto.nombre_producto }}" class="producto-img rounded"></td>
+                            <td>{{ item.cantidad }}</td>
+                            <td>${{ item.producto.precio|floatformat:0 }}</td>
+                            <td>${{ item.subtotal|floatformat:0 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No hay productos en esta factura</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-end"><strong>Total</strong></td>
+                            <td><strong>${{ factura.total|floatformat:0 }}</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Total y acciones -->
+            <div class="factura-footer">
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="alert alert-info">
+                            <p class="mb-0">¡Tu pedido está en proceso! Recibirás una confirmación a tu correo electrónico.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-end fs-5">
+                        <p class="mb-0"><strong>Total a pagar: ${{ factura.total|floatformat:0 }}</strong></p>
+                    </div>
+                </div>
+
+                <!-- Solo botón de imprimir -->
+                <div class="d-flex justify-content-center mt-4 no-print">
+                    <button onclick="window.print()" class="btn btn-outline-dark">
+                        <i class="fas fa-print me-2"></i> Imprimir factura
+                    </button>
+                </div>
+                
+                <!-- Botón para volver a la tienda -->
+                <div class="text-center mt-3 no-print">
+                    <a href="{% url 'productos_usuarios' %}" class="btn btn-primary">
+                        <i class="fas fa-store me-2"></i> Volver a la tienda
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts_unicos %}
+<script>
+    // Script para que la impresión sea más limpia
+    function printFactura() {
+        window.print();
+    }
+</script>
+{% endblock %}

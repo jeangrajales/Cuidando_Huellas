@@ -2,11 +2,11 @@ body {
     position: relative;
     width: 100%;
     min-height: 100vh;
-    background-image: url('../img/fondo_marcadeagua2.jpg'); 
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
+    background-image: url('../../img/fondo_marcadeagua2.jpg') !important; 
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
 }
 
 /* Nuevo header */

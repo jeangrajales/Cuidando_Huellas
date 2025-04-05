@@ -19,6 +19,21 @@
 
 ---
 
+## [ch1.16.12-Alpha.1] - 2025-04-05
+
+## Added
+
+- Se agrego toda la funcionalidad del carrito
+- Se agrego nueva tablas de los carritos
+- Se agrego carpetas nuevas en el templates
+
+## Fixed
+
+- Se corrigieron erros en la imagenes de iniciar sesion y registrarse.
+- Se corrigio logica de las views
+
+---
+
 ## [ch1.15.11-Alpha.1] - 2025-04-04
 
 ## Fixed

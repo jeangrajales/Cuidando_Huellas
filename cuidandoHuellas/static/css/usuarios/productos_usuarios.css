@@ -25,7 +25,7 @@ body {
   border-radius: 10px;
   margin: 10px;
   padding: 10px;
-  height: 286px;
+  height: 340px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -33,7 +33,7 @@ body {
 }
 
 .product-card img {
-  max-height: 157px;
+  max-height: 214px;
   max-width: 100%;
   margin-bottom: 10px;
   border-radius: 10px;
