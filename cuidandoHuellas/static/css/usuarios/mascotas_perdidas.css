@@ -1,0 +1,39 @@
+body {
+    background-color: #eae0d5;
+}
+.card-custom {
+    display: flex;
+    flex-direction: row;
+    background-color: #C4A675;
+    border-radius: 15px;
+    padding: 15px;
+    overflow: hidden;
+    align-items: center;
+}
+.card-text {
+    flex: 1;
+    padding-right: 10px;
+}
+.card-image img {
+    border-radius: 50%;
+    width: 140px; /* Aumentado para ocupar espacio del fondo eliminado */
+    height: 140px;
+    object-fit: cover;
+}
+.badge {
+    font-size: 14px;
+    margin-right: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.info-badge {
+    background-color: #d8c3a5;
+    color: black;
+    margin-bottom: 5px; /* Espacio entre Edad/Raza y Sexo */
+}
+.info-badge-dark {
+    background-color: #3D2B1F;
+    color: white;
+    display: block; /* Para que Sexo quede abajo separado */
+    margin-top: 8px;
+}

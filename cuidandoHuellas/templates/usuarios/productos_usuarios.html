@@ -1,0 +1,76 @@
+{% extends 'administrador/base_sesion.html' %}
+{% load static %}
+
+{% block estilos_unicos %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/usuarios/productos_usuarios.css' %}">
+{% endblock %}
+{% block titulo %} Productos {% endblock %}
+
+
+{% block contenido %}
+    <!-- Primer Carrusel de productos -->
+    <div class="container mt-3">
+        <div id="carouselProductos" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for productos in productos_agrupados %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="container">
+                            <div class="row g-3 justify-content-center">
+                                {% for producto in productos %}
+                                    <div class="col-12 col-sm-6 col-md-3">
+                                        <div class="product-card text-center p-3 border rounded">
+                                            {% if producto.foto_producto %}
+                                                <img src="{{ producto.foto_producto.url }}" class="img-fluid rounded" alt="{{ producto.nombre_producto }}">
+                                            {% endif %}
+                                            <div class="product-name">{{ producto.nombre_producto }}</div>
+                                            <div class="product-price">{{ producto.precio }}</div>
+                                            <button class="btn btn-dark mt-2">Comprar</button>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProductos" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselProductos" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </div>
+
+    
+
+    
+
+    <!-- Productos populares -->
+    <div class="container">
+        <div class="popular-products">
+            <h5 class="mb-3 text-center">Productos Mas vendidos</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="popular-product-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdvQDIHaPcLNMFb0j-m2fhpEuBRdO5NwjSBw&s" alt="Torre para gato">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="popular-product-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaISLvwbvM8Bi4dLhyPajtzaZJSEwL0K3BLw&s" alt="Collar para perro">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="popular-product-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfV5-q9nY1Mp1_XNIwHT5WeBg4toYws-RgUA&s" alt="Juguetes para gato">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

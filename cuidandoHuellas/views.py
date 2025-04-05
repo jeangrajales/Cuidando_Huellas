@@ -7,6 +7,9 @@ from django.core.mail import send_mail
 from .forms import *
 # Create your views here.
 
+# Usuarios
+
+# -------------------
 
 def iniciar_sesion(request):
     if request.method == "POST":
@@ -19,7 +22,7 @@ def iniciar_sesion(request):
             
             request.session["pista"] = {
                 "telefono": q.telefono,
-                "id": q.id,
+                "id": q.id_usuario,
                 "rol": q.rol,
                 "nombre_completo": q.nombre_completo
 
@@ -29,7 +32,7 @@ def iniciar_sesion(request):
             if q.rol == 1:
                 return render(request, 'administrador/pagina_administrador.html')
             elif q.rol == 2:
-                return render(request, 'pagina_usuario.html')
+                return render(request, 'usuarios/pagina_usuario.html')
             else:
                 return render(request, 'quienes_somos.html')
         
@@ -45,7 +48,7 @@ def iniciar_sesion(request):
         if verificar:
             return redirect("pagina_principal")
         else:
-            return render(request, "iniciar_sesion.html")
+            return render(request, "usuarios/iniciar_sesion.html")
         
 def cerrar_sesion(request):
     try:
@@ -69,7 +72,7 @@ def registrarse(request):
         # Se valida si el usuario ya existe mediante el correo electronico
         if Usuario.objects.filter(correo = correo).exists():
             messages.error(request,"Error, el correo electronico ya se encuentra registrado")
-            return render(request, 'registrarse.html')
+            return render(request, 'usuarios/registrarse.html')
         
         #Si el usuario no existe se crea el usuario y se guarda
         else:
@@ -82,22 +85,19 @@ def registrarse(request):
             )
             crear_usuario.save()
             messages.success(request,"Se ha creado la cuenta correctamente, inicie sesion")
+            return redirect('pagina_usuario')
     else:
         # Si el metodo no es POST No entra por la condicion
-          return render(request, "registrarse.html")     
+          return render(request, "usuarios/registrarse.html")     
               
     if request.session.get('pista'):
         messages.info(request, 'Ya tienes una sesion iniciada')
         return render(request,'pagina_principal.html')
     else:
-        return render(request,'registrarse.html')
+        return render(request,'usuarios/registrarse.html')
 
-@session_rol_permission([1,2,3])
 def pagina_principal(request):
-    try:       
-        return render(request,'pagina_usuario.html', {"mostrar_fondo": True})
-    except:
-        return render(request, 'pagina_principal.html')
+    return render(request, 'pagina_principal.html')
     
 def nuestros_servicios(request):
     return render(request, 'nuestros_servicios.html', {'mostrar_fondo': True})
@@ -123,62 +123,67 @@ def contactanos(request):
     else:
         return render(request,"contactanos.html")
 
-
+@session_required_and_rol_permission(1,2,3)
 def mascotas_perdidas(request):
-    return render(request,'mascotas_perdidas.html')
-
-def productos(request):
-    pass
+    return render(request,'usuarios/mascotas_perdidas.html')
 
 def adopciones(request):
-    return render(request,'adopciones.html')
+    return render(request,'usuarios/adopciones.html')
 
 def quienes_somos(request):
     return render(request, 'quienes_somos.html')
 
-
+@session_required_and_rol_permission(1,2,3)
 def pagina_usuario(request):
-    return render(request, 'pagina_usuario.html' )
+    return render(request, 'usuarios/pagina_usuario.html' )
 
+@session_required_and_rol_permission(1,2,3)
 def productos_usuarios(request):
-    return render(request,"productos_usuarios.html")
+    list_productos = Producto.objects.all()
+    contexto = {"dato_producto_usuario": list_productos}
+    return render(request, 'usuarios/productos_usuarios.html', contexto)
 
-
+@session_required_and_rol_permission(1,2,3)
 def veterinarias_asociadas(request):
-    return render(request,'veterinarias_asociadas.html')
+    return render(request,'usuarios/veterinarias_asociadas.html')
+
+def producto_compra(request):
+    return render(request, 'usuarios/producto_compra.html')
+
+# --------------------------------------------------------------
 # Administrador
 
-@session_rol_permission([1,3])
+@session_required_and_rol_permission(1)
 def pagina_administrador(request):
     return render(request, 'administrador/pagina_administrador.html')
 
-
-def producto_compra(request):
-    return render(request, 'producto_compra.html')
-
-def productos_usuarios(request):
-    return render(request, 'productos_usuarios.html')
-
-def adopciones(request):
-    return render(request, "adopciones.html"),
-
-# Usuarios
-
-# Usuarios
-
-@session_rol_permission([1])
+@session_required_and_rol_permission(1)
 def listar_usuarios(request):
     list_usuarios = Usuario.objects.all()
     contexto = {"dato": list_usuarios}
     return render(request, 'administrador/usuarios/listar_usuarios.html', contexto)
 
-@session_rol_permission([1])
+@session_required_and_rol_permission(1)
+def eliminar_usuarios(request, id_usuario):
+    try:
+        traer_usuarios = Usuario.objects.get(pk = id_usuario)
+        traer_usuarios.delete()
+        messages.success(request,"Usuario eliminado correctamente")
+    except Usuario.DoesNotExist:
+        messages.warning(request, "Error: El usuario no existe")
+    return redirect('listar_usuarios')
+
+@session_required_and_rol_permission(1)
 def listar_productos(request):
     list_productos = Producto.objects.all()
     contexto = {"dato_producto": list_productos}
     return render(request, 'administrador/productos/listar_productos.html', contexto)
 
-@session_rol_permission([1])
+
+
+    
+
+@session_required_and_rol_permission(1)
 def agregar_productos(request):
     if request.method == "POST":
         nombre_producto = request.POST.get("nombre_producto")
@@ -207,7 +212,8 @@ def agregar_productos(request):
             return redirect('listar_productos')
     else:
         return render(request, "administrador/productos/agregar_productos.html")
-@session_rol_permission([1])
+    
+@session_required_and_rol_permission(1)
 def eliminar_productos(request, id_producto):
     try:
         traer_producto = Producto.objects.get(pk = id_producto)
@@ -215,9 +221,9 @@ def eliminar_productos(request, id_producto):
         messages.success(request, "El producto se ha eliminado correctamente")
     except Producto.DoesNotExist:
         messages.warning(request, "Error: El producto no existe")
-    
     return redirect('listar_productos')
-@session_rol_permission([1])
+
+@session_required_and_rol_permission(1)
 def editar_productos(request, id_producto):
     try:
         traer_producto = Producto.objects.get(pk = id_producto)
@@ -235,11 +241,11 @@ def editar_productos(request, id_producto):
         categoria = request.POST.get("categoria")
         estado = request.POST.get("estado")
         
-        traer_producto.nombre_producto = nombre_producto,
-        traer_producto.precio = precio,
-        traer_producto.cantidad = cantidad,
-        traer_producto.descripcion = descripcion,
-        traer_producto.foto_producto = foto_producto,
+        traer_producto.nombre_producto = nombre_producto
+        traer_producto.precio = precio
+        traer_producto.cantidad = cantidad
+        traer_producto.descripcion = descripcion
+        traer_producto.foto_producto = foto_producto
         traer_producto.categoria = categoria
         traer_producto.estado = estado
         traer_producto.save()
@@ -247,6 +253,6 @@ def editar_productos(request, id_producto):
         return redirect('listar_productos')
         
     else:
+        traer_producto = Producto.objects.get(pk=id_producto)
         return render(request, "administrador/productos/agregar_productos.html", {"dato": traer_producto})
-        
         

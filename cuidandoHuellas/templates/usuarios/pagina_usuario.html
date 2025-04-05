@@ -1,0 +1,135 @@
+{% extends 'administrador/base_sesion.html' %}
+{% load static %}
+{% block estilos_unicos %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/usuarios/pagina_usuario.css' %}">
+{% endblock %}
+{% block titulo %} Pagina Usuario {% endblock %}
+
+{% block contenido %}
+    <div id="notificaciones">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center"
+            role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <!-- Main Content -->
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Post Form -->
+                <div class="card post-form mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Comparte fotos de tu mascota</h5>
+                        <form>
+                            <div class="mb-3">
+                                <textarea class="form-control" rows="3" placeholder="Describe a tu mascota aquí..."></textarea>
+                            </div>
+                            
+                            <!-- Photo Upload Preview -->
+                            <div class="photo-upload-preview">
+                                <div class="preview-image">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                                <div class="preview-image">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                                <div class="preview-image">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                                <div class="preview-image">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                                <div class="preview-image">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <button type="button" class="btn btn-outline-primary">
+                                    <i class="fas fa-camera me-1"></i> Agregar fotos
+                                </button>
+                                <button type="submit" class="btn btn-primary">Publicar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Una sola publicación con carrusel -->
+                <div class="card pet-card">
+                    <div class="card-header bg-white p-3">
+                        <div class="d-flex align-items-center">
+                            <img src="/api/placeholder/45/45" class="user-avatar me-2" alt="Usuario">
+                            <div>
+                                <h6 class="mb-0">Maria García</h6>
+                                <small class="text-muted">Hace 2 horas</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body pb-2">
+                        <p>Mi hermoso Toby disfrutando del parque este fin de semana. ¡Le encanta jugar con la pelota y correr por el césped! Es un labrador de 2 años muy activo y cariñoso.</p>
+                    </div>
+                    
+                    <!-- Carrusel de fotos -->
+                    <div id="petPhotoCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#petPhotoCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#petPhotoCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#petPhotoCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#petPhotoCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                            <button type="button" data-bs-target="#petPhotoCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="{% static 'img/gato2.jpg' %}" class="d-block w-100" alt="Mascota 1">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{% static 'img/gato.jpg' %}" class="d-block w-100" alt="Mascota 2">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{% static 'img/gato2.jpg' %}" class="d-block w-100" alt="Mascota 3">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{% static 'img/gato.jpg' %}" class="d-block w-100" alt="Mascota 4">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{% static 'img/gato2.jpg' %}" class="d-block w-100" alt="Mascota 5">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#petPhotoCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#petPhotoCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    </div>
+                    
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="fas fa-thumbs-up me-1"></i> Me gusta
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-comment me-1"></i> Comentar
+                                </button>
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-share me-1"></i> Compartir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
