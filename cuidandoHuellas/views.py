@@ -8,6 +8,7 @@ from .forms import *
 from django.utils import timezone
 from datetime import datetime
 from decimal import Decimal
+from django.http import HttpResponse
 # Create your views here.
 
 # Usuarios
@@ -33,11 +34,11 @@ def iniciar_sesion(request):
             messages.success(request, "Bienvenido a cuidando Huellas !!")
             
             if q.rol == 1:
-                return render(request, 'administrador/pagina_administrador.html')
+                return redirect('pagina_administrador')
             elif q.rol == 2:
-                return render(request, 'usuarios/pagina_usuario.html')
+                return redirect('pagina_usuario')
             else:
-                return render(request, 'quienes_somos.html')
+                return render('quienes_somos')
         
         except Usuario.DoesNotExist:
             #Usuario y contraseña incorrectos
@@ -92,12 +93,7 @@ def registrarse(request):
     else:
         # Si el metodo no es POST No entra por la condicion
           return render(request, "usuarios/registrarse.html")     
-              
-    if request.session.get('pista'):
-        messages.info(request, 'Ya tienes una sesion iniciada')
-        return render(request,'pagina_principal.html')
-    else:
-        return render(request,'usuarios/registrarse.html')
+
 
 def pagina_principal(request):
     return render(request, 'pagina_principal.html')
@@ -128,18 +124,66 @@ def contactanos(request):
 
 @session_required_and_rol_permission(1,2,3)
 def mascotas_perdidas(request):
-    return render(request,'usuarios/mascotas_perdidas.html')
+    publicaciones = PublicacionMascota.objects.filter(tipo_publicacion='perdida').order_by('-fecha_publicacion')
+    return render(request, "usuarios/mascotas_perdidas.html", {
+        "publicaciones": publicaciones
+    })
 
 def adopciones(request):
-    return render(request,'usuarios/adopciones.html')
+    publicaciones = PublicacionMascota.objects.filter(tipo_publicacion='adopcion').order_by('-fecha_publicacion')
+    return render(request, "usuarios/adopciones.html", {
+        "publicaciones": publicaciones
+    })
 
 def quienes_somos(request):
     return render(request, 'quienes_somos.html')
 
-@session_required_and_rol_permission(1,2,3)
+@session_required_and_rol_permission(1, 2, 3)
 def pagina_usuario(request):
-    return render(request, 'usuarios/pagina_usuario.html' )
+    sesion = request.session.get("pista", None)
 
+    if not sesion:
+        return redirect("iniciar_sesion")
+
+    try:
+        usuario = Usuario.objects.get(id_usuario=sesion["id"])
+    except Usuario.DoesNotExist:
+        return HttpResponse("Usuario no encontrado", status=404)
+
+    if request.method == "POST":
+        tipo_publicacion = request.POST.get('tipo_publicacion')
+        descripcion = request.POST.get('descripcion')
+        nombre_mascota = request.POST.get('nombre_mascota')
+        raza = request.POST.get('raza')
+        edad = request.POST.get('edad')
+        sexo = request.POST.get('sexo')
+        contacto = request.POST.get('contacto')
+
+        if tipo_publicacion and descripcion and nombre_mascota and raza and edad and sexo and contacto:
+            publicacion = PublicacionMascota.objects.create(
+                usuario=usuario,
+                tipo_publicacion=tipo_publicacion,
+                descripcion=descripcion,
+                nombre_mascota=nombre_mascota,
+                raza=raza,
+                edad=edad,
+                sexo=sexo,
+                contacto=contacto
+            )
+
+            imagenes = request.FILES.getlist('imagenes')
+            for imagen in imagenes:
+                FotoMascota.objects.create(publicacion=publicacion, imagen=imagen)
+
+            return redirect("pagina_usuario")
+
+    publicaciones = PublicacionMascota.objects.all().order_by('-fecha_publicacion')
+
+    return render(request, "usuarios/pagina_usuario.html", {
+        "usuario": usuario,
+        "publicaciones": publicaciones
+    })
+    
 @session_required_and_rol_permission(1,2,3)
 def productos_usuarios(request):
     list_productos = Producto.objects.all()
@@ -199,9 +243,6 @@ def listar_productos(request):
     contexto = {"dato_producto": list_productos}
     return render(request, 'administrador/productos/listar_productos.html', contexto)
 
-
-
-    
 
 @session_required_and_rol_permission(1)
 def agregar_productos(request):
@@ -276,7 +317,6 @@ def editar_productos(request, id_producto):
         traer_producto = Producto.objects.get(pk=id_producto)
         return render(request, "administrador/productos/agregar_productos.html", {"dato": traer_producto})
         
-
 def agregar_al_carrito(request, id_producto):
     # 1. Recuperar ID del usuario desde la sesión
     id_usuario = request.session.get("pista", {}).get("id", None)
@@ -308,9 +348,6 @@ def agregar_al_carrito(request, id_producto):
         pass  # Puedes loguear o mostrar mensaje si quieres
 
     return redirect("productos_usuarios")
-
-
-
 
 def aumentar_cantidad(request, item_id):
     try:
@@ -353,8 +390,6 @@ def vaciar_carrito(request):
     except (Usuario.DoesNotExist, Carrito.DoesNotExist):
         pass
     return redirect('productos_usuarios')
-
-
 
 def generar_factura(request):
     id_usuario = request.session.get('pista', {}).get('id')
@@ -416,3 +451,48 @@ def generar_factura(request):
     except (Usuario.DoesNotExist, Carrito.DoesNotExist):
         messages.error(request, "Ocurrió un error al generar la factura")
         return redirect('productos_usuarios')
+    
+def listar_mascotas_perdidas(request):
+    list_mascotas_perdidas = PublicacionMascota.objects.all()
+    contexto = {"dato_mascotas_perdidas": list_mascotas_perdidas}
+    return render(request, 'administrador/mascotas/listar_mascotas_perdidas.html', contexto)
+
+def eliminar_mascotas_perdidas(request, publicacion_id):
+    try:
+        traer_mascota_perdidas = PublicacionMascota.objects.get(id=publicacion_id)
+        traer_mascota_perdidas.delete()
+        messages.success(request, "La mascota se ha eliminado correctamente")
+    except PublicacionMascota.DoesNotExist:
+        messages.warning(request, "Error: La mascota  no existe")
+    return redirect('listar_mascotas_perdidas')
+
+def listar_mascotas_adopcion(request):
+    list_mascotas_adopcion = PublicacionMascota.objects.filter(tipo_publicacion='adopcion')
+    contexto = {"dato_mascotas_adopcion": list_mascotas_adopcion}
+    return render(request, 'administrador/mascotas/listar_mascotas_adopcion.html', contexto)
+
+def eliminar_mascotas_adopcion(request, publicacion_id):
+    try:
+        traer_mascota_adopcion = PublicacionMascota.objects.get(id=publicacion_id, tipo_publicacion='adopcion')
+        traer_mascota_adopcion.delete()
+        messages.success(request, "La mascota en adopción se ha eliminado correctamente")
+    except PublicacionMascota.DoesNotExist:
+        messages.warning(request, "Error: La mascota en adopción no existe")
+    return redirect('listar_mascotas_adopcion')
+
+def eliminar_publicacion(request, publicacion_id):
+    try:
+        id_usuario = request.session["pista"]["id"]
+        usuario_actual = Usuario.objects.get(id_usuario=id_usuario)
+
+        publicacion = PublicacionMascota.objects.get(id=publicacion_id)
+        if publicacion.usuario == usuario_actual:
+            publicacion.delete()
+            messages.success(request, "Publicación eliminada correctamente.")
+        else:
+            messages.error(request, "No tienes permiso para eliminar esta publicación.")
+    except Exception as e:
+        print("Error al eliminar:", e)
+        messages.error(request, "Ocurrió un error al intentar eliminar la publicación.")
+
+    return redirect("pagina_usuario")

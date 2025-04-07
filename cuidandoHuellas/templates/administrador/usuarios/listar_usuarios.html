@@ -1,5 +1,6 @@
+{% extends 'administrador/pagina_administrador.html' %}
 {% load static %}
-
+{% block contenido_admin %}
 {% if request.session.pista.rol == 1 %}
     <div id="notificaciones">
         {% if messages %}
@@ -62,3 +63,4 @@
     </div>
 {% endif %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

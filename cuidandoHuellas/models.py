@@ -70,3 +70,30 @@ class DetalleFactura(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+    
+class PublicacionMascota(models.Model):
+    TIPO_PUBLICACION = (
+        ('perdida', 'Mascota Perdida'),
+        ('adopcion', 'Mascota en Adopción'),
+    )
+
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='publicaciones')
+    descripcion = models.TextField()
+    fecha_publicacion = models.DateTimeField(auto_now_add=True)
+    tipo_publicacion = models.CharField(max_length=10, choices=TIPO_PUBLICACION, default='perdida')
+    nombre_mascota = models.CharField(max_length=100, null=True, blank=True)
+    edad = models.CharField(max_length=50, null=True, blank=True)
+    raza = models.CharField(max_length=100, null=True, blank=True)
+    sexo = models.CharField(max_length=10, null=True, blank=True)
+    contacto = models.CharField(max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return f"Publicación de {self.usuario.nombre_completo} - {self.fecha_publicacion.strftime('%d/%m/%Y')}"
+
+
+class FotoMascota(models.Model):
+    publicacion = models.ForeignKey(PublicacionMascota, on_delete=models.CASCADE, related_name='fotos')
+    imagen = models.ImageField(upload_to='fotos_mascotas/')
+    
+    def __str__(self):
+        return f"Foto de publicación {self.publicacion.id}"

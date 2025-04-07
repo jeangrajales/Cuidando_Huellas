@@ -36,7 +36,9 @@
 
             {% if request.session.pista %}
             <div class="d-flex align-items-center">
-                <p class="username">{{ request.session.pista.nombre_completo }}</p>
+                <a href="{% url 'pagina_usuario' %}">
+                    <p class="username">{{ request.session.pista.nombre_completo }}</p>
+                </a>
                 <a href="{% url 'cerrar_sesion' %}">
                     <button class="nav-button btn bg-warning">Cerrar Sesión</button>
                 </a>

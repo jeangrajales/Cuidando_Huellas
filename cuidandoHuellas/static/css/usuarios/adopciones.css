@@ -1,66 +1,46 @@
-
-.post-nav-item {
-    background-color: #C4B092;
-    color: rgb(19, 18, 18);
-    border: none;
-    border-radius: 4px;
-    white-space: nowrap;
-    cursor: pointer;
-    width: 190px;
-    text-align: center;
-    margin: 0 5px;
-    padding: 8px 15px;
-    transition: background-color 0.3s ease;
-}
-
-.post-nav-item:hover {
-    background-color: #C4B092;
-}
-
-.menu-buttons {
-    margin: 20px 0;
-}
-
-.menu-btn {
-    background-color: #C4B092;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    margin: 5px;
-    width: 100%;
-}
-
-.side-menu {
-    background-color: #C4B092;
-    padding: 10px;
-    border-radius: 5px;
-    color:rgb(12, 12, 12);
-}
-
-.side-menu ul {
-    list-style-type: none;
-    padding-left: 10px;
-}
-
-.side-menu li {
-    margin: 8px 0;
-}
-
 .dog-card {
-    background-color: #C4B092;
-    border-radius: 10px;
+    background-color: #b7996d;
+    border-radius: 15px;
     padding: 15px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: rgb(12, 12, 12);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    height: 100%;
 }
 
 .dog-image {
     width: 120px;
     height: 120px;
-    border-radius: 50%;
     object-fit: cover;
-    margin: 0 auto 10px;
+    border-radius: 50%;
+    border: 3px solid white;
     display: block;
+    margin: 0 auto;
 }
 
+.text-purple {
+    color: rebeccapurple;
+}
+
+.side-menu {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.side-menu h5 {
+    font-weight: bold;
+}
+
+.side-menu ul li {
+    margin-bottom: 10px;
+}
+
+.lost-pet-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid white;
+    display: block;
+    margin: 0 auto;
+}

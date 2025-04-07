@@ -33,11 +33,14 @@ body {
 }
 
 .product-card img {
-  max-height: 214px;
-  max-width: 100%;
-  margin-bottom: 10px;
+  width: 214px;
+  height: 214px;
+  object-fit: cover;
   border-radius: 10px;
+  display: block;
+  margin: 0 auto 10px auto;
 }
+
 
 .product-name {
   color: white;

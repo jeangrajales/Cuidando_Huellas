@@ -1,50 +1,88 @@
- /* Estilo para la barra lateral */
+
+    body {
+      background-color: #d6d6d4;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
     .sidebar {
-      background-color: #c4b092; /* Color de fondo */
-      width: 250px;             /* Ancho fijo para pantallas grandes */
-      min-height: 100vh;        /* Altura completa de la ventana */
-      transition: width 0.3s ease;
+      background-color: #B79C6F;
+      color: white;
+      height: 100vh;
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 1rem;
+      overflow-y: auto;
     }
-    .sidebar .nav-link {
-      color: #000;              /* Color del texto */
-    }
-    .sidebar .nav-link:hover {
-      background-color: rgba(0, 0, 0, 0.1);
-    }
-    /* Estilo para las imágenes de iconos */
-    .icon {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-      margin-right: 10px;
-    }
-    /* Ajuste para el ícono de usuario */
-    .user-icon {
+
+    .sidebar .profile-img {
       width: 80px;
       height: 80px;
-      object-fit: cover;
       border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: block;
     }
-    /* Ajustes responsivos */
-    @media (max-width: 768px) {
-      .sidebar {
-        width: 60px;
-        overflow: hidden;
-      }
-      .sidebar .profile,
-      .sidebar .nav-link span {
-        display: none;
-      }
-      .sidebar .nav-link {
-        justify-content: center;
-        padding: 15px 0;
-      }
-      .main-content {
-        margin-left: 60px;
-      }
+
+    .sidebar h5 {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
     }
+
+    .sidebar .username {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #D7CCC8;
+      margin-bottom: 1.5rem;
+    }
+
+    .sidebar .nav-link {
+      color: #EDE7E3;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+      background-color: #6D4C41;
+    }
+
     .main-content {
       margin-left: 250px;
-      padding: 20px;
-      transition: margin-left 0.3s ease;
+      padding: 2rem;
     }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .admin-header h2 {
+      color: #3E2723;
+      font-weight: bold;
+    }
+
+    .card-custom {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      background-color: #FFF8F0;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .card-custom h5 {
+      color: #5D4037;
+    }
+
+    .icon-img {
+      width: 24px;
+      height: 24px;
+    }
+  
