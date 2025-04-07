@@ -2,117 +2,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Panel de Administrador</title>
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
-  <link rel="stylesheet" href="{% static 'css/administrador/pagina_administrador.css' %}"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/administrador/pagina_administrador.css' %}">
 </head>
 
 {% if request.session.pista %}
-  <body>
-    <div id="notificaciones">
-      {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center"
-            role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-      {% endif %}
-    </div>
-    <div class="d-flex">
-      <aside class="sidebar p-3">
-        <div class="text-center mb-4 profile">
-          <img src="{% static 'img/foto_admin.png' %}" alt="Administrador" class="w-25">
-          <h5>Administrador</h5>
-        </div>
-        <nav>
-          <ul class="nav flex-column">
-            <li class="nav-item mb-2">
-              <a href="{% url 'listar_productos' %}" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Catálogo" class="icon w-20">
-                <h5>Catálogo</h5>
-              </a>
-            </li>
-            <li class="nav-item mb-2">
-              <a href="{% url 'listar_usuarios' %}" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Usuarios" class="icon">
-                <h5>Usuarios</h5>
-              </a>
-            </li>
-            <li class="nav-item mb-2">
-              <a href="#" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Animales perdidos" class="icon">
-                <h5>Animales perdidos</h5>
-              </a>
-            </li>
-            <li class="nav-item mb-2">
-              <a href="#" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Seguimiento publicaciones" class="icon">
-                <h5>Seguimiento publicaciones</h5>
-              </a>
-            </li>
-            <li class="nav-item mb-2">
-              <a href="#" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Veterinarias asociadas" class="icon">
-                <h5>Veterinarias asociadas</h5>
-              </a>
-            </li>
-            <li class="nav-item mb-2">
-              <a href="#" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Publicidad" class="icon">
-                <h5>Publicidad</h5>
-              </a>
-            </li>
-            <li class="nav-item mb-2">
-              <a href="#" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Reportes" class="icon">
-                <h5>Reportes</h5>
-              </a>
-            </li>
-            <li class="nav-item mb-2">
-              <a href="#" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Soporte" class="icon">
-                <h5>Soporte</h5>
-              </a>
-            </li>
-            <li class="nav-item mb-2">
-              <a href="#" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Análisis" class="icon">
-                <h5>Análisis</h5>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Calendario" class="icon">
-                <h5>Calendario</h5>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="{% url 'pagina_principal' %}" class="nav-link d-flex align-items-center">
-                <img src="{% static 'img/foto_admin.png' %}" alt="Salir" class="icon">
-                <h5>Salir</h5>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-    </div>
-{% else %}
-  <div id="notificaciones">
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center"
-        role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
-    {% endif %}
+<body>
+
+  <!-- BARRA LATERAL -->
+  <div class="sidebar">
+    <img src="{% static 'img/foto_admin.png' %}" class="profile-img" alt="Admin">
+    <h5>Administrador</h5>
+    <p class="username">{{ request.session.pista.nombre_completo }}</p>
+    
+    <nav class="nav flex-column">
+      <a href="{% url 'listar_usuarios' %}" class="nav-link">
+        <img src="{% static 'img/frame_user.png' %}" class="icon-img"> Usuarios
+      </a>
+      <a href="{% url 'listar_productos' %}" class="nav-link">
+        <img src="{% static 'img/frame_productos.png' %}" class="icon-img"> Productos
+      </a>
+      <a href="{% url 'listar_mascotas_perdidas' %}" class="nav-link">
+        <img src="{% static 'img/frame_perdidas.png' %}" class="icon-img"> Mascotas Perdidas
+      </a>
+      <a href="{% url 'listar_mascotas_adopcion' %}" class="nav-link">
+        <img src="{% static 'img/frame_adopcion.png' %}" class="icon-img"> Adopciones
+      </a>
+      <a href="#" class="nav-link">
+        <img src="{% static 'img/frame_soporte.png' %}" class="icon-img"> Soporte
+      </a>
+      <a href="#" class="nav-link">
+        <img src="{% static 'img/frame_reportes.png' %}" class="icon-img"> Reportes
+      </a>
+      <a href="{% url 'pagina_principal' %}" class="nav-link">
+        <img src="{% static 'img/frame_salir.png' %}" class="icon-img"> Salir
+      </a>
+    </nav>
   </div>
-{% endif %}
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="main-content">
+    <div class="admin-header justify-content-center">
+      <h2>Panel de Control</h2>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'danger' }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <!-- CONTENIDO VARIABLE -->
+    {% block contenido_admin %}
+      <div class="card-custom">
+        <h5>Bienvenido al panel</h5>
+        <p>Selecciona una sección desde la izquierda para administrar el sistema.</p>
+      </div>
+    {% endblock %}
+  </div>
+
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
+{% endif %}
 </html>

@@ -20,6 +20,8 @@ urlpatterns = [
     path('productos_usuarios/',views.productos_usuarios,name="productos_usuarios"),
     path('adopciones/',views.adopciones, name="adopciones"),
     path('veterinarias_asociadas/', views.veterinarias_asociadas,name="veterinarias_asociadas"),
+    path('publicacion/<int:publicacion_id>/eliminar/', views.eliminar_publicacion, name='eliminar_publicacion'),
+
     # Carrito
    
     path('agregar_al_carrito/<int:id_producto>/', views.agregar_al_carrito, name='agregar_al_carrito'),
@@ -38,6 +40,14 @@ urlpatterns = [
     path('agregar_productos/',views.agregar_productos, name="agregar_productos"),
     path('eliminar_productos/<int:id_producto>',views.eliminar_productos, name="eliminar_productos"),
     path('editar_productos/<int:id_producto>',views.editar_productos, name="editar_productos"),
+    path('listar_mascotas_perdidas/',views.listar_mascotas_perdidas, name="listar_mascotas_perdidas"),
+    path('eliminar_mascotas_perdidas/<int:publicacion_id>',views.eliminar_mascotas_perdidas, name="eliminar_mascotas_perdidas"),
+    path('listar_mascotas_adopcion/',views.listar_mascotas_adopcion, name="listar_mascotas_adopcion"),
+    path('eliminar_mascotas_adopcion/<int:publicacion_id>/', views.eliminar_mascotas_adopcion, name='eliminar_mascotas_adopcion'),
+
+    
+    
+    
     
  
     

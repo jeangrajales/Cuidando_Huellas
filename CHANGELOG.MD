@@ -19,6 +19,21 @@
 
 ---
 
+## [ch1.17.13-Alpha.1] - 2025-04-06
+
+## Added
+
+- Se agrego la funcionalidad de redirigir publicacion dependiendo de que tipo era, Mascotas perdidas y adopciones.
+- Se implemento nuevo formulario para subir una publicacion mas detallada.
+
+## Fixed
+
+- Se corrigio el diseño del administrador.
+- Se cambiaron los colores del panel administrador.
+- Se corrigio el redireccionamiento del usuario al iniciar sesion.
+
+---
+
 ## [ch1.16.12-Alpha.1] - 2025-04-05
 
 ## Added

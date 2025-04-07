@@ -6,106 +6,57 @@
 {% endblock %}
 {% block titulo %} Adopciones {% endblock %}
 
-
 {% block contenido %}
-    <!-- Main Content -->
-    <div class="container my-4">
- 
-        </div>
-        
-        <div class="row">
-            <!-- Side Menu -->
-            <div class="col-md-3">
-                <div class="side-menu">
-                    <h5>Categorías</h5>
-                    <ul>
-                        <li><input type="checkbox"> Cachorros</li>
-                        <li><input type="checkbox"> Adultos</li>
-                        <li><input type="checkbox"> Mixto</li>
-                        <li><input type="checkbox"> Hembras</li>
-                        <li><input type="checkbox"> Machos</li>
-                        <li><input type="checkbox"> Pequeños</li>
-                        <li><input type="checkbox"> Medianos</li>
-                        <li><input type="checkbox"> Grandes</li>
-                        <li><input type="checkbox"> Especiales</li>
-                        <li><input type="checkbox"> Adoptados</li>
-                    </ul>
-                </div>
+<div class="container my-4">
+    <div class="row">
+        <!-- Side Menu -->
+        <div class="col-md-3">
+            <div class="side-menu">
+                <h5>Filtrar por</h5>
+                <ul class="list-unstyled">
+                    <li><input type="radio" name="edad"> Cachorros</li>
+                    <li><input type="radio" name="edad"> Adultos</li>
+                    <li><input type="radio" name="edad"> Mixto</li>
+                    <hr>
+                    <li><input type="radio" name="sexo"> Todos</li>
+                    <li><input type="radio" name="sexo"> Hembras</li>
+                    <li><input type="radio" name="sexo"> Machos</li>
+                    <hr>
+                    <li><input type="radio" name="tamano"> Todos</li>
+                    <li><input type="radio" name="tamano"> Pequeños</li>
+                    <li><input type="radio" name="tamano"> Medianos</li>
+                    <li><input type="radio" name="tamano"> Grandes</li>
+                </ul>
             </div>
-            
-            <!-- Dog Cards -->
-            <div class="col-md-9">
-                <div class="row">
-                    <!-- First Row -->
-                    <div class="col-md-4">
-                        <div class="dog-card">
-                            <img src="https://cdn.pixabay.com/photo/2019/08/19/07/46/pets-4415653_640.jpg" alt="Lulu 1" class="dog-image">
-                            <h5>Lulu 1</h5>
-                            <p>Raza: Mestizo</p>
+        </div>
+
+        <!-- Publicaciones -->
+        <div class="col-md-9">
+            <div class="row">
+                {% for publicacion in publicaciones %}
+                    {% if publicacion.tipo_publicacion == 'adopcion' %}
+                        <div class="col-md-4 mb-4">
+                            <div class="dog-card text-center p-3">
+                                {% if publicacion.fotos.first %}
+                                    <img src="{{ publicacion.fotos.first.imagen.url }}" alt="{{ publicacion.nombre_mascota }}" class="dog-image mb-2">
+                                {% else %}
+                                    <div class="dog-image placeholder bg-secondary mb-2 d-flex align-items-center justify-content-center text-white">
+                                        <i class="fas fa-paw fa-2x"></i>
+                                    </div>
+                                {% endif %}
+                                <h5 class="text-purple">{{ publicacion.nombre_mascota }}</h5>
+                                <p>Edad: {{ publicacion.edad }}</p>
+                                <p>Sexo: {{ publicacion.sexo }}</p>
+                                <p>Raza: {{ publicacion.raza }}</p>
+                                <p>Contacto: {{ publicacion.contacto }}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="dog-card">
-                            <img src="https://cdn.pixabay.com/photo/2015/01/30/05/11/dog-617041_640.jpg" alt="Lulu 2" class="dog-image">
-                            <h5>Lulu 2</h5>
-                            <p>Raza: Mestizo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="dog-card">
-                            <img src="https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_640.jpg" alt="Lulu 3" class="dog-image">
-                            <h5>Lulu 3</h5>
-                            <p>Raza: Mestizo</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Second Row -->
-                    <div class="col-md-4">
-                        <div class="dog-card">
-                            <img src="https://cdn.pixabay.com/photo/2020/04/13/20/48/dog-5040008_640.jpg" alt="Toby 1" class="dog-image">
-                            <h5>Toby 1</h5>
-                            <p>Raza: Mestizo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="dog-card">
-                            <img src="https://cdn.pixabay.com/photo/2019/04/12/15/12/cat-4122355_640.jpg" alt="Toby 2" class="dog-image">
-                            <h5>Toby 2</h5>
-                            <p>Raza: Mestizo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="dog-card">
-                            <img src="https://cdn.pixabay.com/photo/2021/12/17/19/15/grooming-6877250_640.jpg" alt="Toby 3" class="dog-image">
-                            <h5>Toby 3</h5>
-                            <p>Raza: Mestizo</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Third Row -->
-                    <div class="col-md-4">
-                        <div class="dog-card">
-                            <img src="https://cdn.pixabay.com/photo/2021/12/17/19/16/grooming-6877265_640.jpg" alt="Max 1" class="dog-image">
-                            <h5>Max 1</h5>
-                            <p>Raza: Mestizo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="dog-card">
-                            <img src="https://cdn.pixabay.com/photo/2018/11/05/17/34/cat-3796529_640.jpg" alt="Max 2" class="dog-image">
-                            <h5>Max 2</h5>
-                            <p>Raza: Mestizo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="dog-card">
-                            <img src="https://cdn.pixabay.com/photo/2019/01/30/19/52/husky-3965255_640.jpg" alt="Max 3" class="dog-image">
-                            <h5>Max 3</h5>
-                            <p>Raza: Mestizo</p>
-                        </div>
-                    </div>
-                </div>
+                    {% endif %}
+                {% empty %}
+                    <p class="text-center">No hay mascotas disponibles para adopción.</p>
+                {% endfor %}
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

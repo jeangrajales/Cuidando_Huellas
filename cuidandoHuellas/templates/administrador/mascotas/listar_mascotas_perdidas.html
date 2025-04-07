@@ -1,0 +1,72 @@
+{% extends 'administrador/pagina_administrador.html' %}
+{% load static %}
+{% block contenido_admin %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mascotas Perdidas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/usuarios/mascotas_perdidas.css' %}">
+</head>
+<body>
+
+    <!-- Notificaciones -->
+    <div id="notificaciones">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        <h1 class="text-center my-4">Mascotas Perdidas</h1>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for publicacion in dato_mascotas_perdidas %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-right d-flex align-items-center justify-content-center p-3">
+                            {% if publicacion.fotos.first %}
+                                <img src="{{ publicacion.fotos.first.imagen.url }}" class="rounded-circle lost-pet-img" alt="Mascota">
+                            {% else %}
+                                <div class="rounded-circle lost-pet-img bg-secondary d-flex align-items-center justify-content-center text-white">
+                                    <i class="fas fa-exclamation fa-2x"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Nombre: {{ publicacion.nombre_mascota }}</h5>
+                            <p class="card-text">Raza: {{ publicacion.raza }}</p>
+                            <p class="card-text">Descripción: {{ publicacion.descripcion }}</p>
+                            <p class="card-text">Fecha: {{ publicacion.fecha_publicacion|date:"d/m/Y" }}</p>
+                        </div>
+                        <div class="card-footer d-flex mx-auto gap-5">
+                            <a href="{% url 'eliminar_mascotas_perdidas' publicacion.id %}" class="btn btn-danger btn-sm">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
+                            <a href="" class="btn btn-warning btn-sm">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <a href="" class="btn btn-danger btn-sm d-block w-25 mx-auto mt-5 mb-5">
+            Agregar Mascota Perdida
+        </a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}

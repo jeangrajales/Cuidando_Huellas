@@ -9,101 +9,33 @@
 {% block contenido %}
 <div class="container mt-5">
     <div class="row">
-        <!-- Tarjeta 1 -->
-        <div class="col-md-4 mb-4">
-            <div class="card-custom">
-                <div class="card-text">
-                    <h4>¡Se busca Toño!</h4>
-                    <span class="badge info-badge">Edad: 3</span>
-                    <span class="badge info-badge">Raza: Criollo</span>
-                    <span class="badge info-badge-dark">Sexo: Masculino</span>
-                    <p>Se perdió por la comuna 13 el 26/08/2024.</p>
-                    <p>Para mayor información: 3027557599</p>
+        {% for publicacion in publicaciones %}
+            {% if publicacion.tipo_publicacion == 'perdida' %}
+                <div class="col-md-4 mb-4">
+                    <div class="lost-pet-card d-flex rounded">
+                        <div class="card-left p-3 flex-grow-1">
+                            <h4 class="text-white">¡Se busca {{ publicacion.nombre_mascota }}!</h4>
+                            <span class="badge bg-light text-dark mb-1">Edad: {{ publicacion.edad }}</span><br>
+                            <span class="badge bg-light text-dark mb-1">Raza: {{ publicacion.raza }}</span><br>
+                            <span class="badge bg-dark mb-2">Sexo: {{ publicacion.sexo }}</span>
+                            <p class="text-white">{{ publicacion.descripcion }}</p>
+                            <p class="text-white">Para mayor información: {{ publicacion.contacto }}</p>
+                        </div>
+                        <div class="card-right d-flex align-items-center justify-content-center p-3">
+                            {% if publicacion.fotos.first %}
+                                <img src="{{ publicacion.fotos.first.imagen.url }}" class="rounded-circle lost-pet-img" alt="Mascota">
+                            {% else %}
+                                <div class="rounded-circle lost-pet-img bg-secondary d-flex align-items-center justify-content-center text-white">
+                                    <i class="fas fa-exclamation fa-2x"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-                <div class="card-image">
-                    <img src="{% static 'img/gato.jpg' %}" alt="Mascota">
-                </div>
-            </div>
-        </div>
-
-        <!-- Tarjeta 2 -->
-        <div class="col-md-4 mb-4">
-            <div class="card-custom">
-                <div class="card-text">
-                    <h4>¡Se busca Luna!</h4>
-                    <span class="badge info-badge">Edad: 2</span>
-                    <span class="badge info-badge">Raza: Labrador</span>
-                    <span class="badge info-badge-dark">Sexo: Femenino</span>
-                    <p>Se perdió en el parque central el 14/09/2024.</p>
-                    <p>Para mayor información: 3109876543</p>
-                </div>
-                <div class="card-image">
-                    <img src="{% static 'img/gato.jpg' %}" alt="Mascota">
-                </div>
-            </div>
-        </div>
-
-        <!-- Tarjeta 3 -->
-        <div class="col-md-4 mb-4">
-            <div class="card-custom">
-                <div class="card-text">
-                    <h4>¡Se busca Max!</h4>
-                    <span class="badge info-badge">Edad: 4</span>
-                    <span class="badge info-badge">Raza: Bulldog</span>
-                    <span class="badge info-badge-dark">Sexo: Masculino</span>
-                    <p>Se perdió en la zona industrial el 01/10/2024.</p>
-                    <p>Para mayor información: 3151234567</p>
-                </div>
-                <div class="card-image">
-                    <img src="{% static 'img/gato.jpg' %}" alt="Mascota">
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card-custom">
-                <div class="card-text">
-                    <h4>¡Se busca Max!</h4>
-                    <span class="badge info-badge">Edad: 4</span>
-                    <span class="badge info-badge">Raza: Bulldog</span>
-                    <span class="badge info-badge-dark">Sexo: Masculino</span>
-                    <p>Se perdió en la zona industrial el 01/10/2024.</p>
-                    <p>Para mayor información: 3151234567</p>
-                </div>
-                <div class="card-image">
-                    <img src="{% static 'img/gato.jpg' %}" alt="Mascota">
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card-custom">
-                <div class="card-text">
-                    <h4>¡Se busca Max!</h4>
-                    <span class="badge info-badge">Edad: 4</span>
-                    <span class="badge info-badge">Raza: Bulldog</span>
-                    <span class="badge info-badge-dark">Sexo: Masculino</span>
-                    <p>Se perdió en la zona industrial el 01/10/2024.</p>
-                    <p>Para mayor información: 3151234567</p>
-                </div>
-                <div class="card-image">
-                    <img src="{% static 'img/gato.jpg' %}" alt="Mascota">
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card-custom">
-                <div class="card-text">
-                    <h4>¡Se busca Max!</h4>
-                    <span class="badge info-badge">Edad: 4</span>
-                    <span class="badge info-badge">Raza: Bulldog</span>
-                    <span class="badge info-badge-dark">Sexo: Masculino</span>
-                    <p>Se perdió en la zona industrial el 01/10/2024.</p>
-                    <p>Para mayor información: 3151234567</p>
-                </div>
-                <div class="card-image">
-                    <img src="{% static 'img/gato.jpg' %}" alt="Mascota">
-                </div>
-            </div>
-        </div>
+            {% endif %}
+        {% empty %}
+            <p class="text-center">No hay publicaciones de mascotas perdidas.</p>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

@@ -42,3 +42,16 @@ class FacturaAdmin(admin.ModelAdmin):
 class DetalleFacturaAdmin(admin.ModelAdmin):
     list_display = ['id', 'factura', 'producto', 'cantidad', 'subtotal']
     list_filter = ['factura']
+    
+@admin.register(PublicacionMascota)
+class PublicacionMascotaAdmin(admin.ModelAdmin):
+    list_display = ['id', 'usuario', 'descripcion', 'fecha_publicacion']
+    list_filter = ['fecha_publicacion', 'usuario']
+    search_fields = ['descripcion', 'usuario__nombre_completo']
+
+
+@admin.register(FotoMascota)
+class FotoMascotaAdmin(admin.ModelAdmin):
+    list_display = ['id', 'publicacion', 'imagen']
+    list_filter = ['publicacion']
+    search_fields = ['publicacion__descripcion']
