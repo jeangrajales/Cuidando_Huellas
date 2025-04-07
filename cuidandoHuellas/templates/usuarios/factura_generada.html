@@ -2,37 +2,10 @@
 {% load static %}
 
 {% block estilos_unicos %}
+<link rel="stylesheet" href="{% static 'css/usuarios/factura_generada.css' %}" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>
-    .factura-container {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-    .logo-factura {
-        max-width: 120px;
-    }
-    .factura-header {
-        border-bottom: 1px solid #dee2e6;
-        padding-bottom: 15px;
-        margin-bottom: 20px;
-    }
-    .producto-img {
-        max-width: 80px;
-        max-height: 80px;
-        object-fit: contain;
-    }
-    .factura-footer {
-        margin-top: 30px;
-        padding-top: 15px;
-        border-top: 1px solid #dee2e6;
-    }
-    @media print {
-        .no-print {
-            display: none !important;
-        }
-    }
-</style>
+
 {% endblock %}
 
 {% block titulo %} Factura Generada {% endblock %}

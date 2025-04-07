@@ -16,6 +16,11 @@
 ---
 
 ### CHANGELOG
+---
+## [ch1.17.14-Alpha.1] - 2025-04-06
+
+## Fixed
+- Se agrego la archivo en css `factura_generada`
 
 ---
 
