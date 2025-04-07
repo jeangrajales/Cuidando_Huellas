@@ -76,7 +76,7 @@ class PublicacionMascota(models.Model):
         ('perdida', 'Mascota Perdida'),
         ('adopcion', 'Mascota en Adopción'),
     )
-
+    
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='publicaciones')
     descripcion = models.TextField()
     fecha_publicacion = models.DateTimeField(auto_now_add=True)
