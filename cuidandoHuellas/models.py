@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+import re
 # Create your models here.
 
 class Usuario(models.Model):
@@ -16,6 +18,15 @@ class Usuario(models.Model):
     )
     rol = models.IntegerField(choices=ROLES, default=2)
     
+    def clean(self):
+        # Validar dominio del correo
+        if not re.match(r'^[\w\.-]+@(gmail\.com|hotmail\.com|outlook\.com)$', self.correo):
+            raise ValidationError({'correo': 'Solo se permiten correos de gmail.com, hotmail.com o outlook.com.'})
+
+        # Validar contraseña con letras y números
+        if not re.match(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$', self.contraseña):
+            raise ValidationError({'contraseña': 'La contraseña debe contener letras y números.'})
+
     def __str__(self):
         return f"{self.nombre_completo} - {self.correo}"
     

@@ -26,7 +26,7 @@
             <!-- Formulario publicación -->
             <div class="card post-form mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">Comparte fotos de tu mascota</h5>
+                    <h5 class="card-title">Comparte informacion sobre tu mascota</h5>
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
 
@@ -98,7 +98,7 @@
             <div class="card pet-card mt-4">
                 <div class="card-header bg-white p-3">
                     <div class="d-flex align-items-center">
-                        <img src="/api/placeholder/45/45" class="user-avatar me-2" alt="Usuario">
+                        <img src="{% static 'img/frame_user.png' %}" class="user-avatar me-2" alt="Usuario">
                         <div>
                             <h6 class="mb-0">{{ publicacion.usuario.nombre_completo }}</h6>
                             <small class="text-muted">{{ publicacion.fecha_publicacion|timesince }} atrás</small>

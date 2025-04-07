@@ -19,6 +19,18 @@
 
 ---
 
+## [ch1.18.14-Alpha.1] - 2025-04-06
+
+## Added 
+
+- Se agrego funcionalidad para validar que un correo sea de tipo `@Gmail.com, @hotmail.com, @outlook.com`
+
+## Fixed
+
+- Se corrigio imagenes que no cargaban en panel administrador y pagina usuarios
+
+---
+
 ## [ch1.17.13-Alpha.1] - 2025-04-06
 
 ## Added

@@ -64,35 +64,41 @@ def cerrar_sesion(request):
         return redirect("pagina_principal")
 
 def registrarse(request):
-    # Metodo De la solicitud del formulario debe ser POST 
     if request.method == "POST":
-        # Nos traemos los datos del formulario registrarse
         nombre_completo = request.POST.get("nombre_completo")
         telefono = request.POST.get("telefono")
         ciudad = request.POST.get("ciudad")
         correo = request.POST.get("correo")
         contraseña = request.POST.get("contraseña")
-        
-        # Se valida si el usuario ya existe mediante el correo electronico
-        if Usuario.objects.filter(correo = correo).exists():
-            messages.error(request,"Error, el correo electronico ya se encuentra registrado")
+
+        if Usuario.objects.filter(correo=correo).exists():
+            messages.error(request, "Error, el correo electrónico ya se encuentra registrado")
             return render(request, 'usuarios/registrarse.html')
-        
-        #Si el usuario no existe se crea el usuario y se guarda
+
         else:
             crear_usuario = Usuario(
-                nombre_completo = nombre_completo,
-                telefono = telefono,
-                ciudad = ciudad,
-                correo = correo,
-                contraseña = contraseña
+                nombre_completo=nombre_completo,
+                telefono=telefono,
+                ciudad=ciudad,
+                correo=correo,
+                contraseña=contraseña
             )
-            crear_usuario.save()
-            messages.success(request,"Se ha creado la cuenta correctamente, inicie sesion")
-            return redirect('pagina_usuario')
+
+            try:
+                crear_usuario.full_clean()  # Aquí validamos campos del modelo
+                crear_usuario.save()
+                messages.success(request, "Se ha creado la cuenta correctamente, inicie sesión")
+                return redirect('pagina_usuario')
+
+            except ValidationError as e:
+                # Convertimos errores a mensajes de Django
+                for field, error_list in e.message_dict.items():
+                    for error in error_list:
+                        messages.error(request, f"{field}: {error}")
+                return render(request, 'usuarios/registrarse.html')
+
     else:
-        # Si el metodo no es POST No entra por la condicion
-          return render(request, "usuarios/registrarse.html")     
+        return render(request, "usuarios/registrarse.html")
 
 
 def pagina_principal(request):
@@ -316,7 +322,8 @@ def editar_productos(request, id_producto):
     else:
         traer_producto = Producto.objects.get(pk=id_producto)
         return render(request, "administrador/productos/agregar_productos.html", {"dato": traer_producto})
-        
+
+@session_required_and_rol_permission(1,2,3)
 def agregar_al_carrito(request, id_producto):
     # 1. Recuperar ID del usuario desde la sesión
     id_usuario = request.session.get("pista", {}).get("id", None)
@@ -349,6 +356,7 @@ def agregar_al_carrito(request, id_producto):
 
     return redirect("productos_usuarios")
 
+@session_required_and_rol_permission(1,2,3)
 def aumentar_cantidad(request, item_id):
     try:
         item = ItemCarrito.objects.get(id=item_id)
@@ -358,6 +366,7 @@ def aumentar_cantidad(request, item_id):
         pass
     return redirect('productos_usuarios')
 
+@session_required_and_rol_permission(1,2,3)
 def disminuir_cantidad(request, item_id):
     try:
         item = ItemCarrito.objects.get(id=item_id)
