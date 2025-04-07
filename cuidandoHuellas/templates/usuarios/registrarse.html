@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -16,19 +15,19 @@
     <div id="notificaciones">
       {% if messages %}
       {% for message in messages %}
-      <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center"
-          role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
       {% endfor %}
       {% endif %}
     </div>
+
     <main class="ogin-container text-center d-flex justify-content-center align-items-center vh-100">
       <div class="container-lg">
         <div class="row no-gutter">
-            <div class="col-md-6 d-none d-md-flex bg-image"></div>
-            <div class="col-md-6 bg-light">
+          <div class="col-md-6 d-none d-md-flex bg-image"></div>
+          <div class="col-md-6 bg-light">
             <div class="login d-flex align-items-center py-5">
               <div class="container">
                 <div class="row">
@@ -39,56 +38,79 @@
                     <form method="post">
                       {% csrf_token %}
                       <div class="form-group mb-3">
-                        <input id="inputName" name="nombre_completo" type="name" placeholder="Nombre Completo" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4 text-center"/>
+                        <input id="inputName" name="nombre_completo" type="text"
+                          placeholder="Nombre Completo" required autofocus
+                          class="form-control rounded-pill border-0 shadow-sm px-4 text-center"
+                          pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                          title="Solo se permiten letras y espacios" />
                       </div>
+
                       <div class="form-group mb-3">
-                        <input id="inputName" name="telefono" type="text" placeholder="Numero de celular" pattern="[0-9]{10}" maxlength="10" inputmode="numeric" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4 text-center"/>
+                        <input id="inputPhone" name="telefono" type="text"
+                          placeholder="Número de celular" required
+                          pattern="[0-9]{10}" maxlength="10" inputmode="numeric"
+                          class="form-control rounded-pill border-0 shadow-sm px-4 text-center"
+                          title="Ingresa un número de 10 dígitos" />
                       </div>
+
                       <div class="form-group mb-3">
-                        <select id="ciudad" name="ciudad" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4 form-select text-center">
-                            <option value="">Selecciona ciudad de residencia</option>
-                            <option value="bogota">Bogotá</option>
-                            <option value="medellin">Medellín</option>
-                            <option value="cali">Cali</option>
-                            <option value="barranquilla">Barranquilla</option>
-                            <option value="cartagena">Cartagena</option>
-                            <option value="bucaramanga">Bucaramanga</option>
-                            <option value="pereira">Pereira</option>
-                            <option value="santamarta">Santa Marta</option>
-                            <option value="cucuta">Cúcuta</option>
-                            <option value="ibague">Ibagué</option>
-                            <option value="manizales">Manizales</option>
-                            <option value="neiva">Neiva</option>
-                            <option value="villavicencio">Villavicencio</option>
-                            <option value="pasto">Pasto</option>
-                            <option value="monteria">Montería</option>
+                        <select id="ciudad" name="ciudad" required autofocus
+                          class="form-control rounded-pill border-0 shadow-sm px-4 form-select text-center">
+                          <option value="">Selecciona ciudad de residencia</option>
+                          <option value="bogota">Bogotá</option>
+                          <option value="medellin">Medellín</option>
+                          <option value="cali">Cali</option>
+                          <option value="barranquilla">Barranquilla</option>
+                          <option value="cartagena">Cartagena</option>
+                          <option value="bucaramanga">Bucaramanga</option>
+                          <option value="pereira">Pereira</option>
+                          <option value="santamarta">Santa Marta</option>
+                          <option value="cucuta">Cúcuta</option>
+                          <option value="ibague">Ibagué</option>
+                          <option value="manizales">Manizales</option>
+                          <option value="neiva">Neiva</option>
+                          <option value="villavicencio">Villavicencio</option>
+                          <option value="pasto">Pasto</option>
+                          <option value="monteria">Montería</option>
                         </select>
                       </div>
 
-
                       <div class="form-group mb-3">
-                        <input id="inputEmail" name="correo" type="email" placeholder="Correo electronico" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4 text-center"/>
+                        <input id="inputEmail"
+                          name="correo"
+                          type="text"
+                          placeholder="Correo electrónico"
+                          required
+                          class="form-control rounded-pill border-0 shadow-sm px-4 text-center"
+                          pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|outlook\.com)$"
+                          title="Solo se permiten correos de gmail.com, hotmail.com o outlook.com"/>
                       </div>
 
                       <div class="form-group mb-3">
-                        <input id="inputPassword" name="contraseña" type="password" placeholder="Crear Contraseña" required="" class="form-control rounded-pill border-0 shadow-sm px-4 text-danger text-center"/><br />
+                        <input id="inputPassword" name="contraseña" type="password"
+                          placeholder="Crear Contraseña" required
+                          class="form-control rounded-pill border-0 shadow-sm px-4 text-danger text-center"
+                          pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                          title="Mínimo 8 caracteres, al menos una letra y un número" />
+                      </div>
 
-        
-                        <div class="form-check text-start mb-3">
-                            <input class="form-check-input" type="checkbox" id="rememberCheck">
-                            <label class="form-check-label" for="rememberCheck">Recordar contraseña</label>
-                        </div>
+                      <div class="form-check text-start mb-3">
+                        <input class="form-check-input" type="checkbox" id="rememberCheck">
+                        <label class="form-check-label" for="rememberCheck">Recordar contraseña</label>
+                      </div>
 
-                      <button
-                        type="submit"
-                        class="btn btn-danger btn-block text-uppercase mb-2 rounded-pill shadow-sm">Registrarse</button>
+                      <button type="submit"
+                        class="btn btn-danger btn-block text-uppercase mb-2 rounded-pill shadow-sm">
+                        Registrarse
+                      </button>
                     </form>
 
                     <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
-                        <a href="{% url 'pagina_principal' %}" class="btn btn-danger btn-sm"> Volver</a>
-                        <a href="{% url 'iniciar_sesion' %}" class="text-muted small"><u>Ya tengo cuenta</u></a>
+                      <a href="{% url 'pagina_principal' %}" class="btn btn-danger btn-sm"> Volver</a>
+                      <a href="{% url 'iniciar_sesion' %}" class="text-muted small"><u>Ya tengo cuenta</u></a>
                     </div>
-                   
+
+                  </div>
                 </div>
               </div>
             </div>
@@ -96,7 +118,8 @@
         </div>
       </div>
     </main>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js.map' %}"></script>
   </body>
-  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.bundle.min.js.map' %}"></script>
 </html>
