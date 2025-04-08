@@ -18,13 +18,16 @@
 ### CHANGELOG
 ---
 
-## [ch1.18.15-Alpha.1] - 2025-04-06 
+## [ch1.18.15-Alpha.1] - 2025-04-08 
 
+## Added
 
+- Se agrego menu de usuario Icono
 
 ## Fixed 
 
 - Se corrigieron los colores del modulo `iniciar_sesion` y `registrase`
+
 ---
 
 ## [ch1.18.14-Alpha.1] - 2025-04-06
