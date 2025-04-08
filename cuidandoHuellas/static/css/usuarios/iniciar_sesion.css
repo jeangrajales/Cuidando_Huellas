@@ -1,7 +1,20 @@
-.login, .image{min-height: 81vh}
+.ogin-container{
+    background-color: #FCF4E1;
+    
+}
+
+.login, .image{min-height: 
+    81vh;
+    background-color: #CFB991;
+}
 .bg-image{background-image: url('/static/img/gato_perro.jpg');background-size: cover;background-position: center}
 
 .btn_color{
+    background-color: #8B5E3B !important;
+    border: none !important;
+}
+
+.btn-danger{
     background-color: #8B5E3B !important;
     border: none !important;
 }
