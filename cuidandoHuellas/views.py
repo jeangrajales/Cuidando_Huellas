@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
 from . models import *
 from django.contrib import messages
 from .utils import *
@@ -21,34 +23,37 @@ def iniciar_sesion(request):
         contraseña = request.POST.get("contraseña")
 
         try:
-            q = Usuario.objects.get(correo = correo, contraseña = contraseña)
-            #Todo Ok si existe el usuario, crear sesion y ir al principal
-            
-            request.session["pista"] = {
-                "telefono": q.telefono,
-                "id": q.id_usuario,
-                "rol": q.rol,
-                "nombre_completo": q.nombre_completo
+            q = Usuario.objects.get(correo=correo)
+            # Validar la contraseña encriptada
+            if check_password(contraseña, q.contraseña):
+                # Todo OK si la contraseña coincide, crear sesión y redirigir
+                request.session["pista"] = {
+                    "telefono": q.telefono,
+                    "id": q.id_usuario,
+                    "rol": q.rol,
+                    "nombre_completo": q.nombre_completo,
+                }  # Autenticación: creamos la variable session
+                messages.success(request, "Bienvenido a Cuidando Huellas !!")
 
-            }  # Autenticacion: creamos la variable session
-            messages.success(request, "Bienvenido a cuidando Huellas !!")
-            
-            if q.rol == 1:
-                return redirect('pagina_administrador')
-            elif q.rol == 2:
-                return redirect('pagina_usuario')
+                if q.rol == 1:  
+                    return redirect("pagina_administrador")
+                elif q.rol == 2:
+                    return render(request, "usuarios/pagina_usuario.html")
+                else:
+                    return render(request, "quienes_somos")
             else:
-                return render('quienes_somos')
-        
+                # Contraseña incorrecta
+                messages.error(request, "Usuario o contraseña incorrectos...")
+                return redirect("iniciar_sesion")
+
         except Usuario.DoesNotExist:
-            #Usuario y contraseña incorrectos
-            #Devolver al login
-            request.session["pista"] = None # Autenticacion: vaciamos la variable session
-            messages.error(request, "Usuario o Contraseña Incorrectas...")
+            # Usuario no existe
+            request.session["pista"] = None  # Autenticación: vaciamos la variable session
+            messages.error(request, "El usuario no existe")
             return redirect("iniciar_sesion")
     else:
-         # Capturamos la variable sesion
-        verificar = request.session.get("pista", False) 
+        # Capturamos la variable sesión
+        verificar = request.session.get("pista", False)
         if verificar:
             return redirect("pagina_principal")
         else:
@@ -70,35 +75,37 @@ def registrarse(request):
         ciudad = request.POST.get("ciudad")
         correo = request.POST.get("correo")
         contraseña = request.POST.get("contraseña")
+        confirmar_contraseña = request.POST.get("confirmar_contraseña")
 
         if Usuario.objects.filter(correo=correo).exists():
-            messages.error(request, "Error, el correo electrónico ya se encuentra registrado")
+            messages.error(request, "El correo electrónico ya está registrado")
             return render(request, 'usuarios/registrarse.html')
 
-        else:
-            crear_usuario = Usuario(
-                nombre_completo=nombre_completo,
-                telefono=telefono,
-                ciudad=ciudad,
-                correo=correo,
-                contraseña=contraseña
-            )
+        if contraseña.strip() != confirmar_contraseña:
+            messages.error(request, "Las contraseñas no coinciden")
+            return render(request, 'usuarios/registrarse.html')
 
-            try:
-                crear_usuario.full_clean()  # Aquí validamos campos del modelo
-                crear_usuario.save()
-                messages.success(request, "Se ha creado la cuenta correctamente, inicie sesión")
-                return redirect('pagina_usuario')
+        crear_usuario = Usuario(
+            nombre_completo=nombre_completo,
+            telefono=telefono,
+            ciudad=ciudad,
+            correo=correo,
+            contraseña=make_password(contraseña)  # Contraseña encriptada
+        )
 
-            except ValidationError as e:
-                # Convertimos errores a mensajes de Django
-                for field, error_list in e.message_dict.items():
-                    for error in error_list:
-                        messages.error(request, f"{field}: {error}")
-                return render(request, 'usuarios/registrarse.html')
+        try:
+            crear_usuario.full_clean()
+            crear_usuario.save()
+            messages.success(request, "Cuenta creada exitosamente, por favor inicia sesión.")
+            return render(request,'usuario/pagina_usuario.html')
+        
+        except ValidationError as e:
+            for field, error_list in e.message_dict.items():
+                for error in error_list:
+                    messages.error(request, f"{field}: {error}")
+            return render(request, 'usuarios/registrarse.html')
 
-    else:
-        return render(request, "usuarios/registrarse.html")
+    return render(request, "usuarios/registrarse.html")
 
 
 def pagina_principal(request):

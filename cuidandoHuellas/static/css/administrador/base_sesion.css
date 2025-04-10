@@ -1,99 +1,386 @@
-.navbar {
-    background-color: #C4A675;
-    padding: 10px 15px;
-}
-
-/* 🔹 Ajustar logo sin afectar la altura del header */
-.navbar-brand {
-    margin-left: -10px;
-}
-.navbar-brand img {
-    height: 80px;
-}
-
-/* 🔹 Menú ocupa el espacio disponible hasta el último texto */
-.navbar-nav {
-    display: flex;
-    justify-content: space-between;
-    flex-grow: 1;
-}
-
-/* 🔹 Cada enlace ocupa espacio uniformemente */
-.nav-item {
-    flex-grow: 1;
-    text-align: center;
-}
-
-/* 🔹 Estilo de los enlaces */
-.nav-link {
+/* Estilo para la página activa */
+.nav-link.active {
     color: white !important;
-    font-size: 16px !important;
-    height: 40px !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    transition: 0.3s !important;
+    transform: translateY(-2px);
+    background-color: #403D36;
 }
 
-/* 🔹 Hover con efecto de botón */
-.nav-link:hover {
-    background-color: rgb(124, 117, 117);
-    color: #C4A675;
-    border-radius: 5px;
-}
-
-/* 🔹 Buscador más ancho */
-.search-container {
-    max-width: 320px;
-}
-.search-input {
-    margin-right: 70px !important;
+.nav-link.active::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
     width: 100%;
-    padding: 6px 12px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
+    height: 100%;
+    background-color: var(--accent-color);
+    z-index: -1;
+    transform: translateY(-50%);
+    border-radius: 8px;
+    opacity: 1;
 }
 
-/* 🔹 Botón de Cerrar Sesión */
-.nav-button {
-    background-color: transparent;
-    border: 1px solid white;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 5px;
-    margin-left: 10px;
-}
-.nav-button:hover {
-    background-color: white;
-    color: #C4A675;
+.nav-link.active::after {
+    content: "🐾";
+    font-size: 14px;
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.8;
 }
 
-.username {
-    color: white;
-    margin: 0 10px;
+.navbar {
+    background-color: #C4A675 !important;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    padding: 0.8rem 1.5rem;
+    box-shadow: 
+        0 4px 20px var(--shadow-color),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    border-radius: 0 0 20px 20px;
+    position: relative;
+    z-index: 100;
 }
 
-/* 🔹 Asegurar distribución correcta en responsive */
-.navbar-collapse {
+.navbar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    border-radius: 0 0 20px 20px;
+    opacity: 0.3;
+    z-index: -1;
+}
+
+/* Logo Container with Floating Effect */
+.navbar-brand {
+    position: relative;
+    padding: 0.5rem 0.8rem;
+    margin-right: 2rem;
+    transition: transform var(--transition-speed);
+}
+
+.navbar-brand:hover {
+    transform: translateY(-2px);
+}
+
+.navbar-brand img {
+    height: 60px;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    transition: all var(--transition-speed);
+}
+
+.navbar-brand img:hover {
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2));
+}
+
+.navbar-nav{
     display: flex;
     justify-content: space-between;
+    gap: 0.5rem;
+    flex-grow: 0.9;
+    margin: 0 2rem;
+}
+
+
+.nav-item{
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+
+/* Navigation Link Design with Paw Print Hover Effect */
+.nav-link{
+    color: var(--text-color) !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    padding: 0.7rem 1.2rem !important;
+    border-radius: 12px !important;
+    transition: all var(--transition-speed) !important;
+    position: relative !important;
+    z-index: 1 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    letter-spacing: 0.3px !important;
+}
+
+.nav-link::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: var(--accent-color);
+    z-index: -1;
+    transform: translateY(-50%);
+    transition: height var(--transition-speed);
+    border-radius: 8px;
+    opacity: 0;
+}
+
+.nav-link:hover {
+    color: white !important;
+    transform: translateY(-2px);
+    background-color: #403D36;
+}
+
+.nav-link:hover::before {
+height: 100%;
+opacity: 1;
+}
+
+/* Add paw print indicators on hover */
+.nav-link::after {
+content: "🐾";
+position: absolute;
+font-size: 0;
+right: 6px;
+top: 50%;
+transform: translateY(-50%);
+transition: all var(--transition-speed);
+opacity: 0;
+}
+
+.nav-link:hover::after {
+font-size: 14px;
+opacity: 0.8;
+}
+
+/* Modern Search Box with Animation */
+.search-container {
+position: relative;
+width: 280px;
+margin-right: 1.5rem;
+}
+
+.search-input {
+width: 100%;
+padding: 0.7rem 1.2rem 0.7rem 2.8rem;
+border-radius: 30px;
+border: none;
+background-color: rgba(255, 255, 255, 0.15);
+color: var(--text-color);
+backdrop-filter: blur(4px);
+transition: all var(--transition-speed);
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-input::placeholder {
+color: rgba(255, 255, 255, 0.6);
+}
+
+.search-input:focus {
+outline: none;
+background-color: rgba(255, 255, 255, 0.25);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.search-container::before {
+content: "🔍";
+position: absolute;
+left: 12px;
+top: 50%;
+transform: translateY(-50%);
+font-size: 16px;
+pointer-events: none;
+}
+
+/* User Profile Dropdown */
+.user-dropdown {
+position: relative;
+}
+
+.user-icon {
+width: 45px;
+height: 45px;
+border-radius: 50%;
+cursor: pointer;
+transition: all var(--transition-speed);
+border: 2px solid rgba(255, 255, 255, 0.5);
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-icon:hover {
+transform: scale(1.05);
+border-color: var(--accent-color);
+}
+
+/* Dropdown Menu Redesign */
+.dropdown-menu {
+min-width: 240px;
+padding: 0.8rem 0;
+border: none;
+border-radius: 16px;
+background-color: var(--card-bg);
+backdrop-filter: blur(10px);
+box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.1),
+    0 2px 10px rgba(0, 0, 0, 0.05);
+margin-top: 10px;
+overflow: hidden;
+animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-item {
+padding: 0.8rem 1.2rem;
+display: flex;
+align-items: center;
+color: #333;
+transition: all var(--transition-speed);
+position: relative;
+overflow: hidden;
+}
+
+.dropdown-item:hover {
+background-color: rgba(255, 125, 60, 0.1);
+color: var(--accent-color);
+}
+
+.dropdown-item i {
+margin-right: 12px;
+width: 20px;
+text-align: center;
+color: var(--accent-color);
+transition: transform var(--transition-speed);
+}
+
+.dropdown-item:hover i {
+transform: scale(1.2);
+}
+
+.dropdown-divider {
+border-color: rgba(0, 0, 0, 0.05);
+margin: 0.5rem 1rem;
+}
+
+/* Login/Register Buttons */
+.btn-outline-primary {
+color: var(--text-color);
+border: 2px solid rgba(255, 255, 255, 0.3);
+border-radius: 30px;
+padding: 0.5rem 1.2rem;
+font-weight: 500;
+transition: all var(--transition-speed);
+background: transparent;
+}
+
+.btn-outline-primary:hover {
+background-color: rgba(255, 255, 255, 0.15);
+border-color: white;
+color: white;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+background-color: var(--accent-color);
+border: none;
+border-radius: 30px;
+padding: 0.5rem 1.2rem;
+font-weight: 500;
+transition: all var(--transition-speed);
+box-shadow: 0 4px 12px rgba(255, 125, 60, 0.3);
+}
+
+.btn-primary:hover {
+background-color: var(--hover-color);
+transform: translateY(-2px);
+box-shadow: 0 6px 15px rgba(255, 125, 60, 0.4);
+}
+
+/* Navbar Toggler for Mobile */
+.navbar-toggler {
+border: none;
+background: rgba(255, 255, 255, 0.2);
+border-radius: 8px;
+padding: 0.5rem;
+transition: all var(--transition-speed);
+}
+
+.navbar-toggler:hover {
+background: rgba(255, 255, 255, 0.3);
+}
+
+.navbar-toggler-icon {
+background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+.navbar-collapse {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    margin: 1rem -1.5rem -0.8rem;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.navbar-nav {
+    flex-direction: column;
     align-items: center;
+    margin: 0;
+    gap: 0.5rem;
+}
+
+.nav-item {
     width: 100%;
 }
 
-@media (max-width: 992px) {
-    .navbar-nav {
-        flex-direction: column;
-        align-items: center;
-    }
+.nav-link {
+    width: 100%;
+    text-align: center;
+    padding: 0.8rem !important;
+}
 
-    .search-container {
-        width: 100%;
-        text-align: center;
-    }
+.search-container {
+    width: 100%;
+    margin: 1rem 0;
+    max-width: none;
+}
 
-    .navbar-collapse {
-        flex-direction: column;
-        align-items: center;
-    }
+.dropdown-menu {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+}
+
+/* Dark mode compatibility */
+@media (prefers-color-scheme: dark) {
+.dropdown-menu {
+    background-color: rgba(40, 40, 45, 0.95);
+}
+
+.dropdown-item {
+    color: #e1e1e1;
+}
+
+.dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+}
+
+/* Animation for navbar on page load */
+@keyframes navbarAppear {
+from {
+    transform: translateY(-20px);
+    opacity: 0;
+}
+to {
+    transform: translateY(0);
+    opacity: 1;
+}
+}
+
+.navbar {
+animation: navbarAppear 0.6s ease-out forwards;
 }
