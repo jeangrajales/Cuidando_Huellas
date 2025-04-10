@@ -9,7 +9,7 @@ class Usuario(models.Model):
     nombre_completo = models.CharField(max_length=100)
     ciudad = models.CharField(max_length=100)
     telefono = models.PositiveIntegerField()
-    correo = models.CharField(max_length=254)
+    correo = models.EmailField(max_length=254)
     contraseña = models.CharField(max_length=254)
     ROLES = (
         (1, "Admin"),
@@ -22,13 +22,15 @@ class Usuario(models.Model):
         # Validar dominio del correo
         if not re.match(r'^[\w\.-]+@(gmail\.com|hotmail\.com|outlook\.com)$', self.correo):
             raise ValidationError({'correo': 'Solo se permiten correos de gmail.com, hotmail.com o outlook.com.'})
+        
+        self.contraseña = self.contraseña.strip()
 
         # Validar contraseña con letras y números
-        if not re.match(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$', self.contraseña):
-            raise ValidationError({'contraseña': 'La contraseña debe contener letras y números.'})
+        if not re.match(r'^(?=.*[A-Za-z])(?=.*\d).+$', self.contraseña):
+            raise ValidationError({'contraseña': 'Debe contener letras y números.'})
 
     def __str__(self):
-        return f"{self.nombre_completo} - {self.correo}"
+        return f"{self.nombre_completo} - {self.correo}"    
     
 
 class Producto(models.Model):
