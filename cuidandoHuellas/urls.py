@@ -30,6 +30,7 @@ urlpatterns = [
     path('eliminar_item/<int:item_id>/', views.eliminar_item, name='eliminar_item'),
     path('vaciar_carrito/', views.vaciar_carrito, name='vaciar_carrito'),
     path('generar_factura/', views.generar_factura, name='generar_factura'),
+    path('modal_carrito/', views.modal_carrito, name="modal_carrito"),
 
 
     #Administrador

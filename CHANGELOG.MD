@@ -16,6 +16,20 @@
 ---
 
 ### CHANGELOG
+
+---
+
+## [ch1.19.16-Alpha.1] - 2025-04-11
+
+## Added
+
+- Se añadio Templates del `modal_carrito` por problemas de mensajes
+
+## Fixed
+
+- Se corrigio la encriptacion de contraseñas
+- Se corrigio el error que no lo deje agregar si no hay cantidad disponible
+
 ---
 
 ## [ch1.18.15-Alpha.1] - 2025-04-08 
