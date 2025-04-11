@@ -7,8 +7,8 @@ from . models import *
 
 @admin.register(Usuario)
 class usuarioAdmin(admin.ModelAdmin):
-     list_display = ['id_usuario','nombre_completo', 'ciudad', 'telefono', 'correo', 'rol', 'contraseña']
-     list_editable = ['rol','contraseña']
+     list_display = ['id_usuario','nombre_completo', 'ciudad', 'telefono', 'correo', 'rol']
+     list_editable = ['rol']
 
 @admin.register(Producto)
 class productoAdmin(admin.ModelAdmin):

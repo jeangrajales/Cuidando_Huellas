@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 import re
+from django.contrib.auth.hashers import make_password
 # Create your models here.
 
 class Usuario(models.Model):
@@ -28,6 +29,11 @@ class Usuario(models.Model):
         # Validar contraseña con letras y números
         if not re.match(r'^(?=.*[A-Za-z])(?=.*\d).+$', self.contraseña):
             raise ValidationError({'contraseña': 'Debe contener letras y números.'})
+
+    def save(self, *args, **kwargs):
+        if not self.contraseña.startswith('pbkdf2_'):
+            self.contraseña = make_password(self.contraseña)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.nombre_completo} - {self.correo}"    

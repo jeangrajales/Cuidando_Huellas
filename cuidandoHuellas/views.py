@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from . models import *
 from django.contrib import messages
@@ -90,14 +89,14 @@ def registrarse(request):
             telefono=telefono,
             ciudad=ciudad,
             correo=correo,
-            contraseña=make_password(contraseña)  # Contraseña encriptada
+            contraseña=contraseña  # Contraseña encriptada
         )
 
         try:
             crear_usuario.full_clean()
             crear_usuario.save()
             messages.success(request, "Cuenta creada exitosamente, por favor inicia sesión.")
-            return render(request,'usuario/pagina_usuario.html')
+            return render(request,'usuarios/pagina_usuario.html')
         
         except ValidationError as e:
             for field, error_list in e.message_dict.items():
@@ -244,8 +243,11 @@ def listar_usuarios(request):
 def eliminar_usuarios(request, id_usuario):
     try:
         traer_usuarios = Usuario.objects.get(pk = id_usuario)
-        traer_usuarios.delete()
-        messages.success(request,"Usuario eliminado correctamente")
+        if traer_usuarios.rol == 1:
+            messages.error(request,'Error, el administrador no se puede eliminar')
+        else:
+            traer_usuarios.delete()
+            messages.success(request,"Usuario eliminado correctamente") 
     except Usuario.DoesNotExist:
         messages.warning(request, "Error: El usuario no existe")
     return redirect('listar_usuarios')
@@ -255,7 +257,6 @@ def listar_productos(request):
     list_productos = Producto.objects.all()
     contexto = {"dato_producto": list_productos}
     return render(request, 'administrador/productos/listar_productos.html', contexto)
-
 
 @session_required_and_rol_permission(1)
 def agregar_productos(request):
@@ -330,6 +331,9 @@ def editar_productos(request, id_producto):
         traer_producto = Producto.objects.get(pk=id_producto)
         return render(request, "administrador/productos/agregar_productos.html", {"dato": traer_producto})
 
+def modal_carrito(request):
+    return render(request,'usuarios/modal_carrito.html')
+
 @session_required_and_rol_permission(1,2,3)
 def agregar_al_carrito(request, id_producto):
     # 1. Recuperar ID del usuario desde la sesión
@@ -340,14 +344,20 @@ def agregar_al_carrito(request, id_producto):
         return redirect("iniciar_sesion")
 
     try:
-        # 2. Obtener usuario y producto
+        
+        # Obtener usuario y producto
         usuario = Usuario.objects.get(id_usuario=id_usuario)
         producto = Producto.objects.get(id_producto=id_producto)
         
-        # 3. Obtener o crear carrito para el usuario
+
+        if producto.cantidad <= 0:
+            messages.error(request, f"El producto '{producto.nombre_producto}' está agotado.")
+            return redirect("productos_usuarios")
+
+        # Obtener o crear carrito para el usuario
         carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
         
-        # 4. Obtener o crear ítem en el carrito
+        # Obtener o crear ítem en el carrito
         item, creado_item = ItemCarrito.objects.get_or_create(
             carrito=carrito,
             producto=producto
@@ -366,11 +376,25 @@ def agregar_al_carrito(request, id_producto):
 @session_required_and_rol_permission(1,2,3)
 def aumentar_cantidad(request, item_id):
     try:
+        # Obtener el ítem del carrito
         item = ItemCarrito.objects.get(id=item_id)
+
+        # Asegúrate de que item.producto es un objeto Producto
+        producto = item.producto
+
+        # Verificar el stock del producto
+        if item.cantidad >= producto.cantidad:
+            messages.error(request, f"Solo quedan {producto.cantidad} unidades disponibles.")
+            return redirect("productos_usuarios")
+
+        # Aumentar la cantidad
         item.cantidad += 1
         item.save()
+        messages.success(request, f"Cantidad aumentada para {producto.nombre_producto}.")
     except ItemCarrito.DoesNotExist:
-        pass
+        messages.error(request, "El ítem no existe.")
+    except Exception as e:
+        messages.error(request, f"Ocurrió un error: {str(e)}")
     return redirect('productos_usuarios')
 
 @session_required_and_rol_permission(1,2,3)
@@ -444,6 +468,9 @@ def generar_factura(request):
             )
             detalles.append(detalle)
 
+            if item.cantidad > item.producto.cantidad:
+                messages.error(request, f"No hay suficiente stock para el producto {item.producto.nombre_producto}.")
+                return redirect('productos_usuarios')
             # Descontar stock del producto
             item.producto.cantidad -= item.cantidad
             item.producto.save()

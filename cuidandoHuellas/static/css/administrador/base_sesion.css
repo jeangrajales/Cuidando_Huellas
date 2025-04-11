@@ -30,7 +30,7 @@
 }
 
 .navbar {
-    background-color: #C4A675 !important;
+    background-color: #fcf4e1 !important;
     background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
     padding: 0.8rem 1.5rem;
     box-shadow: 
