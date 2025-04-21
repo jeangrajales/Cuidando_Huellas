@@ -43,6 +43,7 @@
             </div>
             
             {% if request.session.pista %}
+
                 <div class="d-flex align-items-center">
                     <div class="dropdown me-3">
                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,7 +57,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{% url 'editar_usuario' %}">
                                     <i class="fas fa-edit"></i>
                                     Editar Perfil
                                 </a>
@@ -82,6 +83,7 @@
                             </li>
                         </ul>
                     </div>
+
                 </div>
             {% else %}
                 <div class="d-flex align-items-center">
