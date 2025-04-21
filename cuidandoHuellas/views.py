@@ -104,6 +104,8 @@ def registrarse(request):
 
     return render(request, "usuarios/registrarse.html")
 
+def editar_usuario(request):
+    return render(request, 'usuarios/editar_usuario.html')
 
 def pagina_principal(request):
     return render(request, 'pagina_principal.html')

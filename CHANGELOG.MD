@@ -19,6 +19,14 @@
 
 ---
 
+## [ch2.21.17-Alpha.1] - 2025-04-21
+
+## Added
+
+- Se agrego la funcionalidad editar_usuario (Todavia esta estatico)
+
+---
+
 ## [ch2.20.17-Alpha.1] - 2025-04-21
 
 ## Added

@@ -18,6 +18,7 @@ urlpatterns = [
     path('adopciones/',views.adopciones, name="adopciones"),
     path('veterinarias_asociadas/', views.veterinarias_asociadas,name="veterinarias_asociadas"),
     path('publicacion/<int:publicacion_id>/eliminar/', views.eliminar_publicacion, name='eliminar_publicacion'),
+    path('editar_usuario/', views.editar_usuario, name="editar_usuario" ),
 
     # Carrito
    
@@ -46,8 +47,6 @@ urlpatterns = [
     
     
     
-    
- 
-    
+      
     
 ]
