@@ -38,8 +38,6 @@ def iniciar_sesion(request):
                     return redirect("pagina_administrador")
                 elif q.rol == 2:
                     return render(request, "usuarios/pagina_usuario.html")
-                else:
-                    return render(request, "quienes_somos")
             else:
                 # Contraseña incorrecta
                 messages.error(request, "Usuario o contraseña incorrectos...")
@@ -110,29 +108,6 @@ def registrarse(request):
 def pagina_principal(request):
     return render(request, 'pagina_principal.html')
     
-def nuestros_servicios(request):
-    return render(request, 'nuestros_servicios.html', {'mostrar_fondo': True})
-
-def contactanos(request):
-    
-    if request.method == 'POST':
-        
-        nombre = request.POST.get("nombre","").strip()
-        correo = request.POST.get("correo","").strip()
-        mensaje = request.POST.get("mensaje","").strip()    
-        
-        if not nombre or not correo or not mensaje:
-            messages.error(request,"Debe llenar todos los campos")
-            return render(request, "contactanos.html")
-        else:
-            asunto = f'Nuevo mensaje de {nombre}'
-            contenido = f'Correo: {correo}\n\n Mensaje:\n {mensaje}'
-
-            send_mail(asunto, contenido, 'jean.estudio.7@gmail.com', ['cuidandohuellass@hotmail.com', "jeancg2004@hotmail.com"])
-            messages.success(request, "Se ha enviado el mensaje correctamente")
-            return redirect('contactanos')
-    else:
-        return render(request,"contactanos.html")
 
 @session_required_and_rol_permission(1,2,3)
 def mascotas_perdidas(request):
@@ -147,8 +122,6 @@ def adopciones(request):
         "publicaciones": publicaciones
     })
 
-def quienes_somos(request):
-    return render(request, 'quienes_somos.html')
 
 @session_required_and_rol_permission(1, 2, 3)
 def pagina_usuario(request):
