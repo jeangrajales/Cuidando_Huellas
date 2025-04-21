@@ -19,6 +19,24 @@
 
 ---
 
+## [ch2.20.17-Alpha.1] - 2025-04-21
+
+## Added
+
+- Se reestructuro toda la pagina_principal
+
+## Fixed
+
+- Se corrigio dropdown de la pagina principal
+- Se corrigio el logo de sus tamaños, posiciones, de base_sesion y pagina principal
+
+## Removed
+
+- Se elimino las paginas `Quienes somos, contactos , Nuestros servicios con sus respectivos Css, Base`
+
+
+---
+
 ## [ch1.19.16-Alpha.1] - 2025-04-11
 
 ## Added

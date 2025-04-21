@@ -1,87 +1,434 @@
-{% extends 'administrador/base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css.map' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/pagina_principal.css' %}">
+  <link rel="shortcut icon" href="{% static 'img/logo_ch.png' %}" type="image/x-icon">
+  <title>Cuidando Huellas</title>
+</head>
+<body>
+  
+{% if request.session.pista %}
+    {% include 'administrador/base_sesion.html' %}
+{% else %}
+  <header class="">
+    <div class="p">
+      <nav class="nav">
+        <!-- Logo movido a la izquierda -->
+        <div class="logo">
+          <img src="{% static 'img/logo_ch.png' %}" alt="Logo Ciudando Huellas" class="nav_ch-logo-container nav_ch-logo">
+        </div>
+        
+        <!-- Nav items centrados -->
+        <div class="nav-items">
+            <a href="#quienesSomos">
+                <div class="nav-item">Quienes somos</div>
+            </a>
+            <a href="#contactanos">
+                <div class="nav-item">Contactanos</div>
+            </a>
+            <div class="dropdown">
+                <span class="dropdown-toggle custom-dropdown-text" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Nuestros Servicios
+                </span>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Mascotas perdidas</a></li>
+                    <li><a class="dropdown-item" href="#">Mascotas en adopción</a></li>
+                    <li><a class="dropdown-item" href="#">Productos</a></li>
+                    <li><a class="dropdown-item" href="#">Veterinarias Asociadas</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- botones de inicio de sesión y registro -->
+        <div class="auth-buttons">
+            <a href="{% url 'iniciar_sesion' %}">
+                <button class="btn-login">Iniciar Sesión</button>
+            </a>
+            <a href="{% url 'registrarse' %}">
+                <button class="btn-register">Registrarse</button>
+            </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+{% endif %}
 
-{% block estilos_unicos %}
-    <link rel="stylesheet" href="{% static 'css/pagina_principal.css' %}">
-{% endblock %}
-
-{% block titulo %} Pagina Principal {% endblock %}
-
-{% block contenido %}
-
-    <div class="post-navigation">
-        <a href="{% url 'mascotas_perdidas' %}">
-            <button class="post-nav-button">Mascotas Perdidas</button>
-        </a>
-        <a href="{% url 'productos_usuarios' %}">
-            <button class="post-nav-button">Productos</button>
-        </a>
-        <a href="{% url 'adopciones' %}">
-            <button class="post-nav-button">Adopciones</button>
-        </a>
-        <a href="{% url 'veterinarias_asociadas' %}">
-            <button class="post-nav-button">Veterinarias asociadas</button>
-        </a>
+  <section class="hero">
+    <div class="container text-center mt-4" style="max-width: 900px;">
+        <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel" style="border-radius: 20px; overflow: hidden;">
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="50000">
+                    <img src="{% static 'img/imagen_publicidad_pg.png' %}" class="d-block w-100" alt="Publicidad 1">
+                  </div>
+                  <div class="carousel-item" data-bs-interval="200">
+                      <img src="{% static 'img/publicidad2 (1).jpg' %}" class="d-block w-100" alt="Publicidad 2">
+          </div>
+          <div class="carousel-item">
+              <img src="{% static 'img/publicidad_gato.jpg' %}" class="d-block w-100" alt="Publicidad 3">
+          </div>
       </div>
-      <div class="container text-center mt-4" style="max-width: 900px;">
-          <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-              <div class="carousel-inner">
-                  <div class="carousel-item active" data-bs-interval="50000">
-                      <img src=" {% static 'img/imagen_publicidad_pg.png' %}" class="d-block w-100" alt="Publicidad 1">
-                    </div>
-                    <div class="carousel-item" data-bs-interval="200">
-                        <img src=" {% static 'img/publicidad2 (1).jpg' %}" class="d-block w-100" alt="Publicidad 2">
-            </div>
-            <div class="carousel-item">
-                <img src=" {% static 'img/publicidad_gato.jpg' %}" class="d-block w-100" alt="Publicidad 3">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-            
-        </div>
-        <div class="container mt-4 mx-auto">
-            <div class="row">
-                <div class="col-md-6 mb-4 card_center ">
-                    <div class="card text-center bg-light border-0 fixed-width">
-                        <div class="card-header bg-brown text-white fw-bold">
-                            Mascotas en Adopción
-                        </div>
-                        <img src="{% static 'img/mascota_adopcion.jpg' %}" class="card-img-top rounded img-fixed" alt="Mascotas en Adopción">
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4 card_center ">
-                    <div class="card text-center bg-light border-0 fixed-width">
-                        <div class="card-header bg-brown text-white fw-bold">
-                            Mascotas Perdidas
-                        </div>
-                        <img src="{% static 'img/mascota_perdida.jpg' %}" class="card-img-top rounded img-fixed" alt="Mascota Perdida">
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4 card_center ">
-                    <div class="card text-center bg-light border-0 fixed-width">
-                        <div class="card-header bg-brown text-white fw-bold">
-                            Mascotas Rescatadas
-                        </div>
-                        <img src="{% static 'img/gato.jpg' %}" class="card-img-top rounded img-fixed" alt="Adopciones">
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4 card_center ">
-                    <div class="card text-center bg-light border-0 fixed-width">
-                        <div class="card-header bg-brown text-white fw-bold">
-                            Mascotas en adopcion
-                        </div>
-                        <img src="{% static 'img/gato2.jpg' %}" class="card-img-top rounded img-fixed" alt="Adopciones">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> 
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+          </button>
+      </button>   
+    </div>
+  </section>
 
-{% endblock %}
+  <section class="features">
+    <div class="container">
+        <h2 class="text-center mb-5">¿Por qué elegir nuestros servicios?</h2>
+        <figcaption>
+          <p class="text-center mb-5" style="color: rgb(0, 0, 0);">En nuestra aplicación podrás encontrar una amplia variedad <br> de servicios diseñados para facilitar el cuidado y bienestar de tu mascota</p>
+        </figcaption>
+        <div class="row features-grid">
+            <!-- Tarjeta 1 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
+                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
+                        <img src="{% static 'img/mascota_perdida.jpg' %}" alt="Adopción" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <h3>Mascotas en adopción</h3>
+                    <p class="mt-2">Espacio dedicado a conectar mascotas sin hogar con adoptantes responsables.</p>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 2 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
+                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
+                        <img src="{% static 'img/mascota_perdida.jpg' %}" alt="Perdidas" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <h3>Mascotas perdidas</h3>
+                    <p class="mt-2">Sección donde los dueños pueden reportar mascotas extraviadas, indicando detalles como raza, color, ubicación y contacto. La comunidad recibe alertas y puede ayudar en la búsqueda.</p>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 3 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
+                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
+                        <img src="{% static 'img/mascota_perdida.jpg' %}" alt="Productos" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <h3>Productos Mascotas</h3>
+                    <p class="mt-2">En nuestra plataforma, los productos para mascotas abarcan alimentos, accesorios, juguetes, medicamentos e higiene, garantizando su bienestar y felicidad.</p>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 4 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
+                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
+                        <img src="{% static 'img/mascota_perdida.jpg' %}" alt="Veterinarias" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <h3>Veterinarias Asociadas</h3>
+                    <p class="mt-2">Directorio de veterinarias cercanas que ofrecen servicios de atención, vacunación y rescate para mascotas. Incluye información de contacto, horarios y ubicación.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+  <section class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-4">🐾 Publicaciones de Mascotas 🐾</h2>
+      
+      <!-- Estadísticas (usando grid de Bootstrap) -->
+      <div class="row mb-4 text-center">
+        <div class="col-3">
+          <div class="p-3 border rounded">
+            <h4 class="mb-0">1.2K</h4>
+            <small>Seguidores</small>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-3 border rounded">
+            <h4 class="mb-0">356</h4>
+            <small>Seguidos</small>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-3 border rounded">
+            <h4 class="mb-0">24</h4>
+            <small>Mascotas</small>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-3 border rounded">
+            <h4 class="mb-0">99%</h4>
+            <small>Felicidad</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Publicación 1 (Card de Bootstrap) -->
+      <div class="row g-4 mb-4"> <!-- `g-4` añade espacio entre columnas -->
+        <!-- Publicación 1 -->
+        <div class="col-md-4">
+          <div class="card h-100"> <!-- `h-100` iguala alturas -->
+            <div class="card-header bg-white d-flex align-items-center">
+              <img src="{% static 'img/frame_user.png' %}" class="profile-pic rounded-circle me-2">
+              <h5 class="mb-0">Jean Ronaldo</h5>
+            </div>
+            <img src="{% static 'img/mascota_perdida.jpg' %}" class="post-image card-img-top">
+            <div class="card-body">
+              <p class="card-text">¡Se me perdio saliendo del apartamento, estabamos en el parque y se me escapo, ayuda urgente! #triste</p>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-danger">❤️ 44</button>
+                <button class="btn btn-sm btn-outline-secondary">💬 4</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100"> <!-- `h-100` iguala alturas -->
+            <div class="card-header bg-white d-flex align-items-center">
+              <img src="{% static 'img/frame_user.png' %}" class="profile-pic rounded-circle me-2">
+              <h5 class="mb-0">Pablo Emilio</h5>
+            </div>
+            <img src="{% static 'img/mascota_perdida.jpg' %}" class="post-image card-img-top">
+            <div class="card-body">
+              <p class="card-text">Ultima vez visto en el sena, salio corriendo y no lo volvi a ver, por favor si saben algo, se los agradezco.</p>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-danger">❤️ 12</button>
+                <button class="btn btn-sm btn-outline-secondary">💬 100</button>
+              </div>
+            </div>
+          </div>
+        </div>    <div class="col-md-4">
+          <div class="card h-100"> <!-- `h-100` iguala alturas -->
+            <div class="card-header bg-white d-flex align-items-center">
+              <img src="{% static 'img/frame_user.png' %}" class="profile-pic rounded-circle me-2">
+              <h5 class="mb-0">Aurelio Gonzalo</h5>
+            </div>
+            <img src="{% static 'img/mascota_perdida.jpg' %}" class="post-image card-img-top">
+            <div class="card-body">
+              <p class="card-text">¡Se da en adopcion motivos me voy para españa por mucho tiempo y no tengo quien se haga responsable, me gustaria que tenga una familia responsable,se llama Max! 🎾 #Adopcion</p>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-danger">❤️ 24</button>
+                <button class="btn btn-sm btn-outline-secondary">💬 230</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- Historias (Stories) con scroll horizontal -->
+      <div class="mb-4">
+        <h5 class="mb-3">Más Publicaciones</h5>
+        <div class="d-flex overflow-auto gap-3 pb-2">
+          <div class="text-center">
+            <img src="{% static 'img/mascota_perdida.jpg' %}" class="rounded-circle" width="60" height="60" style="object-fit: cover; border: 2px solid #397bff;">
+            <small class="d-block">Max</small>
+          </div>
+          <div class="text-center">
+            <img src="{% static 'img/mascota_perdida.jpg' %}" class="rounded-circle" width="60" height="60" style="object-fit: cover; border: 2px solid #397bff;">
+            <small class="d-block">Luna</small>
+          </div>
+          <div class="text-center">
+            <img src="{% static 'img/mascota_perdida.jpg' %}" class="rounded-circle" width="60" height="60" style="object-fit: cover; border: 2px solid #397bff;">
+            <small class="d-block">Pacheli</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-5" id="mascotas_adopcion">🐶 Nuestros Productos Más Vendidos 🐱</h2>
+      
+      <!-- Fila 1 -->
+      <div class="row g-4 mb-4">
+        <!-- Producto 1 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card product-card h-100">
+            <img src="{% static  'img/producto_baño_seco.png' %}" class="card-img-top product-img" alt="Alimento para perros">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <h5 class="card-title">Alimento Premium para Perros</h5>
+                <span class="price-tag">$24.990</span>
+              </div>
+              <p class="card-text">Nutrición balanceada con proteína de salmón y vegetales. Ideal para razas medianas.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="badge bg-success">Disponible</span>
+                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Producto 2 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card product-card h-100">
+            <img src="{% static 'img/producto gato.png' %}" class="card-img-top product-img" alt="Rascador para gatos">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <h5 class="card-title">Rascador de 3 Niveles</h5>
+                <span class="price-tag">$39.990</span>
+              </div>
+              <p class="card-text">Estructura de sisal y felpa con plataformas para saltar. ¡A los gatos les encanta!</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="badge bg-warning text-dark">Últimas unidades</span>
+                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Producto 3 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card product-card h-100">
+            <img src="{% static 'img/Perfume.png' %}" class="card-img-top product-img" alt="Juguete para perros">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <h5 class="card-title">Juguete Dental para Perros</h5>
+                <span class="price-tag">$12.990</span>
+              </div>
+              <p class="card-text">Material resistente que limpia dientes y reduce el estrés. Tamaño M.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="badge bg-success">Disponible</span>
+                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>     
+      </div>
+    </div>
+  </section>
+
+  <section class="container text-center mt-5 mb-5">
+    <div class="about">
+        <div class="title">
+            <h1 class="font-weight-bold" id="quienesSomos">Sobre la Empresa</h1>
+        </div>
+        <div class="desc">
+            <p>En Cuidando Huellas, creemos que cada animal merece una segunda oportunidad. Fundada en 2023, nuestra misión es rescatar, rehabilitar y encontrar hogares amorosos para perros, gatos y otros animales que han sido abandonados, maltratados o se encuentran en situación de vulnerabilidad.</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <div class="card-body text-center">
+                    <img src="{% static 'img/Desarrollador.jpeg' %}" alt="desarrollador" 
+                         class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                    <h5 class="card-title font-weight-bold mt-3">Jean Carlos Cañaveral</h5>
+                    <p class="card-text">Hola, soy un desarrollador especializado en backend y frontend. Mi enfoque es construir aplicaciones 
+                        web.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <div class="card-body text-center">
+                    <img src="{% static 'img/Desarrollador2.jpeg' %}" alt="desarrollador" 
+                         class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                    <h5 class="card-title font-weight-bold mt-3">Yoiner Stiven Zapata</h5>
+                    <p class="card-text">Hola, soy un desarrollador en backend y frontend apasionado por crear interfaces web dinámicas y intuitivas.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <div class="card-body text-center">
+                    <img src="{% static 'img/Desarrollador3.jpeg' %}" alt="desarrollador" 
+                        class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                    <h5 class="card-title font-weight-bold mt-3">Pablo Espinosa</h5>
+                    <p class="card-text">Hola, soy un desarrollador especializado en Frontend y Bases de Datos. Mi enfoque es construir aplicaciones web.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <div class="card-body text-center">
+                    <img src="{% static 'img/tolerancia.jpg' %}" alt="desarrollador" 
+                        class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                    <h5 class="card-title mt-3">Tolerancia</h5>
+                    <p class="card-text">La tolerancia es el respeto y la aceptación de las diferencias entre personas, ya sean de pensamiento, cultura, religión o cualquier otro aspecto. </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <div class="card-body text-center">
+                    <img src="{% static 'img/responsabilidad.jpg' %}" alt="desarrollador" 
+                        class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                    <h5 class="card-title mt-3">Responsabilidad</h5>
+                    <p class="card-text">Es un valor fundamental que implica cumplir con compromisos, asumir las consecuencias de las acciones y actuar con honestidad y compromiso.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <div class="card-body text-center">
+                    <img src="{% static 'img/respeto.jpg' %}" alt="desarrollador" 
+                        class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                    <h5 class="card-title mt-3">Respeto</h5>
+                    <p class="card-text">El respeto es la base de una convivencia armoniosa y se manifiesta en la consideración y valoración de los derechos, opiniones de los demas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+  </section>
+
+  <footer class="footer" id="contactanos">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-links">
+          <h3>Sobre nosotros</h3>
+          <p>Queremos que toda mascota sea encontrada y rescatada donde pueda conseguir una familia que le de amor y la mejor atencion posible.</p>
+        </div>
+        <div class="logo_footer">
+          <img src="{% static 'img/logo_ch.png' %}" alt="Logo Ciudando Huellas" class="nav_ch-logo-container nav_ch-logo">
+        </div>
+        <div class="footer-links">
+          <h3>Servicios</h3>
+          <ul>
+            <li><a href="#">Centro de Ayuda</a></li>
+            <li><a href="#">Productos</a></li>
+            <li><a href="#">Mascotas Perdidas</a></li>
+            <li><a href="#">Transparencia</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h3>Empresa</h3>
+          <ul>
+            <li><a href="#">Acerca de</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li><a href="#">Términos</a></li>
+            <li><a href="#">Privacidad</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; Cuidandohuellas@gmail.com. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+</body>
+</html>
