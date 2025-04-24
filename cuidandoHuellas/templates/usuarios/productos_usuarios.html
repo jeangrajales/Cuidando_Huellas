@@ -2,137 +2,236 @@
 {% load static %}
 
 {% block estilos_unicos %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/usuarios/productos_usuarios.css' %}">
 {% endblock %}
 
 {% block titulo %} Productos {% endblock %}
 
 {% block contenido %}
+  <div class="container-fluid py-4">
+      <!-- Notification Area -->
+      <div id="notificaciones" class="mb-4">
+          {% if messages %}
+              {% for message in messages %}
+                  <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show" role="alert">
+                      <div class="d-flex align-items-center">
+                          <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %} me-2"></i>
+                          <span>{{ message }}</span>
+                      </div>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              {% endfor %}
+          {% endif %}
+      </div>
 
+      <!-- Header with search and cart -->
+      <div class="row align-items-center mb-4">
+          <div class="col-md-8">
+              <h2 class="section-title">Nuestros Productos</h2>
+              <p class="text-muted">Encuentra todo lo que necesitas para tus mascotas</p>
+          </div>
+          <div class="col-md-4 d-flex justify-content-md-end">
+              <a href="#modalCarrito" data-bs-toggle="modal" class="btn btn-outline-primary cart-btn">
+                  <i class="fas fa-shopping-cart"></i>
+                  <span class="ms-2">Ver Carrito</span>
+              </a>
+          </div>
+      </div>
 
-<!-- Botón para abrir el modal del carrito -->
-<div class="text-end me-5 mt-3">
-    <a href="#modalCarrito" data-bs-toggle="modal" class="btn btn-outline-primary">
-        🛒 Ver Carrito
-    </a>
-</div>
+      <!-- Product Categories -->
+    
 
-<!-- Carrusel de productos -->
-<div class="container main-section mt-3">
-  <div id="notificaciones">
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center" role="alert">
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
-    {% endif %}
+      <!-- Main Banner -->
+      <div class="main-banner mb-5">
+          <div class="row g-0">
+              <div class="col-md-8">
+                  <div class="banner-image">
+                      <img src="{% static 'img/promocion.png' %}" alt="Banner Promocional" onerror="this.src='https://via.placeholder.com/800x400/3367d6/ffffff?text=Productos+para+Mascotas'">
+                      <div class="banner-content">
+                          <h2>Productos de calidad para tus mascotas</h2>
+                          <p>Hasta 30% de descuento en productos seleccionados</p>
+                          <a href="#" class="btn btn-light">Ver Ofertas</a>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="promo-banners">
+                      <div class="promo-banner">
+                          <img src="{% static 'img/accesorio.png' %}" alt="Promoción" onerror="this.src='https://via.placeholder.com/400x200/5f6368/ffffff?text=Accesorios'">
+                          <div class="promo-content">
+                              <h4>Accesorios</h4>
+                              <a href="#" class="btn-link">Ver más</a>
+                          </div>
+                      </div>
+                      <div class="promo-banner mt-3">
+                          <img src="{% static 'img/alimento.png' %}" alt="Promoción" onerror="this.src='https://via.placeholder.com/400x200/5f6368/ffffff?text=Alimentos'">
+                          <div class="promo-content">
+                              <h4>Alimentos</h4>
+                              <a href="#" class="btn-link">Ver más</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Featured Products Section with Side Layout -->
+      <section class="featured-products mb-5">
+          <h3 class="section-subtitle mb-4 fs-1">Productos Destacados</h3>
+          <div class="row">
+              <!-- Left Side Navigation -->
+              <div class="col-md-3 d-none d-md-block">
+                  <div class="category-sidebar">
+                      <h4>Categorías</h4>
+                      <ul class="category-list">
+                          <li><a href="#"><i class="fas fa-paw me-2"></i>Alimentos</a></li>
+                          <li><a href="#"><i class="fas fa-bone me-2"></i>Juguetes</a></li>
+                          <li><a href="#"><i class="fas fa-home me-2"></i>Camas</a></li>
+                          <li><a href="#"><i class="fas fa-pills me-2"></i>Salud</a></li>
+                          <li><a href="#"><i class="fas fa-shower me-2"></i>Higiene</a></li>
+                      </ul>
+                      
+                      <h4 class="mt-4">Marcas Populares</h4>
+                      <div class="brands-list">
+                          <span class="brand-tag">Royal Canin</span>
+                          <span class="brand-tag">Purina</span>
+                          <span class="brand-tag">Hill's</span>
+                          <span class="brand-tag">Eukanuba</span>
+                          <span class="brand-tag">Pedigree</span>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- Right Side Products -->
+              <div class="col-md-9">
+                  <div class="row">
+                      {% for producto in dato_producto_usuario|slice:":8" %}
+                      <div class="col-md-3 col-sm-6 mb-4">
+                          <div class="product-card-v2">
+                              <div class="product-tags">
+                                  <span class="product-tag new">Nuevo</span>
+                                  {% if forloop.counter < 3 %}
+                                  <span class="product-tag hot">Mas Vendidos</span>
+                                  {% endif %}
+                              </div>
+                              <div class="product-image">
+                                  {% if producto.foto_producto %}
+                                      <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}">
+                                  {% else %}
+                                      <img src="{% static 'img/Collar Gato.png' %}" alt="Sin imagen" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/5f6368?text=Producto'">
+                                  {% endif %}
+                                  <div class="product-actions">
+                                      <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="action-btn add-to-cart" title="Agregar al carrito">
+                                          <i class="fas fa-shopping-cart"></i>
+                                      </a>
+                                      <button class="action-btn quick-view" title="Vista rápida">
+                                          <i class="fas fa-eye"></i>
+                                      </button>
+                                      <button class="action-btn add-to-wishlist" title="Añadir a favoritos">
+                                          <i class="far fa-heart"></i>
+                                      </button>
+                                  </div>
+                              </div>
+                              <div class="product-info">
+                                  <h4 class="product-name">{{ producto.nombre_producto }}</h4>
+                                  <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
+                                  <div class="product-meta">
+                                      <span class="sold-count">
+                                          <i class="fas fa-fire-alt me-1"></i>{{ forloop.counter0|add:5 }} vendidos
+                                      </span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <!-- New Arrivals Section -->
+      <section class="mb-5 new-arrivals-section">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+              <h3 class="section-subtitle fs-1">Productos Mas Vendidos</h3>
+              <div class="carousel-nav">
+                  <button class="nav-btn active" data-bs-target="#productCarousel2" data-bs-slide-to="0">1</button>
+                  <button class="nav-btn" data-bs-target="#productCarousel2" data-bs-slide-to="1">2</button>
+                  <button class="nav-btn" data-bs-target="#productCarousel2" data-bs-slide-to="2">3</button>
+              </div>
+          </div>
+
+          <div id="productCarousel2" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                  {% for i in "123" %}
+                  <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                      <div class="row">
+                          {% for producto in dato_producto_usuario|slice:":4" %}
+                          <div class="col-md-3 col-sm-6 mb-4">
+                              <div class="product-card-modern">
+                                  <div class="product-image">
+                                      {% if producto.foto_producto %}
+                                          <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}">
+                                      {% else %}
+                                          <img src="{% static 'img/chip_collar.png' %}" alt="Sin imagen" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/5f6368?text=Producto'">
+                                      {% endif %}
+                                      <div class="product-discount">
+                                          -{{ forloop.counter0|add:10 }}%
+                                      </div>
+                                  </div>
+                                  <div class="product-details">
+                                      <div class="product-category">{{ forloop.counter|divisibleby:2|yesno:"Perros,Gatos" }}</div>
+                                      <h4 class="product-title">{{ producto.nombre_producto }}</h4>
+                                      <div class="product-prices">
+                                          <span class="new-price">${{ producto.precio|floatformat:0 }}</span>
+                                          <span class="old-price">${{ producto.precio|add:5000|floatformat:0 }}</span>
+                                      </div>
+                                      <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="add-to-cart-btn">
+                                          <i class="fas fa-shopping-cart me-2"></i>Agregar al Carrito
+                                      </a>
+                                  </div>
+                              </div>
+                          </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+      </section>
+
+      <!-- Trust indicators section -->
+      <section class="trust-section">
+          <div class="row text-center">
+              <div class="col-md-3 col-6 mb-4">
+                  <div class="trust-item">
+                      <i class="fas fa-truck"></i>
+                      <h5>Envío Gratis</h5>
+                      <p>En pedidos sobre $30.000</p>
+                  </div>
+              </div>
+              <div class="col-md-3 col-6 mb-4">
+                  <div class="trust-item">
+                      <i class="fas fa-shield-alt"></i>
+                      <h5>Pago Seguro</h5>
+                      <p>100% protección de datos</p>
+                  </div>
+              </div>
+              <div class="col-md-3 col-6 mb-4">
+                  <div class="trust-item">
+                      <i class="fas fa-exchange-alt"></i>
+                      <h5>Devoluciones</h5>
+                      <p>Garantía de 30 días</p>
+                  </div>
+              </div>
+              <div class="col-md-3 col-6 mb-4">
+                  <div class="trust-item">
+                      <i class="fas fa-headset"></i>
+                      <h5>Soporte 24/7</h5>
+                      <p>Atención personalizada</p>
+                  </div>
+              </div>
+          </div>
+      </section>
   </div>
-    <div id="productCarousel1" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        {% for producto in dato_producto_usuario %}
-          {% if forloop.first or forloop.counter0|divisibleby:4 %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-              <div class="row">
-          {% endif %}
-
-          <div class="col-3">
-            <div class="product-card">
-              {% if producto.foto_producto %}
-                <img src="{{ producto.foto_producto.url }}" class="card-img-top" alt="{{ producto.nombre_producto }}">
-              {% endif %}
-              <div class="product-name">{{ producto.nombre_producto }}</div>
-              <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
-              <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="btn btn-primary buy-button">
-                Comprar
-              </a>
-            </div>
-          </div>
-
-          {% if forloop.counter|divisibleby:4 or forloop.last %}
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-
-      <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel1" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Anterior</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#productCarousel1" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Siguiente</span>
-      </button>
-    </div>
-</div>
-
-<!-- Segundo Carrusel -->
-<div class="container main-section mt-3">
-    <div id="productCarousel2" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        {% for producto in dato_producto_usuario %}
-          {% if forloop.first or forloop.counter0|divisibleby:4 %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-              <div class="row">
-          {% endif %}
-
-          <div class="col-3">
-            <div class="product-card">
-              {% if producto.foto_producto %}
-                <img src="{{ producto.foto_producto.url }}" class="card-img-top" alt="{{ producto.nombre_producto }}">
-              {% endif %}
-              <div class="product-name">{{ producto.nombre_producto }}</div>
-              <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
-              <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="btn btn-primary buy-button">
-                Comprar
-              </a>
-            </div>
-          </div>
-
-          {% if forloop.counter|divisibleby:4 or forloop.last %}
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-
-      <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel2" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Anterior</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#productCarousel2" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Siguiente</span>
-      </button>
-    </div>
-</div>
-
-<!-- Productos populares -->
-<div class="container">
-    <div class="popular-products">
-        <h5 class="mb-3 text-center">Productos Más Vendidos</h5>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="popular-product-card">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdvQDIHaPcLNMFb0j-m2fhpEuBRdO5NwjSBw&s" alt="Torre para gato">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="popular-product-card">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaISLvwbvM8Bi4dLhyPajtzaZJSEwL0K3BLw&s" alt="Collar para perro">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="popular-product-card">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfV5-q9nY1Mp1_XNIwHT5WeBg4toYws-RgUA&s" alt="Juguetes para gato">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 {% endblock %}

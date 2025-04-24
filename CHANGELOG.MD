@@ -16,6 +16,13 @@
 ---
 
 ### CHANGELOG
+---
+
+## [ch2.21.18-Alpha.1] - 2025-04-24
+
+## Fixed
+
+- Se corrigio el modulo de productos para darle una buena estetica mas simple y entendida para el usuario.
 
 ---
 
