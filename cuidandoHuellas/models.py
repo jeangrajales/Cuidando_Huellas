@@ -59,6 +59,13 @@ class Producto(models.Model):
     foto_producto = models.ImageField(upload_to='foto_producto/') 
     categoria = models.CharField(max_length=20, choices=CATEGORIAS, default=0) 
     estado = models.CharField(max_length=20, choices=ESTADOS, default=0)
+    veces_comprado = models.PositiveIntegerField(default=0, verbose_name="Veces comprado")
+    ultima_compra = models.DateTimeField(null=True, blank=True, verbose_name="Última compra")
+
+    def incrementar_ventas(self):
+        self.veces_comprado += 1
+        self.ultima_compra = timezone.now()
+        self.save()
 
     def __str__(self):
         return f"{self.id_producto} - {self.nombre_producto} - {self.descripcion} - {self.precio} - {self.foto_producto}"

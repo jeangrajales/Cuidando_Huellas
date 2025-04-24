@@ -18,6 +18,14 @@
 ### CHANGELOG
 ---
 
+## [ch2.22.18-Alpha.1] - 2025-04-24
+
+## Added
+
+- Se agrego una nueva funcionalidad para los productos destacados.
+
+---
+
 ## [ch2.21.18-Alpha.1] - 2025-04-24
 
 ## Fixed
