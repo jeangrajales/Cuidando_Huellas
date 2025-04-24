@@ -173,7 +173,12 @@ def pagina_usuario(request):
     
 @session_required_and_rol_permission(1,2,3)
 def productos_usuarios(request):
+    # Productos normales
     list_productos = Producto.objects.all()
+    
+    # Productos más vendidos (ordenados por veces_comprado y fecha reciente)
+    productos_mas_vendidos = Producto.objects.filter(veces_comprado__gt=0)\
+                              .order_by('-veces_comprado', '-ultima_compra')[:8]
     
     # Obtener el id del usuario desde la sesión
     id_usuario = request.session.get("pista", {}).get("id")
@@ -188,6 +193,7 @@ def productos_usuarios(request):
 
     contexto = {
         "dato_producto_usuario": list_productos,
+        "productos_mas_vendidos": productos_mas_vendidos,
         "carrito": carrito
     }
 
@@ -319,16 +325,17 @@ def agregar_al_carrito(request, id_producto):
         return redirect("iniciar_sesion")
 
     try:
-        
         # Obtener usuario y producto
         usuario = Usuario.objects.get(id_usuario=id_usuario)
         producto = Producto.objects.get(id_producto=id_producto)
         
-
         if producto.cantidad <= 0:
             messages.error(request, f"El producto '{producto.nombre_producto}' está agotado.")
             return redirect("productos_usuarios")
 
+        # Incrementar el contador de ventas del producto
+        producto.incrementar_ventas()
+        
         # Obtener o crear carrito para el usuario
         carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
         
@@ -338,13 +345,17 @@ def agregar_al_carrito(request, id_producto):
             producto=producto
         )
         
-        # 5. Si ya existía, solo aumenta la cantidad
+        # Si ya existía, solo aumenta la cantidad
         if not creado_item:
             item.cantidad += 1
             item.save()
+            
+        messages.success(request, f"¡{producto.nombre_producto} agregado al carrito!")
     
-    except (Usuario.DoesNotExist, Producto.DoesNotExist):
-        pass  # Puedes loguear o mostrar mensaje si quieres
+    except Usuario.DoesNotExist:
+        messages.error(request, "Usuario no encontrado")
+    except Producto.DoesNotExist:
+        messages.error(request, "Producto no encontrado")
 
     return redirect("productos_usuarios")
 

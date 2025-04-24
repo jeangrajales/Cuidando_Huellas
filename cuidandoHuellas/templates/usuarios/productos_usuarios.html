@@ -151,54 +151,86 @@
       </section>
 
       <!-- New Arrivals Section -->
-      <section class="mb-5 new-arrivals-section">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-              <h3 class="section-subtitle fs-1">Productos Mas Vendidos</h3>
-              <div class="carousel-nav">
-                  <button class="nav-btn active" data-bs-target="#productCarousel2" data-bs-slide-to="0">1</button>
-                  <button class="nav-btn" data-bs-target="#productCarousel2" data-bs-slide-to="1">2</button>
-                  <button class="nav-btn" data-bs-target="#productCarousel2" data-bs-slide-to="2">3</button>
-              </div>
-          </div>
+      <!-- Productos Más Vendidos Section -->
+        <section class="mb-5 new-arrivals-section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="section-subtitle fs-1">Productos Más Vendidos</h3>
+                <a href="#" class="btn btn-outline-primary">Ver todos los destacados</a>
+            </div>
 
-          <div id="productCarousel2" class="carousel slide" data-bs-ride="carousel">
-              <div class="carousel-inner">
-                  {% for i in "123" %}
-                  <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                      <div class="row">
-                          {% for producto in dato_producto_usuario|slice:":4" %}
-                          <div class="col-md-3 col-sm-6 mb-4">
-                              <div class="product-card-modern">
-                                  <div class="product-image">
-                                      {% if producto.foto_producto %}
-                                          <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}">
-                                      {% else %}
-                                          <img src="{% static 'img/chip_collar.png' %}" alt="Sin imagen" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/5f6368?text=Producto'">
-                                      {% endif %}
-                                      <div class="product-discount">
-                                          -{{ forloop.counter0|add:10 }}%
-                                      </div>
-                                  </div>
-                                  <div class="product-details">
-                                      <div class="product-category">{{ forloop.counter|divisibleby:2|yesno:"Perros,Gatos" }}</div>
-                                      <h4 class="product-title">{{ producto.nombre_producto }}</h4>
-                                      <div class="product-prices">
-                                          <span class="new-price">${{ producto.precio|floatformat:0 }}</span>
-                                          <span class="old-price">${{ producto.precio|add:5000|floatformat:0 }}</span>
-                                      </div>
-                                      <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="add-to-cart-btn">
-                                          <i class="fas fa-shopping-cart me-2"></i>Agregar al Carrito
-                                      </a>
-                                  </div>
-                              </div>
-                          </div>
-                          {% endfor %}
-                      </div>
-                  </div>
-                  {% endfor %}
-              </div>
-          </div>
-      </section>
+            <div class="row">
+                {% for producto in productos_mas_vendidos %}
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-4">
+                    <div class="product-card-modern">
+                        <div class="product-image">
+                            {% if producto.foto_producto %}
+                                <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}" class="img-fluid">
+                            {% else %}
+                                <img src="{% static 'img/default-product.png' %}" alt="Sin imagen" class="img-fluid">
+                            {% endif %}
+                            
+                            <div class="product-badge">
+                                {% if forloop.counter <= 3 %}
+                                    <span class="badge bg-danger">TOP {{ forloop.counter }}</span>
+                                {% else %}
+                                    <span class="badge bg-success">POPULAR</span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="product-actions">
+                                <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="action-btn cart-btn">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </a>
+                                <button class="action-btn quick-view" data-product-id="{{ producto.id_producto }}">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="product-details">
+                            <div class="product-stats d-flex justify-content-between">
+                                <span class="sales-count">
+                                    <i class="fas fa-chart-line me-1"></i> {{ producto.veces_comprado }} compras
+                                </span>
+                                {% if producto.cantidad > 0 %}
+                                    <span class="stock-available text-success">
+                                        <i class="fas fa-check-circle"></i> Disponible
+                                    </span>
+                                {% else %}
+                                    <span class="stock-out text-danger">
+                                        <i class="fas fa-times-circle"></i> Agotado
+                                    </span>
+                                {% endif %}
+                            </div>
+                            
+                            <h4 class="product-title">{{ producto.nombre_producto }}</h4>
+                            
+                            <div class="product-prices">
+                                <span class="new-price">${{ producto.precio|floatformat:0 }}</span>
+                                {% if producto.descuento > 0 %}
+                                    <span class="discount-price">${{ producto.precio_sin_descuento|floatformat:0 }}</span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-grid mt-2">
+                                <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="add-to-cart-btn {% if producto.cantidad <= 0 %}disabled{% endif %}">
+                                    <i class="fas fa-cart-plus me-2"></i>
+                                    {% if producto.cantidad > 0 %}Agregar al carrito{% else %}No disponible{% endif %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Aún no hay productos destacados. ¡Sé el primero en comprar!
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
 
       <!-- Trust indicators section -->
       <section class="trust-section">
