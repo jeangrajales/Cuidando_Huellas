@@ -427,6 +427,175 @@ body {
   color: #ff4f4f;
 }
 
+/* Estilos para el modal de producto */
+.product-image-modal {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image-modal img {
+  max-height: 300px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.product-badge-modal .badge {
+  font-size: 0.9rem;
+  padding: 5px 10px;
+}
+
+.product-title-modal {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.product-price-modal {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem; /* Aumentado */
+}
+
+.product-description-modal {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 2rem; /* Aumentado */
+}
+
+.product-sales-modal {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 4rem; /* Aumentado significativamente */
+}
+
+.product-actions-modal {
+  margin-top: auto; /* Empuja los botones hacia abajo */
+  padding-top: 2rem;
+  margin-bottom: 1rem;
+  border-top: 1px solid #eee;
+  width: 100%;
+}
+
+.btn-add-to-cart {
+  padding: 12px 24px; /* Aumentado */
+  font-weight: 600; /* Más negrita */
+  margin-bottom: 12px; /* Más espacio */
+  font-size: 1rem;
+  border-radius: 6px; /* Bordes más redondeados */
+  transition: all 0.3s ease;
+}
+
+.btn-add-to-cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-add-to-wishlist {
+  padding: 10px 20px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-add-to-wishlist:hover {
+  background-color: #f8f9fa;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 768px) {
+  .product-image-modal {
+    margin-bottom: 20px;
+    padding: 10px;
+  }
+  
+  .product-image-modal img {
+    max-height: 200px;
+  }
+  
+  .product-actions-modal {
+    margin-top: 3rem; /* Más espacio en móviles */
+    padding-top: 1.5rem;
+  }
+  
+  .product-price-modal {
+    margin-bottom: 1.2rem;
+    font-size: 1.3rem;
+  }
+  
+  .product-description-modal {
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .product-sales-modal {
+    margin-bottom: 3rem;
+  }
+  
+  .btn-add-to-cart,
+  .btn-add-to-wishlist {
+    width: 100%;
+    margin-left: 0 !important;
+    padding: 12px;
+  }
+  
+  .btn-add-to-cart {
+    margin-bottom: 10px;
+  }
+}
+
+.carousel-control-prev, 
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        background-color: rgba(0,0,0,0.1);
+        border-radius: 50%;
+        opacity: 1;
+        transition: all 0.3s ease;
+    }
+    
+    .carousel-control-prev {
+        left: -20px;
+    }
+    
+    .carousel-control-next {
+        right: -20px;
+    }
+    
+    .carousel-control-prev:hover, 
+    .carousel-control-next:hover {
+        background-color: rgba(0,0,0,0.2);
+    }
+    
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+    
+    #productCarousel {
+        padding: 0 15px;
+    }
+    
+    /* Estilos para las tarjetas de producto */
+    .product-card-v2 {
+        border: 1px solid #eee;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .product-card-v2:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
 /* Product Card Modern - For nuevos productos */
 .product-card-modern {
   position: relative;
