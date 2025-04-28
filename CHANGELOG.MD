@@ -16,6 +16,23 @@
 ---
 
 ### CHANGELOG
+
+---
+
+## [ch2.23.19-Alpha.1] - 2025-04-24
+
+## Added
+
+- Se agrego funcionalidad para que una foto sea estrictamente png, jpg o jpeg
+
+# Fixed
+
+- Se corrigio un error la cual no se habria el carrito
+
+## Note
+
+- Queda pendiente arreglar que cuando se agregar o incrementa el carrito se reinicia la pagina
+
 ---
 
 ## [ch2.22.18-Alpha.1] - 2025-04-24

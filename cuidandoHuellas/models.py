@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 import re
 from django.contrib.auth.hashers import make_password
+from .validators import *
 # Create your models here.
 
 class Usuario(models.Model):
@@ -119,7 +120,10 @@ class PublicacionMascota(models.Model):
 
 class FotoMascota(models.Model):
     publicacion = models.ForeignKey(PublicacionMascota, on_delete=models.CASCADE, related_name='fotos')
-    imagen = models.ImageField(upload_to='fotos_mascotas/')
+    imagen = models.ImageField(
+        upload_to='fotos_mascotas/',
+        validators=[validar_extension_imagen]
+    )
     
     def __str__(self):
         return f"Foto de publicación {self.publicacion.id}"
