@@ -4,270 +4,656 @@
 {% block estilos_unicos %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/usuarios/productos_usuarios.css' %}">
+   
 {% endblock %}
 
 {% block titulo %} Productos {% endblock %}
 
 {% block contenido %}
-  <div class="container-fluid py-4">
-      <!-- Notification Area -->
-      <div id="notificaciones" class="mb-4">
-          {% if messages %}
-              {% for message in messages %}
-                  <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show" role="alert">
-                      <div class="d-flex align-items-center">
-                          <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %} me-2"></i>
-                          <span>{{ message }}</span>
-                      </div>
-                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-              {% endfor %}
-          {% endif %}
-      </div>
+<div class="container-fluid py-4">
+    <!-- Notification Area -->
+    <div id="notificaciones" class="mb-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %} me-2"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 
-      <!-- Header with search and cart -->
-        <div class="row align-items-center mb-4">
-          <div class="col-md-8">
-              <h2 class="section-title">Nuestros Productos</h2>
-              <p class="text-muted">Encuentra todo lo que necesitas para tus mascotas</p>
-          </div>
-          <div class="d-flex justify-content-end">
-            <a href="#modalCarrito" 
-               data-bs-toggle="modal" 
-               data-bs-target="#modalCarrito" 
-               class="btn btn-outline-primary cart-btn">
+    <!-- Header with search and cart -->
+    <div class="row align-items-center mb-4">
+        <div class="col-md-8">
+            <h2 class="section-title">Nuestros Productos</h2>
+            <p class="text-muted">Encuentra todo lo que necesitas para tus mascotas</p>
+        </div>
+        <div class="col-md-4 d-flex justify-content-md-end">
+            <a href="#modalCarrito" data-bs-toggle="modal" class="btn btn-outline-primary cart-btn">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="ms-2">Ver Carrito</span>
             </a>
-          </div>
-         </div>
+        </div>
+    </div>
 
-      <!-- Product Categories -->
-    
-
-      <!-- Main Banner -->
-      <div class="main-banner mb-5">
-          <div class="row g-0">
-              <div class="col-md-8">
-                  <div class="banner-image">
-                      <img src="{% static 'img/promocion.png' %}" alt="Banner Promocional" onerror="this.src='https://via.placeholder.com/800x400/3367d6/ffffff?text=Productos+para+Mascotas'">
-                      <div class="banner-content">
-                          <h2>Productos de calidad para tus mascotas</h2>
-                          <p>Hasta 30% de descuento en productos seleccionados</p>
-                          <a href="#" class="btn btn-light">Ver Ofertas</a>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-md-4">
-                  <div class="promo-banners">
-                      <div class="promo-banner">
-                          <img src="{% static 'img/accesorio.png' %}" alt="Promoción" onerror="this.src='https://via.placeholder.com/400x200/5f6368/ffffff?text=Accesorios'">
-                          <div class="promo-content">
-                              <h4>Accesorios</h4>
-                              <a href="#" class="btn-link">Ver más</a>
-                          </div>
-                      </div>
-                      <div class="promo-banner mt-3">
-                          <img src="{% static 'img/alimento.png' %}" alt="Promoción" onerror="this.src='https://via.placeholder.com/400x200/5f6368/ffffff?text=Alimentos'">
-                          <div class="promo-content">
-                              <h4>Alimentos</h4>
-                              <a href="#" class="btn-link">Ver más</a>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-
-      <!-- Featured Products Section with Side Layout -->
-      <section class="featured-products mb-5">
-          <h3 class="section-subtitle mb-4 fs-1">Productos Destacados</h3>
-          <div class="row">
-              <!-- Left Side Navigation -->
-              <div class="col-md-3 d-none d-md-block">
-                  <div class="category-sidebar">
-                      <h4>Categorías</h4>
-                      <ul class="category-list">
-                          <li><a href="#"><i class="fas fa-paw me-2"></i>Alimentos</a></li>
-                          <li><a href="#"><i class="fas fa-bone me-2"></i>Juguetes</a></li>
-                          <li><a href="#"><i class="fas fa-home me-2"></i>Camas</a></li>
-                          <li><a href="#"><i class="fas fa-pills me-2"></i>Salud</a></li>
-                          <li><a href="#"><i class="fas fa-shower me-2"></i>Higiene</a></li>
-                      </ul>
-                      
-                      <h4 class="mt-4">Marcas Populares</h4>
-                      <div class="brands-list">
-                          <span class="brand-tag">Royal Canin</span>
-                          <span class="brand-tag">Purina</span>
-                          <span class="brand-tag">Hill's</span>
-                          <span class="brand-tag">Eukanuba</span>
-                          <span class="brand-tag">Pedigree</span>
-                      </div>
-                  </div>
-              </div>
-              
-              <!-- Right Side Products -->
-              <div class="col-md-9">
-                  <div class="row">
-                      {% for producto in dato_producto_usuario|slice:":8" %}
-                      <div class="col-md-3 col-sm-6 mb-4">
-                          <div class="product-card-v2">
-                              <div class="product-tags">
-                                  <span class="product-tag new">Nuevo</span>
-                                  {% if forloop.counter < 3 %}
-                                  <span class="product-tag hot">Mas Vendidos</span>
-                                  {% endif %}
-                              </div>
-                              <div class="product-image">
-                                  {% if producto.foto_producto %}
-                                      <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}">
-                                  {% else %}
-                                      <img src="{% static 'img/Collar Gato.png' %}" alt="Sin imagen" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/5f6368?text=Producto'">
-                                  {% endif %}
-                                  <div class="product-actions">
-                                      <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="action-btn add-to-cart" title="Agregar al carrito">
-                                          <i class="fas fa-shopping-cart"></i>
-                                      </a>
-                                      <button class="action-btn quick-view" title="Vista rápida">
-                                          <i class="fas fa-eye"></i>
-                                      </button>
-                                      <button class="action-btn add-to-wishlist" title="Añadir a favoritos">
-                                          <i class="far fa-heart"></i>
-                                      </button>
-                                  </div>
-                              </div>
-                              <div class="product-info">
-                                  <h4 class="product-name">{{ producto.nombre_producto }}</h4>
-                                  <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
-                                  <div class="product-meta">
-                                      <span class="sold-count">
-                                          <i class="fas fa-fire-alt me-1"></i>{{ forloop.counter0|add:5 }} vendidos
-                                      </span>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      {% endfor %}
-                  </div>
-              </div>
-          </div>
-      </section>
-
-      <!-- New Arrivals Section -->
-      <!-- Productos Más Vendidos Section -->
-        <section class="mb-5 new-arrivals-section">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="section-subtitle fs-1">Productos Más Vendidos</h3>
-                <a href="#" class="btn btn-outline-primary">Ver todos los destacados</a>
+    <!-- Main Banner -->
+    <div class="main-banner mb-5">
+        <div class="row g-0">
+            <div class="col-md-8">
+                <div class="banner-image">
+                    <img src="{% static 'img/promocion.png' %}" alt="Banner Promocional" onerror="this.src='https://via.placeholder.com/800x400/3367d6/ffffff?text=Productos+para+Mascotas'">
+                    <div class="banner-content">
+                        <h2>Productos de calidad para tus mascotas</h2>
+                        <p>Hasta 30% de descuento en productos seleccionados</p>
+                        <a href="#" class="btn btn-light">Ver Ofertas</a>
+                    </div>
+                </div>
             </div>
+            <div class="col-md-4">
+                <div class="promo-banners">
+                    <div class="promo-banner">
+                        <img src="{% static 'img/accesorio.png' %}" alt="Promoción" onerror="this.src='https://via.placeholder.com/400x200/5f6368/ffffff?text=Accesorios'">
+                        <div class="promo-content">
+                            <h4>Accesorios</h4>
+                            <a href="#" class="btn-link">Ver más</a>
+                        </div>
+                    </div>
+                    <div class="promo-banner mt-3">
+                        <img src="{% static 'img/alimento.png' %}" alt="Promoción" onerror="this.src='https://via.placeholder.com/400x200/5f6368/ffffff?text=Alimentos'">
+                        <div class="promo-content">
+                            <h4>Alimentos</h4>
+                            <a href="#" class="btn-link">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <div class="row">
-                {% for producto in productos_mas_vendidos %}
-                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-4">
-                    <div class="product-card-modern">
-                        <div class="product-image">
-                            {% if producto.foto_producto %}
-                                <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}" class="img-fluid">
-                            {% else %}
-                                <img src="{% static 'img/default-product.png' %}" alt="Sin imagen" class="img-fluid">
-                            {% endif %}
-                            
-                            <div class="product-badge">
-                                {% if forloop.counter <= 3 %}
-                                    <span class="badge bg-danger">TOP {{ forloop.counter }}</span>
-                                {% else %}
-                                    <span class="badge bg-success">POPULAR</span>
-                                {% endif %}
+    <!-- Featured Products Section with Side Layout -->
+    <section class="featured-products mb-5">
+        <h3 class="section-subtitle mb-4 fs-1">Productos Destacados</h3>
+        <div class="row">
+            <!-- Left Side Navigation -->
+            <div class="col-md-3 d-none d-md-block">
+                <div class="category-sidebar">
+                    <h4>Categorías</h4>
+                    <ul class="category-list">
+                        <li><a href="#"><i class="fas fa-paw me-2"></i>Alimentos</a></li>
+                        <li><a href="#"><i class="fas fa-bone me-2"></i>Juguetes</a></li>
+                        <li><a href="#"><i class="fas fa-home me-2"></i>Camas</a></li>
+                        <li><a href="#"><i class="fas fa-pills me-2"></i>Salud</a></li>
+                        <li><a href="#"><i class="fas fa-shower me-2"></i>Higiene</a></li>
+                    </ul>
+                    
+                    <h4 class="mt-4">Marcas Populares</h4>
+                    <div class="brands-list">
+                        <span class="brand-tag">Royal Canin</span>
+                        <span class="brand-tag">Purina</span>
+                        <span class="brand-tag">Hill's</span>
+                        <span class="brand-tag">Eukanuba</span>
+                        <span class="brand-tag">Pedigree</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Side Products Carousel -->
+            <div class="col-md-9 position-relative px-4">
+                <div id="productCarousel" class="carousel slide" data-bs-interval="false">
+                    <!-- Carousel Items -->
+                    <div class="carousel-inner">
+                        <!-- First slide - 8 products (2 rows of 4) -->
+                        <div class="carousel-item active">
+                            <!-- First row of 4 products -->
+                            <div class="row mb-4">
+                                {% for producto in dato_producto_usuario|slice:":4" %}
+                                    <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                                        <div class="product-card-v2">
+                                            <div class="product-tags">
+                                                <span class="product-tag new">Nuevo</span>
+                                                {% if forloop.counter < 3 %}
+                                                    <span class="product-tag hot">Mas Vendidos</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="product-image">
+                                                {% if producto.foto_producto %}
+                                                    <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}">
+                                                {% else %}
+                                                    <img src="{% static 'img/Collar Gato.png' %}" alt="Sin imagen" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/5f6368?text=Producto'">
+                                                {% endif %}
+                                                <div class="product-actions">
+                                                    <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="action-btn add-to-cart" title="Agregar al carrito">
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                    </a>
+                                                    <button  class="action-btn quick-view quick-view-btn"
+                                                            title="Vista rápida"
+                                                            data-product-id="{{ producto.id_producto }}"
+                                                            data-product-name="{{ producto.nombre_producto }}"
+                                                            data-product-price="{{ producto.precio|floatformat:0 }}"
+                                                            data-product-image="{% if producto.foto_producto %}{{ producto.foto_producto.url }}{% else %}{% static 'img/Collar Gato.png' %}{% endif %}"
+                                                            data-product-description="{{ producto.descripcion|default:'Descripción no disponible' }}"
+                                                            data-product-sold="{{ forloop.counter0|add:5 }}"
+                                                            data-product-tags="{% if forloop.counter < 3 %}new hot{% else %}new{% endif %}">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="action-btn add-to-wishlist" title="Añadir a favoritos">
+                                                        <i class="far fa-heart"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="product-info">
+                                                <h4 class="product-name">{{ producto.nombre_producto }}</h4>
+                                                <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
+                                                <div class="product-meta">
+                                                    <span class="sold-count">
+                                                        <i class="fas fa-fire-alt me-1"></i>{{ forloop.counter0|add:5 }} vendidos
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
                             
-                            <div class="product-actions">
-                                <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="action-btn cart-btn">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </a>
-                                <button class="action-btn quick-view" data-product-id="{{ producto.id_producto }}">
-                                    <i class="fas fa-eye"></i>
-                                </button>
+                            <!-- Second row of 4 products -->
+                            <div class="row">
+                                {% for producto in dato_producto_usuario|slice:"4:8" %}
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="product-card-v2">
+                                            <div class="product-tags">
+                                                <span class="product-tag new">Nuevo</span>
+                                            </div>
+                                            <div class="product-image">
+                                                {% if producto.foto_producto %}
+                                                    <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}">
+                                                {% else %}
+                                                    <img src="{% static 'img/Collar Gato.png' %}" alt="Sin imagen" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/5f6368?text=Producto'">
+                                                {% endif %}
+                                                <div class="product-actions">
+                                                    <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="action-btn add-to-cart" title="Agregar al carrito">
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                    </a>
+                                                    <button class="action-btn quick-view quick-view-btn" 
+                                                            title="Vista rápida"
+                                                            data-product-id="{{ producto.id_producto }}"
+                                                            data-product-name="{{ producto.nombre_producto }}"
+                                                            data-product-price="{{ producto.precio|floatformat:0 }}"
+                                                            data-product-image="{% if producto.foto_producto %}{{ producto.foto_producto.url }}{% else %}{% static 'img/Collar Gato.png' %}{% endif %}"
+                                                            data-product-description="{{ producto.descripcion|default:'Descripción no disponible' }}"
+                                                            data-product-sold="{{ forloop.counter0|add:9 }}"
+                                                            data-product-tags="new">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="action-btn add-to-wishlist" title="Añadir a favoritos">
+                                                        <i class="far fa-heart"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="product-info">
+                                                <h4 class="product-name">{{ producto.nombre_producto }}</h4>
+                                                <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
+                                                <div class="product-meta">
+                                                    <span class="sold-count">
+                                                        <i class="fas fa-fire-alt me-1"></i>{{ forloop.counter0|add:9 }} vendidos
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                         
-                        <div class="product-details">
-                            <div class="product-stats d-flex justify-content-between">
-                                <span class="sales-count">
-                                    <i class="fas fa-chart-line me-1"></i> {{ producto.veces_comprado }} compras
-                                </span>
-                                {% if producto.cantidad > 0 %}
-                                    <span class="stock-available text-success">
-                                        <i class="fas fa-check-circle"></i> Disponible
-                                    </span>
-                                {% else %}
-                                    <span class="stock-out text-danger">
-                                        <i class="fas fa-times-circle"></i> Agotado
-                                    </span>
-                                {% endif %}
+                        <!-- Second slide - 8 products (2 rows of 4) -->
+                        <div class="carousel-item">
+                            <!-- First row of 4 products -->
+                            <div class="row mb-4">
+                                {% for producto in dato_producto_usuario|slice:"8:12" %}
+                                    <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                                        <div class="product-card-v2">
+                                            <div class="product-tags">
+                                                <span class="product-tag new">Nuevo</span>
+                                            </div>
+                                            <div class="product-image">
+                                                {% if producto.foto_producto %}
+                                                    <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}">
+                                                {% else %}
+                                                    <img src="{% static 'img/Collar Gato.png' %}" alt="Sin imagen" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/5f6368?text=Producto'">
+                                                {% endif %}
+                                                <div class="product-actions">
+                                                    <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="action-btn add-to-cart" title="Agregar al carrito">
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                    </a>
+                                                    <button class="action-btn quick-view quick-view-btn" 
+                                                            title="Vista rápida"
+                                                            data-product-id="{{ producto.id_producto }}"
+                                                            data-product-name="{{ producto.nombre_producto }}"
+                                                            data-product-price="{{ producto.precio|floatformat:0 }}"
+                                                            data-product-image="{% if producto.foto_producto %}{{ producto.foto_producto.url }}{% else %}{% static 'img/Collar Gato.png' %}{% endif %}"
+                                                            data-product-description="{{ producto.descripcion|default:'Descripción no disponible' }}"
+                                                            data-product-sold="{{ forloop.counter0|add:13 }}"
+                                                            data-product-tags="new">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="action-btn add-to-wishlist" title="Añadir a favoritos">
+                                                        <i class="far fa-heart"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="product-info">
+                                                <h4 class="product-name">{{ producto.nombre_producto }}</h4>
+                                                <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
+                                                <div class="product-meta">
+                                                    <span class="sold-count">
+                                                        <i class="fas fa-fire-alt me-1"></i>{{ forloop.counter0|add:13 }} vendidos
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
                             
-                            <h4 class="product-title">{{ producto.nombre_producto }}</h4>
-                            
-                            <div class="product-prices">
-                                <span class="new-price">${{ producto.precio|floatformat:0 }}</span>
-                                {% if producto.descuento > 0 %}
-                                    <span class="discount-price">${{ producto.precio_sin_descuento|floatformat:0 }}</span>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="d-grid mt-2">
-                                <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="add-to-cart-btn {% if producto.cantidad <= 0 %}disabled{% endif %}">
-                                    <i class="fas fa-cart-plus me-2"></i>
-                                    {% if producto.cantidad > 0 %}Agregar al carrito{% else %}No disponible{% endif %}
-                                </a>
+                            <!-- Second row of 4 products (if more products exist) -->
+                            <div class="row">
+                                {% for producto in dato_producto_usuario|slice:"12:16" %}
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="product-card-v2">
+                                            <div class="product-tags">
+                                                <span class="product-tag new">Nuevo</span>
+                                            </div>
+                                            <div class="product-image">
+                                                {% if producto.foto_producto %}
+                                                    <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}">
+                                                {% else %}
+                                                    <img src="{% static 'img/Collar Gato.png' %}" alt="Sin imagen" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/5f6368?text=Producto'">
+                                                {% endif %}
+                                                <div class="product-actions">
+                                                    <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="action-btn add-to-cart" title="Agregar al carrito">
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                    </a>
+                                                    <button class="action-btn quick-view quick-view-btn" 
+                                                            title="Vista rápida"
+                                                            data-product-id="{{ producto.id_producto }}"
+                                                            data-product-name="{{ producto.nombre_producto }}"
+                                                            data-product-price="{{ producto.precio|floatformat:0 }}"
+                                                            data-product-image="{% if producto.foto_producto %}{{ producto.foto_producto.url }}{% else %}{% static 'img/Collar Gato.png' %}{% endif %}"
+                                                            data-product-description="{{ producto.descripcion|default:'Descripción no disponible' }}"
+                                                            data-product-sold="{{ forloop.counter0|add:17 }}"
+                                                            data-product-tags="new">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="action-btn add-to-wishlist" title="Añadir a favoritos">
+                                                        <i class="far fa-heart"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="product-info">
+                                                <h4 class="product-name">{{ producto.nombre_producto }}</h4>
+                                                <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
+                                                <div class="product-meta">
+                                                    <span class="sold-count">
+                                                        <i class="fas fa-fire-alt me-1"></i>{{ forloop.counter0|add:17 }} vendidos
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% empty %}
+                                    <!-- If there aren't enough products to fill the second row -->
+                                    <div class="col-12 text-center">
+                                        <p class="text-muted">Más productos próximamente</p>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                 </div>
-                {% empty %}
-                <div class="col-12">
-                    <div class="alert alert-info text-center">
-                        <i class="fas fa-info-circle me-2"></i>
-                        Aún no hay productos destacados. ¡Sé el primero en comprar!
+                
+                <!-- Carousel Controls - Outside the carousel -->
+                <button class="carousel-control-prev position-absolute top-50 start-0 translate-middle-y" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next position-absolute top-50 end-0 translate-middle-y" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                
+                <!-- Carousel Indicators - Centered below the carousel -->
+                <div class="text-center mt-4">
+                    <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="0" class="active mx-1 bg-dark rounded-circle" aria-current="true" aria-label="Slide 1" style="width: 10px; height: 10px; border: none;"></button>
+                    <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="1" class="mx-1 bg-secondary rounded-circle" aria-label="Slide 2" style="width: 10px; height: 10px; border: none;"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- New Arrivals Section -->
+    <section class="mb-5 new-arrivals-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="section-subtitle fs-1">Productos Más Vendidos</h3>
+            <a href="#" class="btn btn-outline-primary">Ver todos los destacados</a>
+        </div>
+
+        <div class="row">
+            {% for producto in productos_mas_vendidos %}
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-4">
+                <div class="product-card-modern">
+                    <div class="product-image">
+                        {% if producto.foto_producto %}
+                            <img src="{{ producto.foto_producto.url }}" alt="{{ producto.nombre_producto }}" class="img-fluid">
+                        {% else %}
+                            <img src="{% static 'img/default-product.png' %}" alt="Sin imagen" class="img-fluid">
+                        {% endif %}
+                        
+                        <div class="product-badge">
+                            {% if forloop.counter <= 3 %}
+                                <span class="badge bg-danger">TOP {{ forloop.counter }}</span>
+                            {% else %}
+                                <span class="badge bg-success">POPULAR</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="product-actions">
+                            <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="action-btn cart-btn">
+                                <i class="fas fa-shopping-cart"></i>
+                            </a>
+                            <button class="action-btn quick-view quick-view-btn" 
+                                    data-product-id="{{ producto.id_producto }}"
+                                    data-product-name="{{ producto.nombre_producto }}"
+                                    data-product-price="{{ producto.precio|floatformat:0 }}"
+                                    data-product-image="{% if producto.foto_producto %}{{ producto.foto_producto.url }}{% else %}{% static 'img/default-product.png' %}{% endif %}"
+                                    data-product-description="{{ producto.descripcion|default:'Descripción no disponible' }}"
+                                    data-product-sold="{{ producto.veces_comprado }}"
+                                    data-product-tags="{% if forloop.counter <= 3 %}top{% else %}popular{% endif %}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-details">
+                        <div class="product-stats d-flex justify-content-between">
+                            <span class="sales-count">
+                                <i class="fas fa-chart-line me-1"></i> {{ producto.veces_comprado }} compras
+                            </span>
+                            {% if producto.cantidad > 0 %}
+                                <span class="stock-available text-success">
+                                    <i class="fas fa-check-circle"></i> Disponible
+                                </span>
+                            {% else %}
+                                <span class="stock-out text-danger">
+                                    <i class="fas fa-times-circle"></i> Agotado
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <h4 class="product-title">{{ producto.nombre_producto }}</h4>
+                        
+                        <div class="product-prices">
+                            <span class="new-price">${{ producto.precio|floatformat:0 }}</span>
+                            {% if producto.descuento > 0 %}
+                                <span class="discount-price">${{ producto.precio_sin_descuento|floatformat:0 }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid mt-2">
+                            <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="add-to-cart-btn {% if producto.cantidad <= 0 %}disabled{% endif %}">
+                                <i class="fas fa-cart-plus me-2"></i>
+                                {% if producto.cantidad > 0 %}Agregar al carrito{% else %}No disponible{% endif %}
+                            </a>
+                        </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-        </section>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Aún no hay productos destacados. ¡Sé el primero en comprar!
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 
-      <!-- Trust indicators section -->
-      <section class="trust-section">
-          <div class="row text-center">
-              <div class="col-md-3 col-6 mb-4">
-                  <div class="trust-item">
-                      <i class="fas fa-truck"></i>
-                      <h5>Envío Gratis</h5>
-                      <p>En pedidos sobre $30.000</p>
-                  </div>
-              </div>
-              <div class="col-md-3 col-6 mb-4">
-                  <div class="trust-item">
-                      <i class="fas fa-shield-alt"></i>
-                      <h5>Pago Seguro</h5>
-                      <p>100% protección de datos</p>
-                  </div>
-              </div>
-              <div class="col-md-3 col-6 mb-4">
-                  <div class="trust-item">
-                      <i class="fas fa-exchange-alt"></i>
-                      <h5>Devoluciones</h5>
-                      <p>Garantía de 30 días</p>
-                  </div>
-              </div>
-              <div class="col-md-3 col-6 mb-4">
-                  <div class="trust-item">
-                      <i class="fas fa-headset"></i>
-                      <h5>Soporte 24/7</h5>
-                      <p>Atención personalizada</p>
-                  </div>
-              </div>
-          </div>
-      </section>
-  </div>
-  {% include 'usuarios/modal_carrito.html' %}
+    <!-- Trust indicators section -->
+    <section class="trust-section">
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-4">
+                <div class="trust-item">
+                    <i class="fas fa-truck"></i>
+                    <h5>Envío Gratis</h5>
+                    <p>En pedidos sobre $30.000</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="trust-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h5>Pago Seguro</h5>
+                    <p>100% protección de datos</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="trust-item">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h5>Devoluciones</h5>
+                    <p>Garantía de 30 días</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="trust-item">
+                    <i class="fas fa-headset"></i>
+                    <h5>Soporte 24/7</h5>
+                    <p>Atención personalizada</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Modal de Carrito -->
+    {% include 'usuarios/modal_carrito.html' %}
+    
+    <!-- Modal de Vista Rápida -->
+    <div class="modal fade" id="quickViewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="quickViewModalLabel">Detalles del Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="quick-view-img-container">
+                                <img id="quickViewImage" src="" class="img-fluid rounded" alt="">
+                                <div class="product-tags-modal mt-3">
+                                    <span class="badge bg-primary d-none" id="quickViewTagNew">Nuevo</span>
+                                    <span class="badge bg-danger d-none" id="quickViewTagHot">Más Vendido</span>
+                                    <span class="badge bg-success d-none" id="quickViewTagTop">TOP</span>
+                                    <span class="badge bg-warning text-dark d-none" id="quickViewTagPopular">Popular</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 id="quickViewTitle" class="mb-3"></h3>
+                            <div class="d-flex align-items-center mb-3">
+                                <h4 class="text-primary mb-0" id="quickViewPrice"></h4>
+                                <span class="text-decoration-line-through text-muted ms-2 d-none" id="quickViewOldPrice"></span>
+                            </div>
+                            <div id="quickViewDescription" class="mb-4">
+                               
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <!-- CORRECCIÓN: Eliminar esta parte que siempre vincula al primer producto -->
+                                <a href="#" 
+                                   class="btn btn-primary btn-lg" 
+                                   id="quickViewAddToCart">
+                                    <i class="fas fa-cart-plus me-2"></i>
+                                    Agregar al carrito
+                                </a>
+                                
+                                <button class="btn btn-outline-secondary" id="quickViewAddToWishlist">
+                                    <i class="far fa-heart me-2"></i> Añadir a favoritos
+                                </button>
+                            </div>
+                            
+                            <div class="product-meta mt-4">
+                                <div class="sold-count">
+                                    <i class="fas fa-fire-alt me-1 text-danger"></i>
+                                    <span id="quickViewSoldCount"></span> vendidos
+                                </div>
+                                <div class="stock-availability mt-2">
+                                    <span class="text-success d-none" id="quickViewInStock"><i class="fas fa-check-circle me-1"></i> Disponible</span>
+                                    <span class="text-danger d-none" id="quickViewOutStock"><i class="fas fa-times-circle me-1"></i> Agotado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Configuración del modal de vista rápida
+        const quickViewModal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+        
+        // Obtener todos los botones de vista rápida
+        const quickViewButtons = document.querySelectorAll('.quick-view-btn');
+        
+        // Añadir evento click a cada botón de vista rápida
+        quickViewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Obtener datos del producto desde los atributos data-*
+                const productId = this.getAttribute('data-product-id');
+                const productName = this.getAttribute('data-product-name');
+                const productPrice = this.getAttribute('data-product-price');
+                const productImage = this.getAttribute('data-product-image');
+                const productDescription = this.getAttribute('data-product-description');
+                const productSold = this.getAttribute('data-product-sold');
+                const productTags = this.getAttribute('data-product-tags');
+                
+                // Actualizar el modal con los datos del producto
+                document.getElementById('quickViewTitle').textContent = productName;
+                document.getElementById('quickViewPrice').textContent = '$' + productPrice;
+                document.getElementById('quickViewImage').src = productImage;
+                document.getElementById('quickViewImage').alt = productName;
+                document.getElementById('quickViewDescription').textContent = productDescription;
+                document.getElementById('quickViewSoldCount').textContent = productSold;
+                
+                // Actualizar el enlace del botón "Agregar al carrito"
+                document.getElementById('quickViewAddToCart').href = '/agregar_al_carrito/' + productId + '/';
+                
+                // Mostrar/ocultar etiquetas según los tags del producto
+                document.getElementById('quickViewTagNew').classList.toggle('d-none', !productTags.includes('new'));
+                document.getElementById('quickViewTagHot').classList.toggle('d-none', !productTags.includes('hot'));
+                document.getElementById('quickViewTagTop').classList.toggle('d-none', !productTags.includes('top'));
+                document.getElementById('quickViewTagPopular').classList.toggle('d-none', !productTags.includes('popular'));
+                
+                // Por defecto, mostrar disponibilidad (se puede mejorar con datos reales)
+                document.getElementById('quickViewInStock').classList.remove('d-none');
+                document.getElementById('quickViewOutStock').classList.add('d-none');
+                
+                // Abrir el modal
+                quickViewModal.show();
+            });
+        });
+        
+        // Cerrar mensajes de notificación automáticamente después de 3 segundos
+        const notifications = document.querySelectorAll('.alert');
+        notifications.forEach(notification => {
+            setTimeout(() => {
+                const alertInstance = bootstrap.Alert.getOrCreateInstance(notification);
+                alertInstance.close();
+            }, 3000);
+        });
+        
+        // Añadir funcionalidad a los botones de añadir a favoritos
+        const wishlistButtons = document.querySelectorAll('.add-to-wishlist');
+        wishlistButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const heartIcon = this.querySelector('i');
+                
+                // Cambiar entre iconos de corazón (vacío/lleno)
+                if (heartIcon.classList.contains('far')) {
+                    heartIcon.classList.remove('far');
+                    heartIcon.classList.add('fas');
+                    
+                    // Mostrar notificación temporal
+                    showNotification('Producto añadido a favoritos', 'success');
+                } else {
+                    heartIcon.classList.remove('fas');
+                    heartIcon.classList.add('far');
+                    
+                    // Mostrar notificación temporal
+                    showNotification('Producto eliminado de favoritos', 'warning');
+                }
+            });
+        });
+        
+        // Función para mostrar notificaciones temporales
+        function showNotification(message, type = 'info') {
+            const notificationsArea = document.getElementById('notificaciones');
+            
+            // Crear elemento de notificación
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.role = 'alert';
+            
+            // Añadir contenido
+            alertDiv.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'} me-2"></i>
+                    <span>${message}</span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            // Añadir al área de notificaciones
+            notificationsArea.appendChild(alertDiv);
+            
+            // Cerrar automáticamente después de 3 segundos
+            setTimeout(() => {
+                const alertInstance = bootstrap.Alert.getOrCreateInstance(alertDiv);
+                alertInstance.close();
+            }, 3000);
+        }
+        
+        // Inicializar tooltips de Bootstrap (para los botones de acción)
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl, {
+                placement: 'top',
+                trigger: 'hover'
+            });
+        });
+        
+        // Controlar el botón de añadir a favoritos en el modal
+        document.getElementById('quickViewAddToWishlist').addEventListener('click', function() {
+            showNotification('Producto añadido a favoritos', 'success');
+        });
+        
+        // Validación adicional para el carrito
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Aquí se puede añadir lógica adicional antes de redirigir
+                // Por ejemplo, comprobar stock, autenticación, etc.
+                
+                // Para demo: mostrar una notificación temporal al agregar al carrito
+                showNotification('Producto agregado al carrito', 'success');
+            });
+        });
+    });
+</script>
+
 {% endblock %}

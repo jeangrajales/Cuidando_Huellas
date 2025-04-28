@@ -16,10 +16,17 @@
 ---
 
 ### CHANGELOG
+---
+
+## [ch2.24.19-Alpha.1] - 2025-04-28
+
+## Added 
+
+- Se agrego nueva funcionalidad de ver producto detalladamente, se le agrego un carrusel para ver varios productos.
 
 ---
 
-## [ch2.23.19-Alpha.1] - 2025-04-24
+## [ch2.23.19-Alpha.1] - 2025-04-28
 
 ## Added
 
