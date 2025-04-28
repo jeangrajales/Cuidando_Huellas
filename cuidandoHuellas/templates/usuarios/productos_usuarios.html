@@ -26,18 +26,21 @@
       </div>
 
       <!-- Header with search and cart -->
-      <div class="row align-items-center mb-4">
+        <div class="row align-items-center mb-4">
           <div class="col-md-8">
               <h2 class="section-title">Nuestros Productos</h2>
               <p class="text-muted">Encuentra todo lo que necesitas para tus mascotas</p>
           </div>
-          <div class="col-md-4 d-flex justify-content-md-end">
-              <a href="#modalCarrito" data-bs-toggle="modal" class="btn btn-outline-primary cart-btn">
-                  <i class="fas fa-shopping-cart"></i>
-                  <span class="ms-2">Ver Carrito</span>
-              </a>
+          <div class="d-flex justify-content-end">
+            <a href="#modalCarrito" 
+               data-bs-toggle="modal" 
+               data-bs-target="#modalCarrito" 
+               class="btn btn-outline-primary cart-btn">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="ms-2">Ver Carrito</span>
+            </a>
           </div>
-      </div>
+         </div>
 
       <!-- Product Categories -->
     
@@ -266,4 +269,5 @@
           </div>
       </section>
   </div>
+  {% include 'usuarios/modal_carrito.html' %}
 {% endblock %}

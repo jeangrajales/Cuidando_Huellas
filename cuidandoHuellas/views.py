@@ -104,6 +104,7 @@ def registrarse(request):
 
     return render(request, "usuarios/registrarse.html")
 
+@session_required_and_rol_permission(1,2,3)
 def editar_usuario(request):
     return render(request, 'usuarios/editar_usuario.html')
 
@@ -331,7 +332,6 @@ def agregar_al_carrito(request, id_producto):
         
         if producto.cantidad <= 0:
             messages.error(request, f"El producto '{producto.nombre_producto}' está agotado.")
-            return redirect("productos_usuarios")
 
         # Incrementar el contador de ventas del producto
         producto.incrementar_ventas()
@@ -371,7 +371,6 @@ def aumentar_cantidad(request, item_id):
         # Verificar el stock del producto
         if item.cantidad >= producto.cantidad:
             messages.error(request, f"Solo quedan {producto.cantidad} unidades disponibles.")
-            return redirect("productos_usuarios")
 
         # Aumentar la cantidad
         item.cantidad += 1

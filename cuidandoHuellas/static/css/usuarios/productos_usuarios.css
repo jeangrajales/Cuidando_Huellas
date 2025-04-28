@@ -47,16 +47,18 @@ body {
   background-color: var(--primary-color);
 }
 
-/* Cart Button */
+/* Asegura que el botón esté alineado a la derecha */
 .cart-btn {
-  transition: all 0.3s ease;
-  position: relative;
-  font-weight: 500;
+  float: right; /* Mueve el botón a la derecha */
 }
 
+/* Cambio de color cuando se pasa el ratón sobre el botón */
 .cart-btn:hover {
-  transform: translateY(-2px);
+  background-color: #6f4f37; /* Color café adecuado para el hover */
+  border-color: #6f4f37; /* Cambiar el borde a color café */
+  color: white; /* Color de texto blanco para contraste */
 }
+
 
 /* Estilo para el contenedor principal */
 .main-banner {
