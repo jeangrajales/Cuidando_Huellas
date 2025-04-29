@@ -10,6 +10,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/administrador/listar_productos.css' %}">
+    
 </head>
 <body>
     <div class="container">
@@ -18,7 +19,7 @@
             {% for data in dato_producto %}
             <div class="col">
                 <div class="card h-100">
-                    <div class="card-img-container">
+                    <div class="card-img-container" data-bs-toggle="modal" data-bs-target="#productModal{{ data.id_producto }}">
                         {% if data.foto_producto %}
                             <img src="{{ data.foto_producto.url }}" class="card-img-top" alt="{{ data.nombre_producto }}">
                         {% else %}
@@ -30,14 +31,14 @@
                     <div class="card-body">
                         <h5 class="card-title">Nombre: {{ data.nombre_producto }}</h5>
                         <p class="card-text">Categoría: {{ data.categoria }}</p>
-                        <p class="card-text">Precio: {{ data.precio_formateado }}</p>
+                        <p class="card-text">Precio: ${{ data.precio }} </p>
                         <p class="card-text">Cantidad: {{ data.cantidad }}</p>
                         <p class="card-text">Estado: {{ data.estado }}</p>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <a href="">
-                            <button class="btn btn-primary btn-sm"><i class="fa-solid fa-eye"></i></button>
-                        </a>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#productModal{{ data.id_producto }}">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
                         <a href="{% url 'eliminar_productos' data.id_producto %}">
                             <button class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
                         </a>
@@ -47,12 +48,75 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Modal para el producto -->
+            <div class="modal fade" id="productModal{{ data.id_producto }}" tabindex="-1" aria-labelledby="productModalLabel{{ data.id_producto }}" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light">
+                            <h5 class="modal-title" id="productModalLabel{{ data.id_producto }}">{{ data.nombre_producto }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6 text-center">
+                                    {% if data.foto_producto %}
+                                        <img src="{{ data.foto_producto.url }}" class="modal-img img-fluid mb-3" alt="{{ data.nombre_producto }}">
+                                    {% else %}
+                                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                                            <i class="fa-solid fa-image text-muted fa-5x"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 class="mb-3">Detalles del Producto</h4>
+                                    <ul class="product-details-list">
+                                        <li><strong>ID:</strong> {{ data.id_producto }}</li>
+                                        <li><strong>Nombre:</strong> {{ data.nombre_producto }}</li>
+                                        <li><strong>Categoría:</strong> {{ data.categoria }}</li>
+                                        <li><strong>Precio:</strong> ${{ data.precio }} </li>
+                                        <li><strong>Cantidad:</strong> {{ data.cantidad }}</li>
+                                        <li><strong>Estado:</strong> <span class="badge {% if data.estado == 'Disponible' %}bg-success{% else %}bg-danger{% endif %}">{{ data.estado }}</span></li>
+                                    </ul>
+                                    
+                                    <div class="mt-4">
+                                        <h5>Descripción:</h5>
+                                        <p>{{ data.descripcion }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url 'editar_productos' data.id_producto %}" class="btn btn-warning">
+                                <i class="fa-solid fa-pen-to-square me-1"></i> Editar
+                            </a>
+                            <a href="{% url 'eliminar_productos' data.id_producto %}" class="btn btn-danger">
+                                <i class="fa-solid fa-trash-can me-1"></i> Eliminar
+                            </a>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
         </div>
         <a href="{% url 'agregar_productos' %}" class="btn btn-danger btn-sm d-block w-25 mx-auto mt-5 mb-5">Agregar Productos</a>
     </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Script para habilitar los modales de Bootstrap
+        document.addEventListener('DOMContentLoaded', function() {
+            var productCards = document.querySelectorAll('.card-img-container');
+            productCards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    var modalId = this.getAttribute('data-bs-target');
+                    var productModal = new bootstrap.Modal(document.querySelector(modalId));
+                    productModal.show();
+                });
+            });
+        });
+    </script>
 </body>
 </html>
-
 {% endblock %}

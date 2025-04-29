@@ -16,3 +16,43 @@
 .container {
     max-width: 1200px;
 }
+
+
+.card-img-container {
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.card-img-container img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.card-img-container:hover img {
+    transform: scale(1.05);
+}
+
+.modal-img {
+    max-height: 400px;
+    object-fit: contain;
+}
+
+.product-details-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.product-details-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.product-details-list li:last-child {
+    border-bottom: none;
+}

@@ -5,6 +5,7 @@ import re
 from django.contrib.auth.hashers import make_password
 from .validators import *
 # Create your models here.
+from django.core.validators import MinValueValidator
 
 class Usuario(models.Model):
     id_usuario = models.AutoField(primary_key= True)
@@ -35,6 +36,10 @@ class Usuario(models.Model):
         if not self.contraseña.startswith('pbkdf2_'):
             self.contraseña = make_password(self.contraseña)
         super().save(*args, **kwargs)
+        
+    @property
+    def es_administrador(self):
+        return self.rol == 1
 
     def __str__(self):
         return f"{self.nombre_completo} - {self.correo}"    
@@ -43,8 +48,14 @@ class Usuario(models.Model):
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key= True)
     nombre_producto = models.CharField(max_length=250)
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
-    cantidad = models.PositiveIntegerField()
+    precio = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(0.01)]
+    )
+    cantidad = models.IntegerField(
+        validators=[MinValueValidator(1)]
+    )
     descripcion = models.TextField()
     CATEGORIAS = (
         (0, ""),
@@ -57,6 +68,7 @@ class Producto(models.Model):
         (1, "Disponible"),
         (2, "No Disponible")
     )
+
     foto_producto = models.ImageField(upload_to='foto_producto/') 
     categoria = models.CharField(max_length=20, choices=CATEGORIAS, default=0) 
     estado = models.CharField(max_length=20, choices=ESTADOS, default=0)

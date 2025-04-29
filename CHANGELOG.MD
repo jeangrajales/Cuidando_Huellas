@@ -18,6 +18,20 @@
 ### CHANGELOG
 ---
 
+## [ch2.25.21-Alpha.1] - 2025-04-29
+
+# Added
+
+- Se agrego que cuando sea administrador ahí en el icono de usuario que despliegue la opción panel administrador, de resto si es usuario no aparezca.
+
+## Fixed
+
+- Se corrigio el formulario de productos para que no permita cantidad negativa, precio mayor a 0 y que sea decimal.
+
+- Se corrigio el direccionamiento de registar tenia un pequeño bug.
+
+---
+
 ## [ch2.24.20-Alpha.1] - 2025-04-29
 
 ## Fixed

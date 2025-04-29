@@ -44,7 +44,7 @@ urlpatterns = [
     path('listar_mascotas_adopcion/',views.listar_mascotas_adopcion, name="listar_mascotas_adopcion"),
     path('eliminar_mascotas_adopcion/<int:publicacion_id>/', views.eliminar_mascotas_adopcion, name='eliminar_mascotas_adopcion'),
 
-    
+    path('panel-administrador/', views.panel_administrador, name='pagina_administrador'),
     
     
       
