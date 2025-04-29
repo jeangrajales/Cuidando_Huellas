@@ -36,7 +36,7 @@
                     <h3 class="text-center fw-bold mb-4 fs-1">Registrarse</h3>
                     <br />
 
-                    <form method="post">
+                    <form method="post" action="{% url 'registrarse' %}">
                       {% csrf_token %}
                       <div class="form-group mb-3">
                         <input id="inputName" name="nombre_completo" type="text"

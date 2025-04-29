@@ -10,11 +10,18 @@ from django.utils import timezone
 from datetime import datetime
 from decimal import Decimal
 from django.http import HttpResponse
+import os
+from PIL import Image
+from io import BytesIO
+
 # Create your views here.
 
 # Usuarios
 
 # -------------------
+@session_required_and_rol_permission(1)  # Solo para rol 1 (admin)
+def panel_administrador(request):
+    return render(request, 'administrador/pagina_administrador.html')
 
 def iniciar_sesion(request):
     if request.method == "POST":
@@ -27,11 +34,12 @@ def iniciar_sesion(request):
             if check_password(contraseña, q.contraseña):
                 # Todo OK si la contraseña coincide, crear sesión y redirigir
                 request.session["pista"] = {
-                    "telefono": q.telefono,
-                    "id": q.id_usuario,
-                    "rol": q.rol,
-                    "nombre_completo": q.nombre_completo,
-                }  # Autenticación: creamos la variable session
+                "telefono": q.telefono,
+                "id": q.id_usuario,
+                "rol": q.rol,
+                "nombre_completo": q.nombre_completo,
+                "es_administrador": q.es_administrador,  # Usando la propiedad
+            }# Autenticación: creamos la variable session
                 messages.success(request, "Bienvenido a Cuidando Huellas !!")
 
                 if q.rol == 1:  
@@ -240,6 +248,7 @@ def listar_productos(request):
     contexto = {"dato_producto": list_productos}
     return render(request, 'administrador/productos/listar_productos.html', contexto)
 
+
 @session_required_and_rol_permission(1)
 def agregar_productos(request):
     if request.method == "POST":
@@ -251,20 +260,74 @@ def agregar_productos(request):
         categoria = request.POST.get("categoria")
         estado = request.POST.get("estado")
         
-        # Validar que el archivo subido sea una imagen
+        try:
+            precio = float(precio)
+            if precio <= 0:
+                messages.error(request, "Error: El precio debe ser mayor a 0")
+                return redirect('agregar_productos')
+        except (ValueError, TypeError):
+            messages.error(request, "Error: Ingrese un precio válido")
+            return redirect('agregar_productos')
+            
+        try:
+            cantidad = int(cantidad)
+            if cantidad < 1:
+                messages.error(request, "Error: La cantidad debe ser al menos 1")
+                return redirect('agregar_productos')
+        except (ValueError, TypeError):
+            messages.error(request, "Error: Ingrese una cantidad válida")
+            return redirect('agregar_productos')
+        
+        # Validación del archivo de imagen
         if foto_producto:
-            allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif']
+            # 1. Validar extensión del archivo
+            allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
             ext = os.path.splitext(foto_producto.name)[1].lower()
             
             if ext not in allowed_extensions:
-                messages.error(request, "Error: Solo se permiten archivos de imagen (JPG, JPEG, PNG, GIF)")
+                messages.error(request, "Error: Solo se permiten imágenes (JPG, JPEG, PNG, GIF, WEBP)")
                 return redirect('agregar_productos')
             
-            # Opcional: Validar también el tipo MIME
-            if not foto_producto.content_type.startswith('image/'):
-                messages.error(request, "Error: El archivo no es una imagen válida")
+            # 2. Validar que el archivo sea realmente una imagen
+            try:
+                # Leer los primeros bytes para verificar el tipo de archivo
+                image_header = foto_producto.read(1024)
+                foto_producto.seek(0)  # Rebobinar el archivo
+                
+                # Verificar cabeceras de imagen conocidas
+                if not any(
+                    image_header.startswith(signature) for signature in [
+                        b'\xFF\xD8\xFF',  # JPEG
+                        b'\x89PNG',       # PNG
+                        b'GIF87a',        # GIF
+                        b'GIF89a',        # GIF
+                        b'RIFF....WEBPVP' # WEBP (simplificado)
+                    ]
+                ):
+                    messages.error(request, "Error: El archivo no es una imagen válida")
+                    return redirect('agregar_productos')
+                
+                # 3. Validación más estricta con PIL
+                try:
+                    img = Image.open(foto_producto)
+                    img.verify()  # Verifica que sea una imagen válida
+                    foto_producto.seek(0)  # Rebobinar para guardar
+                    
+                    # 4. Validar tamaño máximo del archivo (5MB)
+                    max_size_bytes = 5 * 1024 * 1024
+                    if foto_producto.size > max_size_bytes:
+                        messages.error(request, "Error: La imagen es demasiado grande (máximo 5MB)")
+                        return redirect('agregar_productos')
+                        
+                except Exception as e:
+                    messages.error(request, "Error: El archivo no es una imagen válida o está corrupto")
+                    return redirect('agregar_productos')
+                    
+            except Exception as e:
+                messages.error(request, "Error al procesar la imagen")
                 return redirect('agregar_productos')
         
+        # Resto de tu lógica...
         if Producto.objects.filter(nombre_producto=nombre_producto).exists():
             messages.error(request, "Error: Ya existe un producto con este nombre")
             return redirect('agregar_productos')

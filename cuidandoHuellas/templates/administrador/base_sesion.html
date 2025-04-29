@@ -43,7 +43,6 @@
             </div>
             
             {% if request.session.pista %}
-
                 <div class="d-flex align-items-center">
                     <div class="dropdown me-3">
                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -74,6 +73,17 @@
                                     Configuración
                                 </a>
                             </li>
+                            
+                            <!-- Panel de administrador (solo visible para admins) -->
+                            {% if request.session.pista.rol == 1 %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'pagina_administrador' %}">
+                                    <i class="fas fa-user-shield"></i>
+                                    <strong>Panel Administrador</strong>
+                                </a>
+                            </li>
+                            {% endif %}
+                            
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <a class="dropdown-item" href="{% url 'cerrar_sesion' %}">
@@ -83,12 +93,11 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
             {% else %}
                 <div class="d-flex align-items-center">
-                    <a href="#" class="btn btn-outline-primary me-2">Iniciar Sesión</a>
-                    <a href="#" class="btn btn-primary">Registrarse</a>
+                    <a href="{% url 'iniciar_sesion' %}" class="btn btn-outline-primary me-2">Iniciar Sesión</a>
+                    <a href="{% url 'registrarse' %}" class="btn btn-primary">Registrarse</a>
                 </div>
             {% endif %}
         </div>
@@ -96,8 +105,9 @@
 </nav>
 
 {% block contenido %} 
-
 {% endblock %}
+
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
 </body>
 </html>
