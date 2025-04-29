@@ -18,6 +18,15 @@
 ### CHANGELOG
 ---
 
+## [ch2.24.20-Alpha.1] - 2025-04-29
+
+## Fixed
+- Se corrigio en el admin el modulo productos en el formulario que solo se permitan fotos en formatos JPG, JPEG, PNG, GIF.
+
+- Se corrigio el modulo de productos donde se ven los productos mas vendidos, la logica estaba mal por que ciertas cosas no tenian sentido, pero ya se soluciono el problema.
+
+---
+
 ## [ch2.24.19-Alpha.1] - 2025-04-28
 
 ## Added 

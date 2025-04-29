@@ -18,6 +18,15 @@
 
     <div class="container">
         <h3 class="text-center text-dark">Formulario de Producto</h3>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
@@ -53,11 +62,13 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label class="form-label"></label>
+                <label class="form-label">Imagen del Producto</label>
                 {% if dato.foto_producto %}
                     <img src="{{ dato.foto_producto.url }}" alt="Foto actual" class="img-thumbnail mb-2" style="max-width: 200px;">
+                    <p class="text-muted">Imagen actual</p>
                 {% endif %}
-                <input type="file" name="foto_producto" class="form-control">
+                <input type="file" name="foto_producto" class="form-control" accept="image/*" {% if not dato %}required{% endif %}>
+                <div class="form-text">Formatos aceptados: JPG, JPEG, PNG, GIF. Tamaño máximo: 5MB</div>
             </div>            
             <button type="submit" class="btn btn-custom w-100">Guardar</button>
         </form>

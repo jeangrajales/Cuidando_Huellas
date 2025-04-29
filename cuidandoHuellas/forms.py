@@ -28,3 +28,4 @@ class FotoMascotaForm(forms.ModelForm):
     class Meta:
         model = FotoMascota
         fields = ['imagen']
+

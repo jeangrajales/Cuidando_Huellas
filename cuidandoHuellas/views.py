@@ -251,21 +251,35 @@ def agregar_productos(request):
         categoria = request.POST.get("categoria")
         estado = request.POST.get("estado")
         
-        if Producto.objects.filter(nombre_producto = nombre_producto).exists():
-            messages.error(request,"Error: Ya existe un producto con este nombre")
+        # Validar que el archivo subido sea una imagen
+        if foto_producto:
+            allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif']
+            ext = os.path.splitext(foto_producto.name)[1].lower()
+            
+            if ext not in allowed_extensions:
+                messages.error(request, "Error: Solo se permiten archivos de imagen (JPG, JPEG, PNG, GIF)")
+                return redirect('agregar_productos')
+            
+            # Opcional: Validar también el tipo MIME
+            if not foto_producto.content_type.startswith('image/'):
+                messages.error(request, "Error: El archivo no es una imagen válida")
+                return redirect('agregar_productos')
+        
+        if Producto.objects.filter(nombre_producto=nombre_producto).exists():
+            messages.error(request, "Error: Ya existe un producto con este nombre")
             return redirect('agregar_productos')
         else:
             crear_producto = Producto(
-                nombre_producto = nombre_producto,
-                precio = precio,
-                cantidad = cantidad,
-                descripcion = descripcion,
-                foto_producto = foto_producto,
-                categoria = categoria,
-                estado = estado
+                nombre_producto=nombre_producto,
+                precio=precio,
+                cantidad=cantidad,
+                descripcion=descripcion,
+                foto_producto=foto_producto,
+                categoria=categoria,
+                estado=estado
             )
             crear_producto.save()
-            messages.success(request, "Se agrego producto exitosamente")
+            messages.success(request, "Se agregó producto exitosamente")
             return redirect('listar_productos')
     else:
         return render(request, "administrador/productos/agregar_productos.html")
@@ -318,24 +332,19 @@ def modal_carrito(request):
 
 @session_required_and_rol_permission(1,2,3)
 def agregar_al_carrito(request, id_producto):
-    # 1. Recuperar ID del usuario desde la sesión
     id_usuario = request.session.get("pista", {}).get("id", None)
     
-    # Si no hay sesión activa, redirige
     if not id_usuario:
         return redirect("iniciar_sesion")
 
     try:
-        # Obtener usuario y producto
         usuario = Usuario.objects.get(id_usuario=id_usuario)
         producto = Producto.objects.get(id_producto=id_producto)
         
         if producto.cantidad <= 0:
             messages.error(request, f"El producto '{producto.nombre_producto}' está agotado.")
+            return redirect("productos_usuarios")
 
-        # Incrementar el contador de ventas del producto
-        producto.incrementar_ventas()
-        
         # Obtener o crear carrito para el usuario
         carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
         
@@ -345,7 +354,6 @@ def agregar_al_carrito(request, id_producto):
             producto=producto
         )
         
-        # Si ya existía, solo aumenta la cantidad
         if not creado_item:
             item.cantidad += 1
             item.save()
@@ -424,7 +432,6 @@ def generar_factura(request):
 
     try:
         usuario = Usuario.objects.get(id_usuario=id_usuario)
-        # Traer el carrito
         carrito = Carrito.objects.get(usuario=usuario)
         items = carrito.items.all()
 
@@ -432,7 +439,6 @@ def generar_factura(request):
             messages.warning(request, "No hay productos en el carrito para facturar")
             return redirect('productos_usuarios')
 
-        # Calcular el total exacto como decimal
         total = sum(item.subtotal() for item in items)
 
         # Crear factura
@@ -442,9 +448,14 @@ def generar_factura(request):
             total=Decimal(total)
         )
 
-        # Crear detalles de factura
+        # Crear detalles de factura y actualizar contadores
         detalles = []
         for item in items:
+            # Incrementar contador de compras SOLO AQUÍ
+            item.producto.veces_comprado += item.cantidad
+            item.producto.ultima_compra = timezone.now()
+            item.producto.save()
+
             detalle = DetalleFactura.objects.create(
                 factura=factura,
                 producto=item.producto,
@@ -453,21 +464,16 @@ def generar_factura(request):
             )
             detalles.append(detalle)
 
-            if item.cantidad > item.producto.cantidad:
-                messages.error(request, f"No hay suficiente stock para el producto {item.producto.nombre_producto}.")
-                return redirect('productos_usuarios')
-            # Descontar stock del producto
+            # Descontar stock
             item.producto.cantidad -= item.cantidad
             item.producto.save()
 
-        # Vaciar el carrito después de generar la factura
+        # Vaciar carrito
         items.delete()
 
-        # Obtener fecha y hora formateadas
         fecha_actual = factura.fecha.strftime('%Y-%m-%d')
         hora_actual = factura.fecha.strftime('%H:%M:%S')
 
-        # Redirigir a la vista de factura con todos los datos necesarios
         return render(request, 'usuarios/factura_generada.html', {
             'factura': factura,
             'detalles': detalles,
