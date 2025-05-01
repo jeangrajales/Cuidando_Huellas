@@ -29,3 +29,16 @@ class FotoMascotaForm(forms.ModelForm):
         model = FotoMascota
         fields = ['imagen']
 
+
+
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['nombre_producto', 'categoria', 'precio', 'cantidad', 'estado', 'descripcion', 'foto_producto']
+        widgets = {
+            'descripcion': forms.Textarea(attrs={'rows': 3}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['foto_producto'].required = False  # Hacer que el campo no sea obligatorio

@@ -5,6 +5,7 @@ import re
 from django.contrib.auth.hashers import make_password
 from .validators import *
 # Create your models here.
+from django.core.validators import RegexValidator
 from django.core.validators import MinValueValidator
 
 class Usuario(models.Model):
@@ -105,6 +106,9 @@ class DetalleFactura(models.Model):
     cantidad = models.PositiveIntegerField()
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
     
+from django.core.validators import RegexValidator
+from django.db import models
+
 class PublicacionMascota(models.Model):
     TIPO_PUBLICACION = (
         ('perdida', 'Mascota Perdida'),
@@ -114,12 +118,69 @@ class PublicacionMascota(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='publicaciones')
     descripcion = models.TextField()
     fecha_publicacion = models.DateTimeField(auto_now_add=True)
-    tipo_publicacion = models.CharField(max_length=10, choices=TIPO_PUBLICACION, default='perdida')
-    nombre_mascota = models.CharField(max_length=100, null=True, blank=True)
-    edad = models.CharField(max_length=50, null=True, blank=True)
-    raza = models.CharField(max_length=100, null=True, blank=True)
-    sexo = models.CharField(max_length=10, null=True, blank=True)
-    contacto = models.CharField(max_length=100, null=True, blank=True)
+    tipo_publicacion = models.CharField(
+        max_length=10, 
+        choices=TIPO_PUBLICACION,
+        null=False,
+        blank=False
+    )
+    
+    nombre_mascota = models.CharField(
+        max_length=100,
+        validators=[
+            RegexValidator(
+                regex=r'^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$',
+                message="El nombre solo puede contener letras y espacios"
+            )
+        ],
+        null=True,
+        blank=True
+    )
+    
+    edad = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        help_text="Edad en años"
+    )
+    
+    raza = models.CharField(
+        max_length=100,
+        validators=[
+            RegexValidator(
+                regex=r'^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$',
+                message="La raza solo puede contener letras y espacios"
+            )
+        ],
+        null=True,
+        blank=True
+    )
+    
+    SEXO_CHOICES = [
+        ('Macho', 'Macho'),
+        ('Hembra', 'Hembra'),
+    ]
+    sexo = models.CharField(
+        max_length=10,
+        choices=SEXO_CHOICES,
+        null=True,
+        blank=True
+    )
+    
+    contacto = models.CharField(
+        max_length=20,
+        validators=[
+            RegexValidator(
+                regex=r'^\d{7,15}$',
+                message="El contacto debe contener entre 7 y 15 dígitos"
+            )
+        ],
+        null=True,
+        blank=True
+    )
+
+    def clean(self):
+        if self.tipo_publicacion not in dict(self.TIPO_PUBLICACION).keys():
+            raise ValidationError("Tipo de publicación no válido")
 
     def __str__(self):
         return f"Publicación de {self.usuario.nombre_completo} - {self.fecha_publicacion.strftime('%d/%m/%Y')}"

@@ -36,4 +36,35 @@ body {
     height: 300px;
     object-fit: contain;
 }
-
+.post-trigger {
+    background-color: #f8f9fa;
+    border-radius: 20px;
+    padding: 12px 15px;
+    cursor: pointer;
+    border: 1px solid #dee2e6;
+    margin-bottom: 20px;
+}
+.post-trigger:hover {
+    background-color: #e9ecef;
+}
+.post-options {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #dee2e6;
+    margin-top: 10px;
+}
+.post-option {
+    display: flex;
+    align-items: center;
+    color: #6c757d;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+.post-option:hover {
+    background-color: #f1f1f1;
+}
+.post-option i {
+    margin-right: 8px;
+    font-size: 18px;
+}

@@ -134,6 +134,9 @@ def adopciones(request):
     })
 
 
+from django.core.exceptions import ValidationError
+import re
+
 @session_required_and_rol_permission(1, 2, 3)
 def pagina_usuario(request):
     sesion = request.session.get("pista", None)
@@ -145,39 +148,103 @@ def pagina_usuario(request):
         usuario = Usuario.objects.get(id_usuario=sesion["id"])
     except Usuario.DoesNotExist:
         return HttpResponse("Usuario no encontrado", status=404)
+    
+    # Datos del formulario que se preservarán en caso de error
+    form_data = {
+        'tipo_publicacion': '',
+        'descripcion': '',
+        'nombre_mascota': '',
+        'raza': '',
+        'edad': '',
+        'sexo': '',
+        'contacto': ''
+    }
 
     if request.method == "POST":
-        tipo_publicacion = request.POST.get('tipo_publicacion')
-        descripcion = request.POST.get('descripcion')
-        nombre_mascota = request.POST.get('nombre_mascota')
-        raza = request.POST.get('raza')
-        edad = request.POST.get('edad')
-        sexo = request.POST.get('sexo')
-        contacto = request.POST.get('contacto')
+        try:
+            # Obtener datos del formulario
+            tipo_publicacion = request.POST.get('tipo_publicacion')
+            descripcion = request.POST.get('descripcion', '').strip()
+            nombre_mascota = request.POST.get('nombre_mascota', '').strip()
+            raza = request.POST.get('raza', '').strip()
+            edad = request.POST.get('edad', '').strip()
+            sexo = request.POST.get('sexo', '').strip() 
+            contacto = request.POST.get('contacto', '').strip()
+            imagenes = request.FILES.getlist('imagenes')
 
-        if tipo_publicacion and descripcion and nombre_mascota and raza and edad and sexo and contacto:
+            # Validaciones específicas según tus requerimientos
+            if tipo_publicacion not in ['perdida', 'adopcion']:
+                raise ValidationError("Debes seleccionar un tipo de publicación válido")
+            
+            if not descripcion or len(descripcion) < 10:
+                raise ValidationError("La descripción debe tener al menos 10 caracteres")
+
+            if nombre_mascota and not re.match(r'^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$', nombre_mascota):
+                raise ValidationError("El nombre de la mascota solo puede contener letras y espacios")
+
+            if raza and not re.match(r'^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$', raza):
+                raise ValidationError("La raza solo puede contener letras y espacios")
+
+            if edad:
+                try:
+                    edad_int = int(edad)
+                    if edad_int < 1 or edad_int > 15:
+                        raise ValidationError("La edad debe estar entre 1 y 15 años")
+                    # Guardamos la edad validada
+                    form_data['edad'] = str(edad_int)
+                except ValueError:
+                    raise ValidationError("La edad debe ser un número válido")
+                
+            if not sexo or sexo not in ['Hembra', 'Macho']:
+                raise ValidationError("Selecciona un sexo válido (Macho o Hembra)")
+
+            if contacto and not re.match(r'^\d{7,15}$', contacto):
+                raise ValidationError("El contacto debe contener entre 7 y 15 dígitos")
+
+            if not imagenes:
+                raise ValidationError("Debes subir al menos una imagen")
+
+            # Validar imágenes
+            for imagen in imagenes:
+                # Validar extensión
+                allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+                ext = os.path.splitext(imagen.name)[1].lower()
+                if ext not in allowed_extensions:
+                    raise ValidationError("Solo se permiten imágenes (JPG, JPEG, PNG, GIF, WEBP)")
+
+                # Validar tamaño (5MB máximo)
+                if imagen.size > 5 * 1024 * 1024:
+                    raise ValidationError("Cada imagen debe pesar menos de 5MB")
+
+            # Crear publicación
             publicacion = PublicacionMascota.objects.create(
                 usuario=usuario,
                 tipo_publicacion=tipo_publicacion,
                 descripcion=descripcion,
                 nombre_mascota=nombre_mascota,
                 raza=raza,
-                edad=edad,
+                edad=form_data['edad'],  # Usamos la edad ya validada
                 sexo=sexo,
                 contacto=contacto
             )
 
-            imagenes = request.FILES.getlist('imagenes')
+            # Guardar imágenes
             for imagen in imagenes:
                 FotoMascota.objects.create(publicacion=publicacion, imagen=imagen)
 
+            messages.success(request, "Publicación creada exitosamente!")
             return redirect("pagina_usuario")
 
-    publicaciones = PublicacionMascota.objects.all().order_by('-fecha_publicacion')
+        except ValidationError as e:
+            messages.error(request, str(e))
+        except Exception as e:
+            messages.error(request, f"Ocurrió un error al crear la publicación: {str(e)}")
 
+    publicaciones = PublicacionMascota.objects.all().order_by('-fecha_publicacion')
     return render(request, "usuarios/pagina_usuario.html", {
         "usuario": usuario,
-        "publicaciones": publicaciones
+        "publicaciones": publicaciones,
+        "form_data": form_data  # Pasamos los datos del formulario al template
     })
     
 @session_required_and_rol_permission(1,2,3)
@@ -360,13 +427,13 @@ def eliminar_productos(request, id_producto):
 @session_required_and_rol_permission(1)
 def editar_productos(request, id_producto):
     try:
-        traer_producto = Producto.objects.get(pk = id_producto)
-    
+        producto = Producto.objects.get(pk=id_producto)
     except Producto.DoesNotExist:
-        messages.error(request,"Error Capa 8: El producto no existe")
-        return redirect('listar productos')
+        messages.error(request, "Error: El producto no existe")
+        return redirect('listar_productos')
     
     if request.method == 'POST':
+        # Obtener datos del formulario
         nombre_producto = request.POST.get("nombre_producto")
         precio = request.POST.get("precio")
         cantidad = request.POST.get("cantidad")
@@ -374,21 +441,57 @@ def editar_productos(request, id_producto):
         foto_producto = request.FILES.get("foto_producto")
         categoria = request.POST.get("categoria")
         estado = request.POST.get("estado")
+        eliminar_foto = request.POST.get("eliminar_foto", False) == "on"  # Checkbox para eliminar foto
         
-        traer_producto.nombre_producto = nombre_producto
-        traer_producto.precio = precio
-        traer_producto.cantidad = cantidad
-        traer_producto.descripcion = descripcion
-        traer_producto.foto_producto = foto_producto
-        traer_producto.categoria = categoria
-        traer_producto.estado = estado
-        traer_producto.save()
-        messages.success(request, "Se ha actualizado el producto correctamente")
-        return redirect('listar_productos')
+        # Validación de campos obligatorios
+        if not all([nombre_producto, precio, cantidad, categoria, estado]):
+            messages.error(request, "Todos los campos obligatorios deben ser completados")
+            return render(request, "administrador/productos/agregar_productos.html", {"dato": producto})
         
+        try:
+            # Actualizar campos básicos
+            producto.nombre_producto = nombre_producto
+            producto.precio = float(precio)
+            producto.cantidad = int(cantidad)
+            producto.descripcion = descripcion
+            producto.categoria = categoria
+            producto.estado = estado
+            
+            # Manejo avanzado de la imagen
+            if eliminar_foto:
+                # Eliminar imagen existente si el checkbox está marcado
+                if producto.foto_producto:
+                    producto.foto_producto.delete(save=False)
+                producto.foto_producto = None
+            elif foto_producto:
+                # Validar tipo y tamaño de imagen
+                valid_extensions = ['image/jpeg', 'image/png', 'image/gif']
+                if foto_producto.content_type not in valid_extensions:
+                    messages.error(request, "Formato de imagen no válido. Use JPG, PNG o GIF.")
+                    return render(request, "administrador/productos/agregar_productos.html", {"dato": producto})
+                
+                if foto_producto.size > 5*1024*1024:  # 5MB
+                    messages.error(request, "La imagen es demasiado grande (máximo 5MB)")
+                    return render(request, "administrador/productos/agregar_productos.html", {"dato": producto})
+                
+                # Si pasa validaciones, actualizar la imagen
+                producto.foto_producto = foto_producto
+            # Si no hay cambios en la imagen, se mantiene la existente
+            
+            producto.save()
+            messages.success(request, "Producto actualizado correctamente")
+            return redirect('listar_productos')
+            
+        except ValueError as e:
+            messages.error(request, f"Error en los datos numéricos: {str(e)}")
+        except Exception as e:
+            messages.error(request, f"Error al actualizar el producto: {str(e)}")
+        
+        return render(request, "administrador/productos/agregar_productos.html", {"dato": producto})
+    
     else:
-        traer_producto = Producto.objects.get(pk=id_producto)
-        return render(request, "administrador/productos/agregar_productos.html", {"dato": traer_producto})
+        # Método GET - Mostrar formulario con datos actuales
+        return render(request, "administrador/productos/agregar_productos.html", {"dato": producto})
 
 def modal_carrito(request):
     return render(request,'usuarios/modal_carrito.html')
@@ -593,3 +696,4 @@ def eliminar_publicacion(request, publicacion_id):
         messages.error(request, "Ocurrió un error al intentar eliminar la publicación.")
 
     return redirect("pagina_usuario")
+

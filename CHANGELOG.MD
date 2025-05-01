@@ -18,6 +18,18 @@
 ### CHANGELOG
 ---
 
+## [ch2.25.22-Alpha.1] - 2025-04-01
+
+## Fixed
+
+- Se corrigio el modulo de productos la foto del producto, que cuando se editaba y se guardaba la foto se eliminaba.
+
+- Se corrigio las validaciones del formulario del usuario.
+
+- Se Actualizo el aspecto del usuario a la hora de ver las publicaciones, que al momento de agregar una mascota salga el formulario en una ventana modal.
+
+---
+
 ## [ch2.25.21-Alpha.1] - 2025-04-29
 
 # Added
