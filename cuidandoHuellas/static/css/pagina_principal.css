@@ -7,13 +7,13 @@
 .nav_ch-logo {
     width: 75px;
     padding-top: 10px;
+    margin-bottom: 10px;
 }
 
 :root {
     --primary-color: #403D36;
     --dark-bg: #FCF4E1;
     --light-text: #000000;
-   
     --text-color: #000000;
 }
 
@@ -21,10 +21,14 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #FCF4E1 20%,#E8D9BB 50%,#B79C6F 75%,#917B59 90%);
+  background: linear-gradient(to bottom, #FCF4E1 20%, #E8D9BB 50%, #B79C6F 75%, #917B59 90%);
   color: var(--light-text);
 }
 
+header {
+  border-bottom: 1px solid rgba(51, 51, 51, 0.3);
+  margin-bottom: 20px;
+}
 
 .header {
     padding: 20px 0;
@@ -274,115 +278,110 @@ body {
     border-color: #397bff;
   }
   
-  
-/* Estilos para el footer */
-.footer {
+
+/*  Nuevo Footer */
+
+ /* Estilos del footer */
+ .footer {
   background: transparent;
-  color: #ecf0f1; /* ↑ aumentamos el padding inferior */
-  font-family: 'Arial', sans-serif;
+  color: #333;
+  padding: 30px 0;
+  position: relative;
+  margin-top: 50px;
 }
 
-.footer-bottom {
-  text-align: center;
-  margin-top: 4rem; /* ↑ más separación del contenido de arriba */
-  padding-top: 2rem;
-  border-top: 1px solid #666; /* ↓ borde más sutil */
-  color: #bdc3c7;
-  font-size: 0.9rem;
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; /* ajusté las columnas para que todo se distribuya mejor */
-  gap: 2rem;
-  align-items: start;
+.footer-container {
   max-width: 1200px;
   margin: 0 auto;
-  position: relative;
+  padding: 0 20px;
 }
 
-.logo_footer {
-  grid-column: 2;
+.footer-divider {
+  border-top: 1px solid rgba(51, 51, 51, 0.3);
+  margin-bottom: 20px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Estilos para la sección "Sobre nosotros" */
+.footer-about {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.footer-about h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.footer-about p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Estilos para el logo */
+.footer-logo {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.2rem;
-  margin-left: 0; /* ajusté el margen para centrar */
 }
 
-.logo_footer img {
-  max-height: 180px;
-  width: auto;
-  transition: transform 0.3s ease;
+.footer-logo img {
+  max-width: 100px;
 }
 
-.logo_footer img:hover {
-  transform: scale(1.05);
-}
-
+/* Estilos para las columnas de enlaces */
 .footer-links {
-  padding: 0 1rem;
-  max-width: 100%; /* ajusté el ancho para evitar que se estreche */
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
 }
 
-.footer-links h3 {
-  color: #397bff;
-  margin-bottom: 1.5rem;
-  font-size: 1.2rem;
-  position: relative;
-  display: inline-block;
+.footer-column {
+  margin-left: 20px;
 }
 
-.footer-links h3::after {
-  content: '';
-  position: absolute;
-  width: 50%;
-  height: 2px;
-  background: #397bff;
-  bottom: -8px;
-  left: 0;
+.footer-column h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  font-weight: bold;
 }
 
-.footer-links p {
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.footer-links ul {
+.footer-column ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
-.footer-links li {
-  margin-bottom: 0.8rem;
+.footer-column ul li {
+  margin-bottom: 8px;
 }
 
-.footer-links a {
-  color: #bdc3c7;
+.footer-column ul li a {
+  color: #333;
   text-decoration: none;
-  transition: color 0.3s ease;
-  display: inline-block;
+  font-size: 14px;
 }
 
-.footer-links a:hover {
-  color: #397bff;
-  transform: translateX(5px);
+.footer-column ul li a:hover {
+  text-decoration: underline;
 }
 
-.custom-dropdown-text {
-    font-weight: bold;
-    font-size: 16px;
-    color: inherit;
-    cursor: pointer;
-    text-decoration: none; /* Para que se vea similar a los otros enlaces */
+/* Estilos para el copyright */
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(51, 51, 51, 0.3);
+  font-size: 14px;
 }
-
-.custom-dropdown-text:hover {
-    text-decoration: none;
-    color: #007bff; /* Cambia el color al pasar el mouse */
-}
-
-
 
 
 /* Responsive */

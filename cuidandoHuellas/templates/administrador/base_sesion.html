@@ -11,101 +11,103 @@
     <title>CH - {% block titulo %} ... {% endblock %} </title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'pagina_principal' %}">
-            <img src="{% static 'img/logo_ch.png' %}" alt="Logo">
-        </a>
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'mascotas_perdidas' %}active{% endif %}" href="{% url 'mascotas_perdidas' %}">Mascotas Perdidas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'productos_usuarios' %}active{% endif %}" href="{% url 'productos_usuarios' %}">Productos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'veterinarias_asociadas' %}active{% endif %}" href="{% url 'veterinarias_asociadas' %}">Veterinarias Asociadas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'adopciones' %}active{% endif %}" href="{% url 'adopciones' %}">Adopciones</a>
-                </li>
-            </ul>
+<header class="">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'pagina_principal' %}">
+                <img src="{% static 'img/logo_ch.png' %}" alt="Logo">
+            </a>
             
-            <div class="search-container d-none d-lg-block">
-                <input type="text" class="search-input" placeholder="🔍 Buscar...">
-            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             
-            {% if request.session.pista %}
-                    <div class="dropdown me-3">
-                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {% if request.session.pista.foto_perfil %}
-                                <img src="{{ request.session.pista.foto_perfil }}" alt="Foto de perfil" class="user-icon rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-                            {% else %}
-                                <img src="{% static 'img/frame_user.png' %}" alt="Usuario" class="user-icon">
-                            {% endif %}
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item" href="{% url 'pagina_usuario' %}">
-                                    <i class="fas fa-user"></i>
-                                    {{ request.session.pista.nombre_completo }}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{% url 'editar_usuario' %}">
-                                    <i class="fas fa-edit"></i>
-                                    Editar Perfil
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
-                                    <i class="fas fa-history"></i>
-                                    Mis publicaciones
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
-                                    <i class="fas fa-cog"></i>
-                                    Configuración
-                                </a>
-                            </li>
-                            
-                            <!-- Panel de administrador (solo visible para admins) -->
-                            {% if request.session.pista.rol == 1 %}
-                            <li>
-                                <a class="dropdown-item" href="{% url 'pagina_administrador' %}">
-                                    <i class="fas fa-user-shield"></i>
-                                    <strong>Panel Administrador</strong>
-                                </a>
-                            </li>
-                            {% endif %}
-                            
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item" href="{% url 'cerrar_sesion' %}">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    Cerrar Sesión
-                                </a>
-                            </li>
-                        </ul>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'mascotas_perdidas' %}active{% endif %}" href="{% url 'mascotas_perdidas' %}">Mascotas Perdidas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'productos_usuarios' %}active{% endif %}" href="{% url 'productos_usuarios' %}">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'veterinarias_asociadas' %}active{% endif %}" href="{% url 'veterinarias_asociadas' %}">Veterinarias Asociadas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'adopciones' %}active{% endif %}" href="{% url 'adopciones' %}">Adopciones</a>
+                    </li>
+                </ul>
+                
+                <div class="search-container d-none d-lg-block">
+                    <input type="text" class="search-input" placeholder="🔍 Buscar...">
+                </div>
+                
+                {% if request.session.pista %}
+                        <div class="dropdown me-3">
+                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if request.session.pista.foto_perfil %}
+                                    <img src="{{ request.session.pista.foto_perfil }}" alt="Foto de perfil" class="user-icon rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                {% else %}
+                                    <img src="{% static 'img/frame_user.png' %}" alt="Usuario" class="user-icon">
+                                {% endif %}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'pagina_usuario' %}">
+                                        <i class="fas fa-user"></i>
+                                        {{ request.session.pista.nombre_completo }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'editar_usuario' %}">
+                                        <i class="fas fa-edit"></i>
+                                        Editar Perfil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
+                                        <i class="fas fa-history"></i>
+                                        Mis publicaciones
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
+                                        <i class="fas fa-cog"></i>
+                                        Configuración
+                                    </a>
+                                </li>
+                                
+                                <!-- Panel de administrador (solo visible para admins) -->
+                                {% if request.session.pista.rol == 1 %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'pagina_administrador' %}">
+                                        <i class="fas fa-user-shield"></i>
+                                        <strong>Panel Administrador</strong>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'cerrar_sesion' %}">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        Cerrar Sesión
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            {% else %}
-                <div class="d-flex align-items-center">
-                    <a href="{% url 'iniciar_sesion' %}" class="btn btn-outline-primary me-2">Iniciar Sesión</a>
-                    <a href="{% url 'registrarse' %}" class="btn btn-primary">Registrarse</a>
-                </div>
-            {% endif %}
-        </div>
-    </div>  
-</nav>
+                {% else %}
+                    <div class="d-flex align-items-center">
+                        <a href="{% url 'iniciar_sesion' %}" class="btn btn-outline-primary me-2">Iniciar Sesión</a>
+                        <a href="{% url 'registrarse' %}" class="btn btn-primary">Registrarse</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>  
+    </nav>
+</header>
 
 {% block contenido %} 
 {% endblock %}
