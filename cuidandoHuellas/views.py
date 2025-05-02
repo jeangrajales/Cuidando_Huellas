@@ -13,7 +13,7 @@ from django.http import HttpResponse
 import os
 from PIL import Image
 from io import BytesIO
-
+from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 # Usuarios
@@ -34,6 +34,7 @@ def iniciar_sesion(request):
             if check_password(contraseña, q.contraseña):
                 # Todo OK si la contraseña coincide, crear sesión y redirigir
                 request.session["pista"] = {
+                "foto_perfil": q.foto_perfil.url if q.foto_perfil else None,
                 "telefono": q.telefono,
                 "id": q.id_usuario,
                 "rol": q.rol,
@@ -112,9 +113,113 @@ def registrarse(request):
 
     return render(request, "usuarios/registrarse.html")
 
-@session_required_and_rol_permission(1,2,3)
+# views.py
+
+from django.contrib.auth.hashers import make_password
+
+@session_required_and_rol_permission(1, 2, 3)
 def editar_usuario(request):
-    return render(request, 'usuarios/editar_usuario.html')
+    # Verificar sesión y obtener usuario
+    try:
+        usuario_session = request.session.get("pista")
+        if not usuario_session:
+            messages.error(request, 'Debes iniciar sesión primero')
+            return redirect('iniciar_sesion')
+            
+        usuario_obj = Usuario.objects.get(id_usuario=usuario_session["id"])
+    except KeyError:
+        messages.error(request, 'Información de sesión incompleta')
+        return redirect('iniciar_sesion')
+    except Usuario.DoesNotExist:
+        messages.error(request, 'Usuario no encontrado')
+        return redirect('pagina_principal')
+    except Exception as e:
+        messages.error(request, f'Error al cargar el perfil: {str(e)}')
+        return redirect('pagina_principal')
+
+    if request.method == 'POST':
+        try:
+            # Procesar datos básicos
+            usuario_obj.nombre_completo = request.POST.get('name', usuario_obj.nombre_completo)
+            usuario_obj.telefono = request.POST.get('phone', usuario_obj.telefono)
+            usuario_obj.ciudad = request.POST.get('city', usuario_obj.ciudad)
+            
+        
+            # Procesar foto de perfil
+            if 'profilePicInput' in request.FILES:
+                foto = request.FILES['profilePicInput']
+                
+                # Validar imagen
+                if foto.size > 5 * 1024 * 1024:  # 5MB máximo
+                    messages.error(request, 'La imagen es demasiado grande (máximo 5MB)')
+                    return redirect('editar_usuario')
+                
+                if not foto.name.lower().endswith(('.jpg', '.jpeg', '.png')):
+                    messages.error(request, 'Formato no válido. Use JPG, JPEG o PNG.')
+                    return redirect('editar_usuario')
+                
+                # Guardar la nueva imagen
+                fs = FileSystemStorage()
+                if usuario_obj.foto_perfil:  # Eliminar imagen anterior si existe
+                    fs.delete(usuario_obj.foto_perfil.name)
+                
+                filename = fs.save(f'perfiles/user_{usuario_obj.id_usuario}.jpg', foto)
+                usuario_obj.foto_perfil = filename
+                usuario_obj.save()
+                
+                # Actualizar sesión
+                request.session['pista']['foto_perfil'] = usuario_obj.foto_perfil.url
+                messages.success(request, 'Foto de perfil actualizada correctamente')
+                return redirect('editar_usuario')
+            
+            # Procesar cambio de contraseña
+            current_password = request.POST.get('currentPassword')
+            new_password = request.POST.get('newPassword')
+            confirm_password = request.POST.get('confirmPassword')
+            
+            if current_password or new_password or confirm_password:
+                if not all([current_password, new_password, confirm_password]):
+                    messages.error(request, 'Complete todos los campos para cambiar la contraseña')
+                    return redirect('editar_usuario')
+                
+                if not usuario_obj.check_password(current_password):
+                    messages.error(request, 'Contraseña actual incorrecta')
+                    return redirect('editar_usuario')
+                
+                if new_password != confirm_password:
+                    messages.error(request, 'Las nuevas contraseñas no coinciden')
+                    return redirect('editar_usuario')
+                
+                if len(new_password) < 8:
+                    messages.error(request, 'La contraseña debe tener al menos 8 caracteres')
+                    return redirect('editar_usuario')
+                
+                usuario_obj.contraseña = make_password(new_password)
+                messages.success(request, 'Contraseña actualizada correctamente')
+            
+            # Guardar todos los cambios
+            usuario_obj.save()
+            
+            # Actualizar sesión
+            request.session['pista'] = {
+                'id': usuario_obj.id_usuario,
+                'nombre_completo': usuario_obj.nombre_completo,
+                'telefono': usuario_obj.telefono,
+                'rol': usuario_obj.rol,
+                'es_administrador': usuario_obj.es_administrador,
+                # Agrega otros campos necesarios
+            }
+            
+            messages.success(request, 'Perfil actualizado correctamente')
+            return redirect('editar_usuario')
+            
+        except Exception as e:
+            messages.error(request, f'Error al actualizar: {str(e)}')
+            return redirect('editar_usuario')
+    
+    # GET request - Mostrar formulario
+    context = {'usuario': usuario_obj}
+    return render(request, 'usuarios/editar_usuario.html', context)
 
 def pagina_principal(request):
     return render(request, 'pagina_principal.html')

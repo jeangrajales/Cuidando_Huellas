@@ -2,7 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 import re
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password , check_password
+
 from .validators import *
 # Create your models here.
 from django.core.validators import RegexValidator
@@ -15,6 +16,15 @@ class Usuario(models.Model):
     telefono = models.PositiveIntegerField()
     correo = models.EmailField(max_length=254)
     contraseña = models.CharField(max_length=254)
+    foto_perfil = models.ImageField(upload_to='perfiles/', null=True, blank=True)
+    
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.contraseña)
+    
+    def save(self, *args, **kwargs):
+        if not self.contraseña.startswith('pbkdf2_'):
+            self.contraseña = make_password(self.contraseña)
+        super().save(*args, **kwargs)
     ROLES = (
         (1, "Admin"),
         (2, "Usuario"),
