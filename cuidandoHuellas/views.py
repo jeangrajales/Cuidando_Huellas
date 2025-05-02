@@ -117,6 +117,12 @@ def registrarse(request):
 
 from django.contrib.auth.hashers import make_password
 
+from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.hashers import make_password
+from django.utils.timezone import now
+import os
+from .models import PublicacionMascota  # Asegúrate de importar tu modelo de publicaciones
+
 @session_required_and_rol_permission(1, 2, 3)
 def editar_usuario(request):
     # Verificar sesión y obtener usuario
@@ -144,7 +150,9 @@ def editar_usuario(request):
             usuario_obj.telefono = request.POST.get('phone', usuario_obj.telefono)
             usuario_obj.ciudad = request.POST.get('city', usuario_obj.ciudad)
             
-        
+            # Bandera para saber si cambió la foto
+            foto_actualizada = False
+            
             # Procesar foto de perfil
             if 'profilePicInput' in request.FILES:
                 foto = request.FILES['profilePicInput']
@@ -158,19 +166,26 @@ def editar_usuario(request):
                     messages.error(request, 'Formato no válido. Use JPG, JPEG o PNG.')
                     return redirect('editar_usuario')
                 
-                # Guardar la nueva imagen
+                # Guardar la nueva imagen con timestamp para evitar caché
+                timestamp = str(now().timestamp()).replace('.', '')
                 fs = FileSystemStorage()
-                if usuario_obj.foto_perfil:  # Eliminar imagen anterior si existe
-                    fs.delete(usuario_obj.foto_perfil.name)
                 
-                filename = fs.save(f'perfiles/user_{usuario_obj.id_usuario}.jpg', foto)
+                # Eliminar imagen anterior si existe
+                if usuario_obj.foto_perfil:
+                    try:
+                        if os.path.exists(usuario_obj.foto_perfil.path):
+                            os.remove(usuario_obj.foto_perfil.path)
+                    except Exception as e:
+                        print(f"Error eliminando imagen anterior: {str(e)}")
+                
+                # Guardar nueva imagen
+                filename = fs.save(
+                    f'perfiles/user_{usuario_obj.id_usuario}_{timestamp}.jpg', 
+                    foto
+                )
                 usuario_obj.foto_perfil = filename
-                usuario_obj.save()
-                
-                # Actualizar sesión
-                request.session['pista']['foto_perfil'] = usuario_obj.foto_perfil.url
+                foto_actualizada = True
                 messages.success(request, 'Foto de perfil actualizada correctamente')
-                return redirect('editar_usuario')
             
             # Procesar cambio de contraseña
             current_password = request.POST.get('currentPassword')
@@ -200,18 +215,29 @@ def editar_usuario(request):
             # Guardar todos los cambios
             usuario_obj.save()
             
-            # Actualizar sesión
+            # Actualizar sesión con timestamp para evitar caché
+            foto_url = usuario_obj.foto_perfil.url if usuario_obj.foto_perfil else None
+            if foto_url and foto_actualizada:
+                foto_url += f"?v={timestamp}"
+            
             request.session['pista'] = {
                 'id': usuario_obj.id_usuario,
                 'nombre_completo': usuario_obj.nombre_completo,
                 'telefono': usuario_obj.telefono,
                 'rol': usuario_obj.rol,
                 'es_administrador': usuario_obj.es_administrador,
-                # Agrega otros campos necesarios
+                'foto_perfil': foto_url
             }
+            request.session.modified = True
             
-            messages.success(request, 'Perfil actualizado correctamente')
-            return redirect('editar_usuario')
+            # Forzar actualización de publicaciones (opcional)
+            if foto_actualizada:
+                from django.db.models import F
+                PublicacionMascota.objects.filter(usuario=usuario_obj).update(
+                    fecha_publicacion=F('fecha_publicacion')
+                )
+            
+            return redirect('pagina_usuario')  # Redirigir a la página de usuario
             
         except Exception as e:
             messages.error(request, f'Error al actualizar: {str(e)}')

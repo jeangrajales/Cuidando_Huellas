@@ -152,7 +152,16 @@
             <div class="card pet-card mt-4">
                 <div class="card-header bg-white p-3">
                     <div class="d-flex align-items-center">
-                        <img src="{% static 'img/frame_user.png' %}" class="user-avatar me-2" alt="Usuario">
+                        {% if publicacion.usuario.foto_perfil %}
+                            <img src="{{ publicacion.usuario.foto_perfil.url }}?v={{ publicacion.usuario.id }}" 
+                                class="user-avatar me-2 rounded-circle"
+                                alt="Usuario"
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'img/frame_user.png' %}" 
+                                class="user-avatar me-2"
+                                alt="Usuario">
+                        {% endif %}
                         <div>
                             <h6 class="mb-0">{{ publicacion.usuario.nombre_completo }}</h6>
                             <small class="text-muted">{{ publicacion.fecha_publicacion|timesince }} atrás</small>

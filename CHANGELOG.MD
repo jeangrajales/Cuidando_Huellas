@@ -18,7 +18,16 @@
 ### CHANGELOG
 ---
 
-## [ch2.26.22-Alpha.1] - 2025-04-01
+## [ch2.26.23-Alpha.1] - 2025-04-02
+
+## Fixed
+
+- Se corrigio la foto del usuario que al cambiarla salga tambien en la publicacion, se modifico un poco el editar usuario cambio de color..
+
+---
+---
+
+## [ch2.26.22-Alpha.1] - 2025-05-01
 
 ## Added
 
@@ -26,7 +35,7 @@
 
 ---
 
-## [ch2.25.22-Alpha.1] - 2025-04-01
+## [ch2.25.22-Alpha.1] - 2025-05-01
 
 ## Fixed
 
