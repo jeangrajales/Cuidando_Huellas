@@ -68,3 +68,13 @@ body {
     margin-right: 8px;
     font-size: 18px;
 }
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.user-avatar:hover {
+    transform: scale(1.1);
+}
