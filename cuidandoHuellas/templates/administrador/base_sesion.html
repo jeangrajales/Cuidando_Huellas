@@ -43,10 +43,13 @@
             </div>
             
             {% if request.session.pista %}
-                <div class="d-flex align-items-center">
                     <div class="dropdown me-3">
                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{% static 'img/frame_user.png' %}" alt="" class="user-icon">
+                            {% if request.session.pista.foto_perfil %}
+                                <img src="{{ request.session.pista.foto_perfil }}" alt="Foto de perfil" class="user-icon rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'img/frame_user.png' %}" alt="Usuario" class="user-icon">
+                            {% endif %}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>

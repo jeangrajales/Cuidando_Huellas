@@ -18,6 +18,14 @@
 ### CHANGELOG
 ---
 
+## [ch2.26.22-Alpha.1] - 2025-04-01
+
+## Added
+
+- Se Agrego funcionalidad al editar perfil, ya todo esta en funcionamiento, puede actualizar tanto una campo, como la contraseña.
+
+---
+
 ## [ch2.25.22-Alpha.1] - 2025-04-01
 
 ## Fixed

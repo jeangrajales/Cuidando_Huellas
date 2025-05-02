@@ -120,3 +120,4 @@ MEDIA_URL = '/media/'
 
 # Ruta donde django guardara los archivos subidos (os.path.join crea una ruta segura)   
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
