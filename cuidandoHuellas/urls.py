@@ -19,7 +19,8 @@ urlpatterns = [
     path('veterinarias_asociadas/', views.veterinarias_asociadas,name="veterinarias_asociadas"),
     path('publicacion/<int:publicacion_id>/eliminar/', views.eliminar_publicacion, name='eliminar_publicacion'),
     path('editar_usuario/', views.editar_usuario, name="editar_usuario" ),
-
+    path('mis-publicaciones/', views.mis_publicaciones, name='mis_publicaciones'),
+    path('editar_publicacion/<int:publicacion_id>/', views.editar_publicacion, name='editar_publicacion'),
     # Carrito
    
     path('agregar_al_carrito/<int:id_producto>/', views.agregar_al_carrito, name='agregar_al_carrito'),

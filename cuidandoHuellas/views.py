@@ -14,10 +14,15 @@ import os
 from PIL import Image
 from io import BytesIO
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.hashers import make_password
+from django.utils.timezone import now
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 # Create your views here.
 
 # Usuarios
-
+from django.core.exceptions import ValidationError
+import re
 # -------------------
 @session_required_and_rol_permission(1)  # Solo para rol 1 (admin)
 def panel_administrador(request):
@@ -112,16 +117,6 @@ def registrarse(request):
             return render(request, 'usuarios/registrarse.html')
 
     return render(request, "usuarios/registrarse.html")
-
-# views.py
-
-from django.contrib.auth.hashers import make_password
-
-from django.core.files.storage import FileSystemStorage
-from django.contrib.auth.hashers import make_password
-from django.utils.timezone import now
-import os
-from .models import PublicacionMascota  # Asegúrate de importar tu modelo de publicaciones
 
 @session_required_and_rol_permission(1, 2, 3)
 def editar_usuario(request):
@@ -264,10 +259,6 @@ def adopciones(request):
         "publicaciones": publicaciones
     })
 
-
-from django.core.exceptions import ValidationError
-import re
-
 @session_required_and_rol_permission(1, 2, 3)
 def pagina_usuario(request):
     sesion = request.session.get("pista", None)
@@ -377,6 +368,188 @@ def pagina_usuario(request):
         "publicaciones": publicaciones,
         "form_data": form_data  # Pasamos los datos del formulario al template
     })
+
+@session_required_and_rol_permission(1, 2, 3)
+def mis_publicaciones(request):
+    sesion = request.session.get("pista", None)
+    
+    if not sesion:
+        return redirect("iniciar_sesion")
+    try:
+        usuario = Usuario.objects.get(id_usuario=sesion["id"])
+    except Usuario.DoesNotExist:
+        return HttpResponse("Usuario no encontrado", status=404)
+    
+    # Datos del formulario que se preservarán en caso de error
+    form_data = {
+        'tipo_publicacion': '',
+        'descripcion': '',
+        'nombre_mascota': '',
+        'raza': '',
+        'edad': '',
+        'sexo': '',
+        'contacto': ''
+    }
+
+    if request.method == "POST":
+        try:
+            # Obtener datos del formulario
+            tipo_publicacion = request.POST.get('tipo_publicacion')
+            descripcion = request.POST.get('descripcion', '').strip()
+            nombre_mascota = request.POST.get('nombre_mascota', '').strip()
+            raza = request.POST.get('raza', '').strip()
+            edad = request.POST.get('edad', '').strip()
+            sexo = request.POST.get('sexo', '').strip() 
+            contacto = request.POST.get('contacto', '').strip()
+            imagenes = request.FILES.getlist('imagenes')
+
+            # Validaciones específicas según tus requerimientos
+            if tipo_publicacion not in ['perdida', 'adopcion']:
+                raise ValidationError("Debes seleccionar un tipo de publicación válido")
+            
+            if not descripcion or len(descripcion) < 10:
+                raise ValidationError("La descripción debe tener al menos 10 caracteres")
+
+            if nombre_mascota and not re.match(r'^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$', nombre_mascota):
+                raise ValidationError("El nombre de la mascota solo puede contener letras y espacios")
+
+            if raza and not re.match(r'^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$', raza):
+                raise ValidationError("La raza solo puede contener letras y espacios")
+
+            if edad:
+                try:
+                    edad_int = int(edad)
+                    if edad_int < 1 or edad_int > 15:
+                        raise ValidationError("La edad debe estar entre 1 y 15 años")
+                    # Guardamos la edad validada
+                    form_data['edad'] = str(edad_int)
+                except ValueError:
+                    raise ValidationError("La edad debe ser un número válido")
+                
+            if not sexo or sexo not in ['Hembra', 'Macho']:
+                raise ValidationError("Selecciona un sexo válido (Macho o Hembra)")
+
+            if contacto and not re.match(r'^\d{7,15}$', contacto):
+                raise ValidationError("El contacto debe contener entre 7 y 15 dígitos")
+
+            if not imagenes:
+                raise ValidationError("Debes subir al menos una imagen")
+
+            # Validar imágenes
+            for imagen in imagenes:
+                # Validar extensión
+                allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+                ext = os.path.splitext(imagen.name)[1].lower()
+                if ext not in allowed_extensions:
+                    raise ValidationError("Solo se permiten imágenes (JPG, JPEG, PNG, GIF, WEBP)")
+
+                # Validar tamaño (5MB máximo)
+                if imagen.size > 5 * 1024 * 1024:
+                    raise ValidationError("Cada imagen debe pesar menos de 5MB")
+
+            # Crear publicación
+            publicacion = PublicacionMascota.objects.create(
+                usuario=usuario,
+                tipo_publicacion=tipo_publicacion,
+                descripcion=descripcion,
+                nombre_mascota=nombre_mascota,
+                raza=raza,
+                edad=form_data['edad'],  # Usamos la edad ya validada
+                sexo=sexo,
+                contacto=contacto
+            )
+
+            # Guardar imágenes
+            for imagen in imagenes:
+                FotoMascota.objects.create(publicacion=publicacion, imagen=imagen)
+
+            messages.success(request, "Publicación creada exitosamente!")
+            return redirect("mis_publicaciones")
+
+        except ValidationError as e:
+            messages.error(request, str(e))
+        except Exception as e:
+            messages.error(request, f"Ocurrió un error al crear la publicación: {str(e)}")
+
+    try:
+        usuario = Usuario.objects.get(id_usuario=sesion["id"])
+    except Usuario.DoesNotExist:
+        return HttpResponse("Usuario no encontrado", status=404)
+    
+    # Filtramos solo las publicaciones del usuario actual
+    publicaciones = PublicacionMascota.objects.filter(usuario=usuario).order_by('-fecha_publicacion')
+    
+    # Usamos el mismo template de pagina_usuario pero con contexto diferente
+    return render(request, "usuarios/pagina_usuario.html", {
+        "usuario": usuario,
+        "publicaciones": publicaciones,
+        "solo_mis_publicaciones": True,
+        "total_publicaciones": publicaciones.count(),
+        "ultima_publicacion": publicaciones.first().fecha_publicacion if publicaciones.exists() else None  # Bandera para el template
+    })
+
+@session_required_and_rol_permission(1, 2, 3)
+def editar_publicacion(request, publicacion_id):
+    try:
+        publicacion = PublicacionMascota.objects.get(id=publicacion_id, usuario__id_usuario=request.session["pista"]["id"])
+        
+        if request.method == "POST":
+            # Procesa los datos del formulario
+            publicacion.tipo_publicacion = request.POST.get('tipo_publicacion')
+            publicacion.nombre_mascota = request.POST.get('nombre_mascota')
+            publicacion.raza = request.POST.get('raza')
+            publicacion.edad = request.POST.get('edad')
+            publicacion.sexo = request.POST.get('sexo')
+            publicacion.contacto = request.POST.get('contacto')
+            publicacion.descripcion = request.POST.get('descripcion')
+            # Actualiza todos los campos necesarios
+            
+            # Manejar imágenes eliminadas
+            deleted_images = request.POST.getlist('deleted_images')
+            for image_id in deleted_images:
+                try:
+                    foto = FotoMascota.objects.get(id=image_id, publicacion=publicacion)
+                    # Eliminar archivo físico
+                    if os.path.exists(foto.imagen.path):
+                        default_storage.delete(foto.imagen.path)
+                    # Eliminar registro de la base de datos
+                    foto.delete()
+                except FotoMascota.DoesNotExist:
+                    pass
+            
+            # Manejar imágenes que se mantienen
+            keep_images = request.POST.getlist('keep_images')
+            FotoMascota.objects.filter(publicacion=publicacion).exclude(id__in=keep_images).delete()
+            
+            # Agregar nuevas imágenes
+            nuevas_imagenes = request.FILES.getlist('imagenes')
+            for imagen in nuevas_imagenes:
+                # Validar tamaño (máximo 5MB)
+                if imagen.size > 5 * 1024 * 1024:
+                    messages.warning(request, f'La imagen {imagen.name} es demasiado grande (máximo 5MB)')
+                    continue
+                
+                # Validar tipo de archivo
+                extension = os.path.splitext(imagen.name)[1].lower()
+                if extension not in ['.jpg', '.jpeg', '.png', '.gif', '.webp']:
+                    messages.warning(request, f'Formato no soportado para {imagen.name}')
+                    continue
+                
+                # Guardar la imagen
+                foto = FotoMascota(publicacion=publicacion)
+                foto.imagen.save(imagen.name, ContentFile(imagen.read()), save=True)
+                
+            publicacion.save()
+            messages.success(request, "Publicación actualizada correctamente")
+            return redirect('mis_publicaciones')
+            
+        return render(request, 'usuarios/editar_publicacion.html', {
+            'publicacion': publicacion
+        })
+        
+    except PublicacionMascota.DoesNotExist:
+        messages.error(request, "Publicación no encontrada")
+        return redirect('pagina_usuario')
     
 @session_required_and_rol_permission(1,2,3)
 def productos_usuarios(request):
