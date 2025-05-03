@@ -16,6 +16,14 @@
 ---
 
 ### CHANGELOG
+---
+
+## [ch2.27.24-Alpha.1] - 2025-05-03
+
+## Added
+
+- Se agrego el modulo de mis publicaciones, para que cada usuario pueda ver solo sus publicaciones.
+- se agrego el editar de las publicaciones de cada usuario, para asi poder corregir y actualizar su publicacion sin ningun problema.
 
 ---
 

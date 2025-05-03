@@ -4,11 +4,44 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="{% static 'css/usuarios/pagina_usuario.css' %}">
-
 {% endblock %}
-{% block titulo %} Pagina Usuario {% endblock %}
+{% block titulo %} Página Usuario {% endblock %}
 
 {% block contenido %}
+{% if solo_mis_publicaciones %}
+<div class="alert alert-info mb-3 text-center">
+    <i class="fas fa-info-circle"></i> Estás viendo solo tus publicaciones
+    <a href="{% url 'pagina_usuario' %}" class="btn btn-sm btn-outline-primary ms-3">
+        Ver todas las publicaciones
+    </a>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-2">
+        <div class="card shadow-sm"> 
+            <div class="card-body p-3"> 
+                <h6 class="card-title mb-2"> 
+                    <i class="fas fa-chart-pie me-2"></i> 
+                    Resumen
+                </h6>
+                <div class="d-flex flex-column small"> 
+                    <span class="mb-1">
+                        <i class="fas fa-list-ol me-1 text-muted"></i>
+                        Total: <strong>{{ total_publicaciones }}</strong>
+                    </span>
+                    {% if ultima_publicacion %}
+                    <span>
+                        <i class="far fa-calendar-alt me-1 text-muted"></i>
+                        Última: <strong>{{ ultima_publicacion|date:"d/m/Y" }}</strong>
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <div id="notificaciones">
     {% if messages %}
         {% for message in messages %}
@@ -24,11 +57,10 @@
     <div class="row justify-content-center">
         <div class="col-lg-8">
 
-            <!-- Área para activar el modal de publicación -->
             <div class="card post-form mb-4">
                 <div class="card-body">
                     <div class="post-trigger" data-bs-toggle="modal" data-bs-target="#publicacionModal">
-                        <span class="text-muted">¿Comparta informacion de tu mascota, {{ request.session.pista.nombre_completo }}?</span>
+                        <span class="text-muted">¿Comparta información de tu mascota, {{ request.session.pista.nombre_completo }}?</span>
                     </div>
                     <div class="post-options">
                         <div class="post-option" data-bs-toggle="modal" data-bs-target="#publicacionModal">
@@ -47,7 +79,7 @@
                 </div>
             </div>
 
-            <!-- Modal para el formulario de publicación -->
+            <!-- Modal para Crear Publicación -->
             <div class="modal fade" id="publicacionModal" tabindex="-1" aria-labelledby="publicacionModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -56,10 +88,9 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" enctype="multipart/form-data">
+                            <form method="POST" enctype="multipart/form-data" action="{% if solo_mis_publicaciones %}{% url 'mis_publicaciones' %}{% else %}{% url 'pagina_usuario' %}{% endif %}">
                                 {% csrf_token %}
 
-                                <!-- Tipo de publicación -->
                                 <div class="mb-3">
                                     <label for="id_tipo_publicacion" class="form-label">Tipo de publicación*</label>
                                     <select name="tipo_publicacion" class="form-select" id="id_tipo_publicacion" required>
@@ -69,7 +100,6 @@
                                     </select>
                                 </div>
 
-                                <!-- Nombre de la mascota -->
                                 <div class="mb-3">
                                     <label for="id_nombre_mascota" class="form-label">Nombre de la mascota</label>
                                     <input type="text" name="nombre_mascota" class="form-control" id="id_nombre_mascota" 
@@ -80,7 +110,6 @@
                                            required>
                                 </div>
 
-                                <!-- Raza -->
                                 <div class="mb-3">
                                     <label for="id_raza" class="form-label">Raza</label>
                                     <input type="text" name="raza" class="form-control" id="id_raza" 
@@ -90,7 +119,7 @@
                                            oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')"
                                            required>
                                 </div>
-                                <!-- Edad -->
+
                                 <div class="mb-3">
                                     <label for="id_edad" class="form-label">Edad (1-15 años)</label>
                                     <input type="number" name="edad" class="form-control" id="id_edad" 
@@ -100,7 +129,6 @@
                                            required>
                                 </div>
 
-                                <!-- Sexo -->
                                 <div class="mb-3">
                                     <label for="id_sexo" class="form-label">Sexo*</label>
                                     <select name="sexo" class="form-select" id="id_sexo" required>
@@ -110,7 +138,6 @@
                                     </select>
                                 </div>
 
-                                <!-- Contacto -->
                                 <div class="mb-3">
                                     <label for="id_contacto" class="form-label">Contacto (10 dígitos)</label>
                                     <input type="tel" name="contacto" class="form-control" id="id_contacto" 
@@ -121,13 +148,11 @@
                                            required>
                                 </div>
 
-                                <!-- Descripción -->
                                 <div class="mb-3">
                                     <label for="id_descripcion" class="form-label">Descripción (mínimo 10 caracteres)</label>
                                     <textarea name="descripcion" cols="40" rows="3" class="form-control" required>{{ form_data.descripcion }}</textarea>
                                 </div>
 
-                                <!-- Imágenes -->
                                 <div class="mb-3">
                                     <label for="id_imagenes" class="form-label">Imágenes</label>
                                     <input type="file" name="imagenes" multiple accept="image/*" class="form-control" required>
@@ -147,10 +172,9 @@
                 </div>
             </div>
 
-            <!-- Publicaciones reales -->
             {% for publicacion in publicaciones %}
             <div class="card pet-card mt-4">
-                <div class="card-header bg-white p-3">
+                <div class="card-header bg-white p-3 post-header">
                     <div class="d-flex align-items-center">
                         {% if publicacion.usuario.foto_perfil %}
                             <img src="{{ publicacion.usuario.foto_perfil.url }}?v={{ publicacion.usuario.id }}" 
@@ -163,10 +187,36 @@
                                 alt="Usuario">
                         {% endif %}
                         <div>
-                            <h6 class="mb-0">{{ publicacion.usuario.nombre_completo }}</h6>
+                            <h6 class="mb-0">{{ publicacion.usuario.nombre_completo }}{% if request.session.pista.id == publicacion.usuario.id_usuario %} <span class="badge bg-light text-dark ms-2 border">Tu publicación</span>{% endif %}</h6>
                             <small class="text-muted">{{ publicacion.fecha_publicacion|timesince }} atrás</small>
                         </div>
                     </div>
+                    
+                    {% if request.session.pista.id == publicacion.usuario.id_usuario %}
+                    <div class="post-actions">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal{{ publicacion.id }}">
+                                        <i class="fas fa-edit me-2"></i> Editar
+                                    </button>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" action="{% url 'eliminar_publicacion' publicacion.id %}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta publicación?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="fas fa-trash me-2"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="card-body pb-2">
                     <p><strong>Tipo:</strong> 
@@ -179,6 +229,9 @@
                         {% endif %}
                     </p>
                     <p><strong>Nombre:</strong> {{ publicacion.nombre_mascota }}</p>
+                    <p><strong>Raza:</strong> {{ publicacion.raza }}</p>
+                    <p><strong>Edad:</strong> {{ publicacion.edad }} años</p>
+                    <p><strong>Sexo:</strong> {{ publicacion.sexo }}</p>
                     <p><strong>Contacto:</strong> {{ publicacion.contacto }}</p>
                     <p>{{ publicacion.descripcion }}</p>
                 </div>
@@ -215,14 +268,106 @@
                                 <i class="fas fa-comment me-1"></i> Comentar
                             </button>
                         </div>
-                        {% if request.session.pista.id == publicacion.usuario.id_usuario %}
-                            <form method="post" action="{% url 'eliminar_publicacion' publicacion.id %}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta publicación?');" class="d-inline">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para Editar Publicación -->
+            <div class="modal fade" id="editModal{{ publicacion.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ publicacion.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel{{ publicacion.id }}">Editar publicación</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" enctype="multipart/form-data" action="{% url 'editar_publicacion' publicacion.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                    <i class="fas fa-trash me-1"></i> Eliminar
-                                </button>
+                                
+                                <div class="mb-3">
+                                    <label for="edit_tipo_publicacion{{ publicacion.id }}" class="form-label">Tipo de publicación*</label>
+                                    <select name="tipo_publicacion" class="form-select" id="edit_tipo_publicacion{{ publicacion.id }}" required>
+                                        <option value="perdida" {% if publicacion.tipo_publicacion == 'perdida' %}selected{% endif %}>Mascota Perdida</option>
+                                        <option value="adopcion" {% if publicacion.tipo_publicacion == 'adopcion' %}selected{% endif %}>Mascota en Adopción</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_nombre_mascota{{ publicacion.id }}" class="form-label">Nombre de la mascota</label>
+                                    <input type="text" name="nombre_mascota" class="form-control" id="edit_nombre_mascota{{ publicacion.id }}" 
+                                           value="{{ publicacion.nombre_mascota }}"
+                                           pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" 
+                                           title="Solo letras y espacios (no números)"
+                                           oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')"
+                                           required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_raza{{ publicacion.id }}" class="form-label">Raza</label>
+                                    <input type="text" name="raza" class="form-control" id="edit_raza{{ publicacion.id }}" 
+                                           value="{{ publicacion.raza }}"
+                                           pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" 
+                                           title="Solo letras y espacios (no números)"
+                                           oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')"
+                                           required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_edad{{ publicacion.id }}" class="form-label">Edad (1-15 años)</label>
+                                    <input type="number" name="edad" class="form-control" id="edit_edad{{ publicacion.id }}" 
+                                           value="{{ publicacion.edad }}"
+                                           min="1" max="15" step="1"
+                                           title="Debe ser un número entre 1 y 15"
+                                           required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_sexo{{ publicacion.id }}" class="form-label">Sexo*</label>
+                                    <select name="sexo" class="form-select" id="edit_sexo{{ publicacion.id }}" required>
+                                        <option value="Hembra" {% if publicacion.sexo == 'Hembra' %}selected{% endif %}>Hembra</option>
+                                        <option value="Macho" {% if publicacion.sexo == 'Macho' %}selected{% endif %}>Macho</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_contacto{{ publicacion.id }}" class="form-label">Contacto (10 dígitos)</label>
+                                    <input type="tel" name="contacto" class="form-control" id="edit_contacto{{ publicacion.id }}" 
+                                           value="{{ publicacion.contacto }}"
+                                           pattern="\d{7,15}" 
+                                           title="10 dígitos"
+                                           oninput="this.value = this.value.replace(/\D/g, '')"
+                                           required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_descripcion{{ publicacion.id }}" class="form-label">Descripción (mínimo 10 caracteres)</label>
+                                    <textarea name="descripcion" cols="40" rows="3" class="form-control" id="edit_descripcion{{ publicacion.id }}" required>{{ publicacion.descripcion }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Imágenes actuales</label>
+                                    <div class="current-images">
+                                        {% for foto in publicacion.fotos.all %}
+                                            <div class="image-thumbnail">
+                                                <img src="{{ foto.imagen.url }}" alt="Imagen actual">
+                                                <button type="button" class="btn btn-danger btn-sm btn-remove" onclick="removeImage(this, '{{ foto.id }}')">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                                <input type="hidden" name="keep_images" value="{{ foto.id }}">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <label for="edit_imagenes{{ publicacion.id }}" class="form-label">Añadir nuevas imágenes</label>
+                                    <input type="file" name="imagenes" multiple accept="image/*" class="form-control" id="edit_imagenes{{ publicacion.id }}">
+                                    <small class="text-muted">Formatos aceptados: JPG, JPEG, PNG, GIF, WEBP. Máximo 5MB por imagen.</small>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                </div>
                             </form>
-                        {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -234,7 +379,7 @@
 </div>
 
 <script>
-    // Validación adicional para el formulario
+    // Validación del formulario
     document.querySelector('form').addEventListener('submit', function(e) {
         const descripcion = document.querySelector('[name="descripcion"]').value;
         if (descripcion.length < 10) {
@@ -252,5 +397,21 @@
         
         return true;
     });
+
+    // Función para eliminar imágenes en edición
+    function removeImage(button, imageId) {
+        if (confirm('¿Eliminar esta imagen?')) {
+            // Crear input para marcar la imagen a eliminar
+            const form = button.closest('form');
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'deleted_images';
+            input.value = imageId;
+            form.appendChild(input);
+            
+            // Eliminar el contenedor de la imagen
+            button.closest('.image-thumbnail').remove();
+        }
+    }
 </script>
 {% endblock %}
