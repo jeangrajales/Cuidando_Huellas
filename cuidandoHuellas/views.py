@@ -18,6 +18,7 @@ from django.contrib.auth.hashers import make_password
 from django.utils.timezone import now
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.contrib.auth import logout
 # Create your views here.
 
 # Usuarios
@@ -579,6 +580,32 @@ def productos_usuarios(request):
 
     return render(request, 'usuarios/productos_usuarios.html', contexto)
 
+def configuracion(request):
+    return render(request, 'usuarios/configuracion.html')
+
+
+
+def eliminar_cuenta(request):
+    if request.method == 'POST':
+        confirmacion = request.POST.get('confirmacion')
+        
+        try:
+            # Acceder al id_usuario desde la sesión
+            usuario = Usuario.objects.get(id_usuario=request.session['pista']['id'])
+            
+            # Verificar si la contraseña es correcta
+            if usuario.check_password(confirmacion):
+                usuario.delete()
+                # Cerrar la sesión del usuario
+                logout(request)
+                messages.success(request, "Tu cuenta ha sido eliminada permanentemente.")
+                return redirect('iniciar_sesion')  # Redirige a la página de inicio
+            else:
+                messages.error(request, "La contraseña ingresada es incorrecta.")
+                return redirect('configuracion')  # Redirige a la página de configuración
+        except Usuario.DoesNotExist:
+            messages.error(request, "Usuario no encontrado.")
+            return redirect('configuracion')  # Redirige a la página de configuración
 
 @session_required_and_rol_permission(1,2,3)
 def veterinarias_asociadas(request):

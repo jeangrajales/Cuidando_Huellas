@@ -1,5 +1,7 @@
 from django import forms
 from .models import *
+from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
 
 class formularioContacto(forms.Form):
     nombre = forms.CharField(max_length=100, required= True)
@@ -42,3 +44,4 @@ class ProductoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['foto_producto'].required = False  # Hacer que el campo no sea obligatorio
+

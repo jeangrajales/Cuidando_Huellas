@@ -21,6 +21,9 @@ urlpatterns = [
     path('editar_usuario/', views.editar_usuario, name="editar_usuario" ),
     path('mis-publicaciones/', views.mis_publicaciones, name='mis_publicaciones'),
     path('editar_publicacion/<int:publicacion_id>/', views.editar_publicacion, name='editar_publicacion'),
+    path('configuracion/', views.configuracion, name='configuracion'),
+    path('eliminar_cuenta/', views.eliminar_cuenta, name='eliminar_cuenta'),
+
     # Carrito
    
     path('agregar_al_carrito/<int:id_producto>/', views.agregar_al_carrito, name='agregar_al_carrito'),

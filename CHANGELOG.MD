@@ -18,6 +18,15 @@
 ### CHANGELOG
 ---
 
+## [ch2.28.24-Alpha.1] - 2025-05-05
+
+## Added
+
+- Se agrego el modulo de configuracion, se le dio un estilo simple y entendido para el usuario.
+- Se agrego la funcionalidad para eliminar la cuenta permanente.
+
+---
+
 ## [ch2.27.24-Alpha.1] - 2025-05-03
 
 ## Added
