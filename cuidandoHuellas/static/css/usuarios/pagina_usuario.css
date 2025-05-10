@@ -147,3 +147,36 @@ body {
 .dropdown-menu {
     min-width: 120px;
 }
+/* Estilos para el modal de reporte */
+.modal-reporte .modal-header {
+    background-color: #dc3545;
+    color: white;
+}
+
+.modal-reporte .btn-close {
+    filter: invert(1);
+}
+
+/* Estilos para los dropdowns */
+.dropdown-menu {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+}
+
+.dropdown-item.text-danger {
+    color: #dc3545 !important;
+}
+
+.dropdown-item.text-danger:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Validación de formularios */
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875em;
+} 

@@ -18,6 +18,15 @@
 ### CHANGELOG
 ---
 
+## [ch2.29.24-Alpha.1] - 2025-05-10
+
+## Added
+
+- Se agrego el modulo de configuracion, se le dio un estilo simple y entendido para el usuario.
+- Se agrego el modulo de reportes, se le dio un estilo simple y entendido para el administrador a la hora de ver los reportes.
+
+---
+
 ## [ch2.28.24-Alpha.1] - 2025-05-05
 
 ## Added

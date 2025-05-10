@@ -205,3 +205,34 @@ class FotoMascota(models.Model):
     
     def __str__(self):
         return f"Foto de publicación {self.publicacion.id}"
+    
+class Reporte(models.Model):
+    TIPO_REPORTE = [
+        ('inapropiado', 'Contenido inapropiado'),
+        ('estafa', 'Posible estafa'),
+        ('spam', 'Spam'),
+        ('otros', 'Otros'),
+    ]
+    
+    publicacion = models.ForeignKey(
+        'PublicacionMascota', 
+        on_delete=models.CASCADE,
+        related_name='reportes'
+    )
+    tipo_reporte = models.CharField(max_length=20, choices=TIPO_REPORTE)
+    usuario_reportero = models.ForeignKey(
+        Usuario, 
+        on_delete=models.CASCADE, 
+        related_name='reportes_hechos'
+    )
+    motivo = models.TextField(blank=True, null=True)
+    fecha_reporte = models.DateTimeField(auto_now_add=True)
+    resuelto = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-fecha_reporte']
+        verbose_name = 'Reporte'
+        verbose_name_plural = 'Reportes'
+    
+    def __str__(self):
+        return f"Reporte #{self.id} - {self.get_tipo_reporte_display()} - {self.publicacion.tipo_publicacion}"

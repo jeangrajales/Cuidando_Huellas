@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import check_password
 from . models import *
 from django.contrib import messages
@@ -19,6 +19,7 @@ from django.utils.timezone import now
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.contrib.auth import logout
+from django.http import JsonResponse
 # Create your views here.
 
 # Usuarios
@@ -619,7 +620,24 @@ def producto_compra(request):
 
 @session_required_and_rol_permission(1)
 def pagina_administrador(request):
-    return render(request, 'administrador/pagina_administrador.html')
+    if not request.session.get('pista') or request.session['pista'].get('rol') != 1:  # Asume que 1 es admin
+        return redirect('pagina_principal')
+    
+    # Obtener estadísticas
+    reportes_pendientes = Reporte.objects.filter(revisado=False).count()
+    usuarios_activos = Usuario.objects.filter(activo=True).count()
+    
+    # Últimos 5 reportes no revisados
+    ultimos_reportes = Reporte.objects.filter(revisado=False).select_related(
+        'publicacion', 'usuario_reportero'
+    ).order_by('-fecha_reporte')[:5]
+    
+    context = {
+        'reportes_pendientes_count': reportes_pendientes,
+        'usuarios_activos': usuarios_activos,
+        'ultimos_reportes': ultimos_reportes,
+    }
+    return render(request, 'administrador/pagina_administrador.html', context)
 
 @session_required_and_rol_permission(1)
 def listar_usuarios(request):
@@ -1028,3 +1046,94 @@ def eliminar_publicacion(request, publicacion_id):
 
     return redirect("pagina_usuario")
 
+# ------------------- VISTAS PARA REPORTES -------------------
+@session_required_and_rol_permission(1)  # Solo admin
+def listar_reportes(request):
+    reportes = Reporte.objects.filter(resuelto=False).select_related(
+        'publicacion', 
+        'usuario_reportero',
+        'publicacion__usuario'
+    ).order_by('-fecha_reporte')
+    
+    return render(request, 'administrador/listar_reportes.html', {
+        'reportes': reportes
+    })
+
+@session_required_and_rol_permission(1)  # Solo admin
+def ver_reporte(request, reporte_id):
+    reporte = get_object_or_404(
+        Reporte.objects.select_related(
+            'publicacion',
+            'usuario_reportero',
+            'publicacion__usuario'
+        ), 
+        id=reporte_id
+    )
+    
+    return render(request, 'administrador/detalle_reporte.html', {
+        'reporte': reporte
+    })
+
+@session_required_and_rol_permission(1)  # Solo admin
+def resolver_reporte(request, reporte_id):
+    if request.method == 'POST':
+        reporte = get_object_or_404(Reporte, id=reporte_id)
+        reporte.resuelto = True
+        reporte.save()
+        
+        messages.success(request, 'Reporte marcado como resuelto.')
+    return redirect('listar_reportes')
+
+@session_required_and_rol_permission(2, 3)  # Para usuarios normales (roles 2 y 3)
+def reportar_publicacion(request):
+    if request.method == 'POST':
+        publicacion_id = request.POST.get('publicacion_id')
+        tipo_reporte = request.POST.get('tipo_reporte')
+        motivo = request.POST.get('motivo', '')
+        
+        try:
+            publicacion = PublicacionMascota.objects.get(id=publicacion_id)
+            usuario_reportero = Usuario.objects.get(id_usuario=request.session['pista']['id'])
+            
+            # Validar que no sea el dueño
+            if usuario_reportero == publicacion.usuario:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'No puedes reportar tu propia publicación'
+                }, status=400)
+                
+            # Verificar si ya reportó
+            existe = Reporte.objects.filter(
+                publicacion=publicacion,
+                usuario_reportero=usuario_reportero,
+                resuelto=False
+            ).exists()
+            
+            if existe:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Ya has reportado esta publicación'
+                }, status=400)
+            
+            # Crear reporte
+            Reporte.objects.create(
+                publicacion=publicacion,
+                tipo_reporte=tipo_reporte,
+                usuario_reportero=usuario_reportero,
+                motivo=motivo
+            )
+            
+            return JsonResponse({'success': True})
+            
+        except PublicacionMascota.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'error': 'Publicación no encontrada'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=500)
+    
+    return JsonResponse({'success': False}, status=400)
