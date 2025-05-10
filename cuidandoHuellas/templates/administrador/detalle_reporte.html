@@ -1,0 +1,246 @@
+{% load static %}
+{% block estilos_unicos %}
+    <link rel="stylesheet" href="{% static 'css/administrador/detalle_reporte.css' %}">
+    
+{% endblock %}
+
+{% block contenido_admin %}
+<div class="container-fluid">
+    <div class="row g-4">
+      <!-- Columna izquierda -->
+      <div class="col-lg-6">
+        <!-- Tarjeta de información del reporte -->
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-flag me-2"></i> Información del Reporte
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">ID del Reporte</h6>
+                  <p class="fw-bold">#{{ reporte.id }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Fecha</h6>
+                  <p class="fw-bold">{{ reporte.fecha_reporte|date:"d/m/Y H:i" }}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="text-muted small">Tipo de Reporte</h6>
+              <span class="badge bg-{% if reporte.tipo_reporte == 'inapropiado' %}danger{% elif reporte.tipo_reporte == 'estafa' %}warning text-dark{% else %}secondary{% endif %} py-2 px-3 fs-6">
+                <i class="fas fa-{% if reporte.tipo_reporte == 'inapropiado' %}exclamation-triangle{% elif reporte.tipo_reporte == 'estafa' %}money-bill-wave{% else %}info-circle{% endif %} me-1"></i>
+                {{ reporte.get_tipo_reporte_display }}
+              </span>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="text-muted small">Motivo</h6>
+              <div class="alert alert-light border">
+                {% if reporte.motivo %}
+                  <p class="mb-0">{{ reporte.motivo }}</p>
+                {% else %}
+                  <p class="text-muted mb-0"><i>No se proporcionó motivo adicional</i></p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Tarjeta del usuario que reportó -->
+        <div class="card shadow-sm border-0 mt-4">
+          <div class="card-header bg-info text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-user me-2"></i> Usuario que Reportó
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              {% if reporte.usuario_reportero.foto_perfil %}
+                <img src="{{ reporte.usuario_reportero.foto_perfil.url }}" class="rounded-circle me-3" width="60" height="60" alt="Foto perfil">
+              {% else %}
+                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                  <i class="fas fa-user text-white fs-4"></i>
+                </div>
+              {% endif %}
+              <div>
+                <h5 class="mb-0">{{ reporte.usuario_reportero.nombre_completo }}</h5>
+                <span class="text-muted">{{ reporte.usuario_reportero.rol|default:"Usuario" }}</span>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Email</h6>
+                  <p class="fw-bold">{{ reporte.usuario_reportero.correo }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Teléfono</h6>
+                  <p class="fw-bold">{{ reporte.usuario_reportero.telefono|default:"No proporcionado" }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Columna derecha -->
+      <div class="col-lg-6">
+        <!-- Tarjeta de la publicación reportada -->
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-{% if reporte.publicacion.tipo_publicacion == 'perdida' %}danger{% else %}success{% endif %} text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-{% if reporte.publicacion.tipo_publicacion == 'perdida' %}paw{% else %}heart{% endif %} me-2"></i>
+              Publicación Reportada: {{ reporte.publicacion.nombre_mascota|default:"Sin nombre" }}
+            </h5>
+          </div>
+          <div class="card-body">
+            <!-- Carrusel de imágenes -->
+            {% if reporte.publicacion.tipo_publicacion == 'perdida' %}
+                Mascota Perdida: {{ reporte.publicacion.nombre_mascota }}
+            {% else %}
+                Mascota en Adopción: {{ reporte.publicacion.nombre_mascota }}
+            {% endif %}
+            </h5>
+            <p class="card-text">{{ reporte.publicacion.descripcion }}</p>
+            <small class="text-muted">
+                Publicado el {{ reporte.publicacion.fecha_publicacion|date:"d/m/Y" }}
+            </small>
+            
+            <!-- Sección de imágenes CORREGIDA -->
+            {% if reporte.publicacion.fotos.all %}
+                <div class="mt-4">
+                    <h6 class="mb-3">Imágenes adjuntas:</h6>
+                    <div id="carouselPublicacion{{ reporte.publicacion.id }}" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner rounded">
+                            {% for foto in reporte.publicacion.fotos.all %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <img src="{{ foto.imagen.url }}" 
+                                    class="d-block w-100" 
+                                    style="height: 400px; object-fit: contain;"
+                                    alt="Imagen de {{ reporte.publicacion.nombre_mascota|default:'la mascota' }}">
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        {% if reporte.publicacion.fotos.count > 1 %}
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselPublicacion{{ reporte.publicacion.id }}" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselPublicacion{{ reporte.publicacion.id }}" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="text-center mt-2">
+                        <small class="text-muted">
+                            Imagen {{ forloop.counter }} de {{ reporte.publicacion.fotos.count }}
+                        </small>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-4 bg-light rounded mt-3">
+                    <i class="fas fa-image fa-3x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Esta publicación no contiene imágenes</p>
+                </div>
+            {% endif %}
+            
+            <!-- Detalles de la publicación -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Tipo</h6>
+                  <p class="fw-bold">{{ reporte.publicacion.get_tipo_publicacion_display }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Raza</h6>
+                  <p class="fw-bold">{{ reporte.publicacion.raza|default:"No especificada" }}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Edad</h6>
+                  <p class="fw-bold">{{ reporte.publicacion.edad }} años</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Sexo</h6>
+                  <p class="fw-bold">{{ reporte.publicacion.get_sexo_display }}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="text-muted small">Descripción</h6>
+              <div class="alert alert-light border">
+                <p class="mb-0">{{ reporte.publicacion.descripcion }}</p>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="text-muted small">Contacto</h6>
+              <p class="fw-bold">{{ reporte.publicacion.contacto }}</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Tarjeta del dueño de la publicación -->
+        <div class="card shadow-sm border-0 mt-4">
+          <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">
+              <i class="fas fa-user-tag me-2"></i> Dueño de la Publicación
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              {% if reporte.publicacion.usuario.foto_perfil %}
+                <img src="{{ reporte.publicacion.usuario.foto_perfil.url }}" class="rounded-circle me-3" width="60" height="60" alt="Foto perfil">
+              {% else %}
+                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                  <i class="fas fa-user text-white fs-4"></i>
+                </div>
+              {% endif %}
+              <div>
+                <h5 class="mb-0">{{ reporte.publicacion.usuario.nombre_completo }}</h5>
+                <span class="text-muted">{{ reporte.publicacion.usuario.ciudad|default:"Sin ubicación" }}</span>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Email</h6>
+                  <p class="fw-bold">{{ reporte.publicacion.usuario.correo }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Teléfono</h6>
+                  <p class="fw-bold">{{ reporte.publicacion.contacto }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
