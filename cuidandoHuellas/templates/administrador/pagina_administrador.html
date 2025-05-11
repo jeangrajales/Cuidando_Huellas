@@ -3,62 +3,144 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Panel de Administrador</title>
+  <title>Panel de Administrador | PetCare</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/administrador/pagina_administrador.css' %}">
 </head>
 
 {% if request.session.pista %}
-<body>
+<body class="admin-body">
 
   <!-- BARRA LATERAL -->
   <div class="sidebar">
-    <img src="{% static 'img/foto_admin.png' %}" class="profile-img" alt="Admin">
-    <h5>Administrador</h5>
-    <p class="username">{{ request.session.pista.nombre_completo }}</p>
+    <div class="sidebar-header">
+      <div class="profile-container">
+        {% if request.session.pista.foto_perfil %}
+            <img src="{{ request.session.pista.foto_perfil }}" alt="Foto de perfil" 
+                class="profile-img rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+        {% else %}
+            <img src="{% static 'img/frame_user.png' %}" alt="Usuario" 
+                class="profile-img rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+        {% endif %}
+          <!-- Eliminamos el overlay de cámara -->
+      </div>
+      <h5 class="admin-title">Administrador</h5>
+      <p class="username">{{ request.session.pista.nombre_completo }}</p>
+      <div class="status-indicator online"></div>
+    </div>
     
     <nav class="nav flex-column">
       <a href="{% url 'listar_usuarios' %}" class="nav-link">
-        <img src="{% static 'img/frame_user.png' %}" class="icon-img"> Usuarios
+        <i class="fas fa-users icon"></i>
+        <span>Usuarios</span>
+        <i class="fas fa-chevron-right arrow"></i>
       </a>
       <a href="{% url 'listar_productos' %}" class="nav-link">
-        <img src="{% static 'img/Frame_productos.png' %}" class="icon-img"> Productos
+        <i class="fas fa-shopping-bag icon"></i>
+        <span>Productos</span>
+        <i class="fas fa-chevron-right arrow"></i>
       </a>
       <a href="{% url 'listar_mascotas_perdidas' %}" class="nav-link">
-        <img src="{% static 'img/frame_perdidas.png' %}" class="icon-img"> Mascotas Perdidas
+        <i class="fas fa-search-location icon"></i>
+        <span>Mascotas Perdidas</span>
+        <i class="fas fa-chevron-right arrow"></i>
       </a>
       <a href="{% url 'listar_mascotas_adopcion' %}" class="nav-link">
-        <img src="{% static 'img/frame_adopcion.png' %}" class="icon-img"> Adopciones
+        <i class="fas fa-paw icon"></i>
+        <span>Adopciones</span>
+        <i class="fas fa-chevron-right arrow"></i>
       </a>
       <a href="#" class="nav-link">
-        <img src="{% static 'img/Frame_Reportes.png' %}" class="icon-img"> Soportes
+        <i class="fas fa-headset icon"></i>
+        <span>Soportes</span>
+        <i class="fas fa-chevron-right arrow"></i>
       </a>
       <a href="{% url 'listar_reportes' %}" class="nav-link">
-        <img src="{% static 'img/frame_soporte.png' %}" class="icon-img"> Reportes
+        <i class="fas fa-flag icon"></i>
+        <span>Reportes</span>
+        <i class="fas fa-chevron-right arrow"></i>
       </a>
-      <a href="{% url 'pagina_principal' %}" class="nav-link">
-        <img src="{% static 'img/Frame_Salir.png' %}" class="icon-img"> Salir
-      </a>
+      <div class="sidebar-footer">
+        <a href="{% url 'pagina_principal' %}" class="nav-link logout-link">
+          <i class="fas fa-sign-out-alt icon"></i>
+          <span>Salir</span>
+        </a>
+      </div>
     </nav>
   </div>
 
   <!-- CONTENIDO PRINCIPAL -->
   <div class="main-content">
-    <div class="admin-header justify-content-center">
-      <h2>Panel de Control</h2>
+    <div class="admin-header">
+      <div class="header-content">
+        <h2><i class="fas fa-tachometer-alt me-2"></i> Panel de Control</h2>
+        <div class="header-actions">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Buscar...">
+          </div>
+          <div class="notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge">3</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- CONTENIDO VARIABLE -->
-    {% block contenido_admin %}
-      <div class="card-custom">
-        <h5>Bienvenido al panel</h5>
-        <p>Selecciona una sección desde la izquierda para administrar el sistema.</p>
+    <div class="content-wrapper">
+      {% block contenido_admin %}
+      <div class="welcome-card">
+        <div class="welcome-content">
+          <h3>Bienvenido, <span>{{ request.session.pista.nombre_completo }}</span></h3>
+          <p class="welcome-text">Selecciona una sección del menú para comenzar a administrar el sistema.</p>
+          <div class="welcome-stats">
+            <div class="stat-card">
+              <i class="fas fa-users"></i>
+              <div>
+                <h4>1,240</h4>
+                <p>Usuarios</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-paw"></i>
+              <div>
+                <h4>356</h4>
+                <p>Mascotas</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-shopping-bag"></i>
+              <div>
+                <h4>189</h4>
+                <p>Productos</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="welcome-image">
+          <img src="{% static 'img/admin_welcome.svg' %}" alt="Welcome">
+        </div>
       </div>
-    {% endblock %}
+      {% endblock %}
+    </div>
   </div>
 
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script>
+    // Efecto hover para los items del menú
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('mouseenter', function() {
+        this.querySelector('.arrow').style.transform = 'translateX(5px)';
+      });
+      link.addEventListener('mouseleave', function() {
+        this.querySelector('.arrow').style.transform = 'translateX(0)';
+      });
+    });
+  </script>
 </body>
 {% endif %}
 </html>

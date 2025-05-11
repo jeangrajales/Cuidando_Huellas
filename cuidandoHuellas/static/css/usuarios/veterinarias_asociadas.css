@@ -1,121 +1,220 @@
+/* Estilos generales */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
 
-  .task-info {
-    color: #545968;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-  .sort-container {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .sort-select {
-    height: 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    padding: 0 0.5rem;
-    outline: none;
-    cursor: pointer;
-  }
-  
-  /* Cards Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.main-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin-bottom: 40px;
+}
+
+/* Contenedor de tarjetas */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
+}
+
+/* Estilos de tarjetas */
+.card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card.premium {
+  border: 2px solid #f1c40f;
+}
+
+.card-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #e74c3c;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.card.premium .card-badge {
+  background: #f1c40f;
+  color: #2c3e50;
+}
+
+.card-header {
+  padding: 25px 25px 15px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  text-align: center;
+  position: relative;
+}
+
+.card-logo {
+  max-height: 80px;
+  max-width: 200px;
+  margin: 0 auto 15px;
+  display: block;
+  object-fit: contain;
+}
+
+.card-rating {
+  margin-top: 10px;
+}
+
+.stars {
+  color: #f1c40f;
+  font-size: 1rem;
+}
+
+.review-count {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  display: block;
+  margin-top: 5px;
+}
+
+.card-body {
+  padding: 20px 25px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.card-slogan {
+  color: #3498db;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.card-features {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.card-features li {
+  padding: 8px 0;
+  font-size: 0.95rem;
+  position: relative;
+  padding-left: 25px;
+}
+
+.card-features li i {
+  color: #2ecc71;
+  position: absolute;
+  left: 0;
+  top: 10px;
+  font-size: 0.9rem;
+}
+
+.card-offer {
+  background: #e8f4fc;
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  font-size: 0.9rem;
+}
+
+.card-offer i {
+  color: #3498db;
+  margin-right: 8px;
+}
+
+.card-footer {
+  padding: 15px 25px 25px;
+  background: #f8f9fa;
+  border-top: 1px solid #eee;
+}
+
+.card-button {
+  display: block;
+  text-align: center;
+  background: #CFB991;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.card-button:hover {
+  background: #826F53;
+  color: white;
+}
+
+.card-contact {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.card-contact p {
+  margin: 5px 0;
+}
+
+.card-contact i {
+  width: 20px;
+  text-align: center;
+  margin-right: 8px;
+  color: #3498db;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    justify-content: center;
+      grid-template-columns: 1fr;
   }
   
-  /* Card Styles */
+  .main-title {
+      font-size: 2rem;
+  }
+  
+  .subtitle {
+      font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
   .card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    width: 300px;
-    padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-  }
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  .card-icon {
-    width: 30px;
-  }
-  .card-credits {
-    color: #5e585b;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-  .card-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin: 0.5rem 0;
-  }
-  .badge {
-    display: inline-block;
-    background-color: #d8c9cf;
-    color: j#080808;
-    font-size: 0.875rem;
-    font-weight: 600;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-    transition: color 0.3s;
-  }
-  .badge:hover {
-    color: #0056b3;
-  }
-  .card-description {
-    font-size: 0.875rem;
-    color: #000000;
-    margin: 0.5rem 0;
-    flex-grow: 1;
-  }
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-  }
-  .card-time {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: #947f89;
-    font-weight: 600;
-    font-size: 0.875rem;
-  }
-  .card-users {
-    display: flex;
-    align-items: center;
-  }
-  .avatar {
-    width: 36px;
-    height: 36px;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-left: -10px;
-  }
-  .more-users {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    background: none;
-    color: #f90;
-    font-weight: 600;
-    margin-left: -10px;
+      margin: 0 10px;
   }
   
+  .card-header, .card-body, .card-footer {
+      padding: 20px;
+  }
+}

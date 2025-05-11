@@ -27,5 +27,63 @@
     border: 3px solid #fff;
 }
 
+/* Estilos para el efecto hover y modal */
+.lost-pet-img-container {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #5a3e26;
+}
+
+.lost-pet-img-container:hover .lost-pet-img {
+    opacity: 0.7;
+}
+
+.lost-pet-img-container:hover .view-icon {
+    opacity: 1;
+}
+
+.view-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+.lost-pet-img {
+    transition: opacity 0.3s ease;
+    object-fit: cover;
+}
+
+/* Estilos para el modal */
+.modal-pet-img {
+    max-height: 400px;
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+}
+.modal-pet-header {
+    background-color: #5a3e26;
+    color: white;
+    border-bottom: none;
+    padding: 15px 20px;
+}
+.modal-pet-details {
+    padding: 20px;
+    color: rgb(0, 0, 0);
+    height: 100%;
+}
+
+.modal-pet-name {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
 
 

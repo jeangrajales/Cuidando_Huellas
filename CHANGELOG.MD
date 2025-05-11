@@ -18,11 +18,22 @@
 ### CHANGELOG
 ---
 
+## [ch2.30.25-Alpha.1] - 2025-05-11
+
+## Added
+
+-Se agrego un modal para  `Mascotas perdidas` y  `Adopciones` para tener una vista mas completa de la publicacion.
+
+## Fixed
+
+- Se corrigio el diseño de algunas paginas para tener un estilo mas simple para el usuario como  `Veterinarias Asociadas`,  `Adopciones`,  `Productos`,  `Pagina_administrador`.
+
+---
+
 ## [ch2.29.24-Alpha.1] - 2025-05-10
 
 ## Added
 
-- Se agrego el modulo de configuracion, se le dio un estilo simple y entendido para el usuario.
 - Se agrego el modulo de reportes, se le dio un estilo simple y entendido para el administrador a la hora de ver los reportes.
 
 ---

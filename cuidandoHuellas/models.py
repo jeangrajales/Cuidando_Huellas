@@ -31,6 +31,13 @@ class Usuario(models.Model):
         (3, "Empleado")
     )
     rol = models.IntegerField(choices=ROLES, default=2)
+
+    foto_perfil = models.ImageField(
+        upload_to='perfiles/',
+        null=True,
+        blank=True,
+        default=None
+    )
     
     def clean(self):
         # Validar dominio del correo

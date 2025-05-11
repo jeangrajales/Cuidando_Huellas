@@ -1,62 +1,184 @@
 {% extends 'administrador/base_sesion.html' %}
 {% load static %}
 {% block estilos_unicos %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/usuarios/adopciones.css' %}">
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    
 {% endblock %}
+
 {% block titulo %} Adopciones {% endblock %}
 
 {% block contenido %}
-<div class="container my-4">
+<div class="container my-5">
     <div class="row">
-        <!-- Side Menu -->
-        <div class="col-md-3">
+        <!-- Filtros Premium -->
+        <div class="col-lg-3">
             <div class="side-menu">
-                <h5>Filtrar por</h5>
-                <ul class="list-unstyled">
-                    <li><input type="radio" name="edad"> Cachorros</li>
-                    <li><input type="radio" name="edad"> Adultos</li>
-                    <li><input type="radio" name="edad"> Mixto</li>
-                    <hr>
-                    <li><input type="radio" name="sexo"> Todos</li>
-                    <li><input type="radio" name="sexo"> Hembras</li>
-                    <li><input type="radio" name="sexo"> Machos</li>
-                    <hr>
-                    <li><input type="radio" name="tamano"> Todos</li>
-                    <li><input type="radio" name="tamano"> Pequeños</li>
-                    <li><input type="radio" name="tamano"> Medianos</li>
-                    <li><input type="radio" name="tamano"> Grandes</li>
-                </ul>
+                <div class="filter-group">
+                    <h5><i class="fas fa-filter"></i> Filtros</h5>
+                    <div class="filter-title">Edad</div>
+                    <label class="filter-option">
+                        <input type="radio" name="edad" checked>
+                        <span>Todos</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="edad">
+                        <span>Cachorros (1-2 año)</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="edad">
+                        <span>Adultos (8-10 años)</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="edad">
+                        <span>Mayores (+10 años)</span>
+                    </label>
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-title">Sexo</div>
+                    <label class="filter-option">
+                        <input type="radio" name="sexo" checked>
+                        <span>Todos</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="sexo">
+                        <span>Hembras</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="sexo">
+                        <span>Machos</span>
+                    </label>
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-title">Tamaño</div>
+                    <label class="filter-option">
+                        <input type="radio" name="tamano" checked>
+                        <span>Todos</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="tamano">
+                        <span>Pequeños (0-10 kg)</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="tamano">
+                        <span>Medianos (10-25 kg)</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="tamano">
+                        <span>Grandes (+25 kg)</span>
+                    </label>
+                </div>
             </div>
         </div>
 
-        <!-- Publicaciones -->
-        <div class="col-md-9">
+        <!-- Publicaciones Premium -->
+        <div class="col-lg-9">
+            {% if publicaciones %}
             <div class="row">
                 {% for publicacion in publicaciones %}
                     {% if publicacion.tipo_publicacion == 'adopcion' %}
-                        <div class="col-md-4 mb-4">
-                            <div class="dog-card text-center p-3">
-                                {% if publicacion.fotos.first %}
-                                    <img src="{{ publicacion.fotos.first.imagen.url }}" alt="{{ publicacion.nombre_mascota }}" class="dog-image mb-2">
-                                {% else %}
-                                    <div class="dog-image placeholder bg-secondary mb-2 d-flex align-items-center justify-content-center text-white">
-                                        <i class="fas fa-paw fa-2x"></i>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="dog-card" data-pet-id="{{ publicacion.id }}">
+                                <div class="dog-image-container">
+                                    {% if publicacion.fotos.first %}
+                                        <img src="{{ publicacion.fotos.first.imagen.url }}" class="dog-image" alt="{{ publicacion.nombre_mascota }}">
+                                    {% else %}
+                                        <div class="placeholder">
+                                            <i class="fas fa-paw fa-3x"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div class="view-overlay">
+                                        <i class="fas fa-eye view-icon"></i>
                                     </div>
-                                {% endif %}
-                                <h5 class="text-purple">{{ publicacion.nombre_mascota }}</h5>
-                                <p>Edad: {{ publicacion.edad }}</p>
-                                <p>Sexo: {{ publicacion.sexo }}</p>
-                                <p>Raza: {{ publicacion.raza }}</p>
-                                <p>Contacto: {{ publicacion.contacto }}</p>
+                                </div>
+                                
+                                <div class="dog-info">
+                                    <h3 class="dog-name">{{ publicacion.nombre_mascota }}</h3>
+                                    
+                                    <div class="dog-details">
+                                        <span class="detail-item"><i class="fas fa-birthday-cake fa-xs"></i> {{ publicacion.edad }}</span>
+                                        <span class="detail-item"><i class="fas fa-venus-mars fa-xs"></i> {{ publicacion.sexo }}</span>
+                                        <span class="detail-item"><i class="fas fa-dog fa-xs"></i> {{ publicacion.raza }}</span>
+                                    </div>
+                                    
+                                    <p class="dog-description">{{ publicacion.descripcion|truncatechars:120 }}</p>
+                                    
+                                    <div class="contact-info">
+                                        <i class="fas fa-phone-alt"></i>
+                                        <span>{{ publicacion.contacto }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal para cada mascota -->
+                        <div class="modal fade pet-modal" id="petModal{{ publicacion.id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Detalles de {{ publicacion.nombre_mascota }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="modal-image-container">
+                                            {% if publicacion.fotos.first %}
+                                                <img src="{{ publicacion.fotos.first.imagen.url }}" class="modal-image" alt="{{ publicacion.nombre_mascota }}">
+                                            {% else %}
+                                                <div class="placeholder h-100 d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-paw fa-4x" style="color: var(--cafe-medio);"></i>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-details">
+                                            <h3 class="modal-pet-name">{{ publicacion.nombre_mascota }}</h3>
+                                            
+                                            <div class="modal-features">
+                                                <span class="modal-feature"><i class="fas fa-birthday-cake fa-sm"></i> {{ publicacion.edad }}</span>
+                                                <span class="modal-feature"><i class="fas fa-venus-mars fa-sm"></i> {{ publicacion.sexo }}</span>
+                                                <span class="modal-feature"><i class="fas fa-dog fa-sm"></i> {{ publicacion.raza }}</span>
+                                            </div>
+                                            
+                                            <div class="modal-description">
+                                                <h5 class="mb-3" style="color: var(--cafe-oscuro);">Sobre mí</h5>
+                                                <p>{{ publicacion.descripcion }}</p>
+                                            </div>
+                                            
+                                            <div class="modal-contact">
+                                                <h5 class="modal-contact-title"><i class="fas fa-phone-alt"></i> Contacto</h5>
+                                                <p class="modal-contact-info">{{ publicacion.contacto }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     {% endif %}
-                {% empty %}
-                    <p class="text-center">No hay mascotas disponibles para adopción.</p>
                 {% endfor %}
             </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-paw"></i>
+                <h4>No hay mascotas disponibles</h4>
+                <p>Actualmente no tenemos mascotas en adopción. Por favor revisa más tarde o contáctanos si quieres ayudar.</p>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Configurar click para abrir modal
+        document.querySelectorAll('.dog-image-container').forEach(container => {
+            container.addEventListener('click', function() {
+                const petId = this.closest('.dog-card').getAttribute('data-pet-id');
+                const modal = new bootstrap.Modal(document.getElementById('petModal' + petId));
+                modal.show();
+            });
+        });
+    });
+</script>
 {% endblock %}

@@ -2,191 +2,192 @@
 {% load static %}
 {% block estilos_unicos %}
   <link rel="stylesheet" href="{% static 'css/usuarios/veterinarias_asociadas.css' %}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 {% endblock %}
 {% block titulo %} Veterinarias Asociadas {% endblock %}
 
-
 {% block contenido %}
+<div class="container">
+  <h1 class="main-title">Nuestras Veterinarias Asociadas</h1>
+  <p class="subtitle">Los mejores cuidados para tu mascota</p>
   
-    <!-- Cards Container -->
-    <div class="cards-container mt-5">
-      <!-- Card 1 -->
-      <div class="card">
-        <div class="card-header">
-          <p class="card-credits">Sugerencias</p>
+  <div class="cards-container">
+    <!-- Card 1 - Punto.Vet -->
+    <div class="card premium">
+      <div class="card-badge">Recomendado</div>
+      <div class="card-header">
+        <img src="{% static 'img/punto_vet.png' %}" class="card-logo" alt="Punto.Vet">
+        <div class="card-rating">
+          <span class="stars">★★★★★</span>
+          <span class="review-count">4.9 (128 reseñas)</span>
         </div>
-        <h3 class="card-title">Bienvenidos</h3>
-        <a href="https://puntovet.com.co/" target="_blank">
-          <span class="badge">Punto.Vet</span>
-        </a>
-        <img src="{% static 'img/punto_vet.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
-        <ul class="card-description">
-          <li>Ayudas Diagnósticas</li>
-          <li>Hospitalización de Mascotas</li>
-          <li>Urgencias Veterinarias 24 Horas</li>
-          <li>Cirugía Veterinaria</li>
-          <li>Medicina Preventiva Veterinaria</li>
-          <li>Consulta Veterinaria</li>
-          <li>Trámites de Viaje</li>
-          <li>Laboratorio Clínico</li>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Punto.Vet</h3>
+        <p class="card-slogan">Cuidado integral para tu mascota</p>
+        <ul class="card-features">
+          <li><i class="fas fa-check-circle"></i> Urgencias 24 horas</li>
+          <li><i class="fas fa-check-circle"></i> Cirugías especializadas</li>
+          <li><i class="fas fa-check-circle"></i> Laboratorio clínico</li>
+          <li><i class="fas fa-check-circle"></i> Hospitalización</li>
         </ul>
-        <div class="card-footer">
-          <div class="card-time">
-            <i class="fa fa-calendar-o"></i>
-            <p>2 Dias</p>
-          </div>
+        <div class="card-offer">
+          <p><i class="fas fa-gift"></i> <strong>Descuento especial:</strong> 15% en primera consulta</p>
         </div>
       </div>
-      <!-- Repite la estructura de la card según lo necesario -->
-      <div class="card">
-        <div class="card-header">
-          <p class="card-credits">Sugerencias</p>
-        </div>
-        <h3 class="card-title">Bienvenidos</h3>
-        <a href="https://www.animalsveterinaria.com/" target="_blank">
-          <span class="badge bg-primary">Animals</span>
-        </a>
-        <img src="{% static 'img/animals.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
-        <ul class="card-description">
-          <li>SALUD Y BIENESTAR</li>
-          <li>MARCAS</li>
-          <li>VETERINARIO</li>
-          <li>BAÑO Y PELUQUERIA</li>
-        </ul>        
-        <div class="card-footer">
-          <div class="card-time">
-            <i class="fa fa-calendar-o"></i>
-            <p>4 Dias</p>
-          </div>
+      <div class="card-footer">
+        <a href="https://puntovet.com.co/" target="_blank" class="card-button">Visitar sitio web <i class="fas fa-external-link-alt"></i></a>
+        <div class="card-contact">
+          <p><i class="fas fa-phone"></i> (601) 555 1234</p>
+          <p><i class="fas fa-map-marker-alt"></i> Bogotá, Medellín, Cali</p>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <p class="card-credits">Sugerencias</p>
+    </div>
+
+    <!-- Card 2 - Animals -->
+    <div class="card">
+      <div class="card-header">
+        <img src="{% static 'img/animals.png' %}" class="card-logo" alt="Animals Veterinaria">
+        <div class="card-rating">
+          <span class="stars">★★★★☆</span>
+          <span class="review-count">4.7 (95 reseñas)</span>
         </div>
-        <h3 class="card-title">Bienvenidos</h3>
-        <a href="https://vetmasagro.com/" target="_blank">
-          <span class="badge">Vet-Agro</span>
-        </a>
-        <img src="{% static 'img/vet+agro.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
-        <ul class="card-description">
-          <li>Tienda</li>
-          <li>Productos para perros</li>
-          <li>Alimento</li>
-          <li>Farmacia</li>
-          <li>Higiene</li>
-          <li>Productos para gatos</li>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Animals Veterinaria</h3>
+        <p class="card-slogan">Salud y bienestar animal</p>
+        <ul class="card-features">
+          <li><i class="fas fa-check-circle"></i> Medicina preventiva</li>
+          <li><i class="fas fa-check-circle"></i> Peluquería canina</li>
+          <li><i class="fas fa-check-circle"></i> Nutrición especializada</li>
+          <li><i class="fas fa-check-circle"></i> Farmacia veterinaria</li>
         </ul>
-        
-        <div class="card-footer">
-          <div class="card-time">
-            <i class="fa fa-calendar-o"></i>
-            <p>10 Dias</p>
-          </div>
+      </div>
+      <div class="card-footer">
+        <a href="https://www.animalsveterinaria.com/" target="_blank" class="card-button">Visitar sitio web <i class="fas fa-external-link-alt"></i></a>
+        <div class="card-contact">
+          <p><i class="fas fa-phone"></i> (601) 555 5678</p>
+          <p><i class="fas fa-map-marker-alt"></i> Bogotá, Barranquilla</p>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <p class="card-credits">Sugerencias</p>
-        </div>
-        <h3 class="card-title">Bienvenidos</h3>
-        <a href="https://laika.com.co/" target="_blank">
-          <span class="badge">Laika</span>
-        </a>
-        <img src="{% static 'img/laika.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
-        <ul class="card-description">
-          <li>Consulta veterinaria a domicilio</li>
-          <li>Adopción</li>
-        </ul>        
-        <div class="card-footer">
-          <div class="card-time">
-            <i class="fa fa-calendar-o"></i>
-            <p>4 Days</p>
-          </div>
+    </div>
+
+    <!-- Card 3 - Vet-Agro -->
+    <div class="card">
+      <div class="card-header">
+        <img src="{% static 'img/vet+agro.png' %}" class="card-logo" alt="Vet-Agro">
+        <div class="card-rating">
+          <span class="stars">★★★★☆</span>
+          <span class="review-count">4.5 (76 reseñas)</span>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <p class="card-credits">Sugerencias</p>
-        </div>
-        <h3 class="card-title">Bienvenidos</h3>
-        <a href="https://caninosyfelinos.com.co/" target="_blank">
-          <span class="badge">Caninos y Felinos</span>
-        </a>
-        <img src="{% static 'img/caninosYfelinos.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
-        <ul class="card-description">
-          <li>Consulta y Revisión</li>
-          <li>Laboratorio</li>
-          <li>Endoscopia</li>
-          <li>Rayos X · Ecografía</li>
-          <li>Hospital · Cuidados Intensivos</li>
-          <li>Cirugía · Laparoscopia</li>
-          <li>Oftalmología</li>
-          <li>Fisioterapia</li>
-          <li>Cardiología</li>
-        </ul>        
-        <div class="card-footer">
-          <div class="card-time">
-            <i class="fa fa-calendar-o"></i>
-            <p>4 Days</p>
-          </div>
-        </div>
-      </div> <div class="card">
-        <div class="card-header">
-          <p class="card-credits">Sugerencias</p>
-        </div>
-        <h3 class="card-title">Bienvenidos</h3>
-        <a href="https://www.animalpets.live/" target="_blank">
-          <span class="badge">Animal Pets</span>
-        </a>
-        <img src="{% static 'img/animalpets.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
-        <ul class="card-description">
-          <li>Venta de mascotas</li>
+      <div class="card-body">
+        <h3 class="card-title">Vet-Agro</h3>
+        <p class="card-slogan">Todo para tu mascota en un solo lugar</p>
+        <ul class="card-features">
+          <li><i class="fas fa-check-circle"></i> Tienda de mascotas</li>
+          <li><i class="fas fa-check-circle"></i> Alimentos premium</li>
+          <li><i class="fas fa-check-circle"></i> Productos de higiene</li>
+          <li><i class="fas fa-check-circle"></i> Accesorios y juguetes</li>
         </ul>
-        <div class="card-footer">
-          <div class="card-time">
-            <i class="fa fa-calendar-o"></i>
-            <p>4 Days</p>
-          </div>
+      </div>
+      <div class="card-footer">
+        <a href="https://vetmasagro.com/" target="_blank" class="card-button">Visitar sitio web <i class="fas fa-external-link-alt"></i></a>
+        <div class="card-contact">
+          <p><i class="fas fa-phone"></i> (601) 555 9012</p>
+          <p><i class="fas fa-map-marker-alt"></i> Bogotá, Medellín</p>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <p class="card-credits">Sugerencias</p>
-        </div>
-        <h3 class="card-title">Bienvenidos</h3>
-        <a href="https://puntovet.com.co/" target="_blank">
-          <span class="badge">Punto.Vet</span>
-        </a>
-        <img src="{% static 'img/productos.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
-        <p class="card-description">Queremos que te informes sobre nosotros los cuales nos especializamos en tener un buen ambiente tanto para los clientes y para las mascotas.</p>
-        <div class="card-footer">
-          <div class="card-time">
-            <i class="fa fa-calendar-o"></i>
-            <p>2 Dias</p>
-          </div>
+    </div>
+
+    <!-- Card 4 - Laika -->
+    <div class="card">
+      <div class="card-header">
+        <img src="{% static 'img/laika.png' %}" class="card-logo" alt="Laika">
+        <div class="card-rating">
+          <span class="stars">★★★★★</span>
+          <span class="review-count">4.8 (210 reseñas)</span>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <p class="card-credits">Sugerencias</p>
+      <div class="card-body">
+        <h3 class="card-title">Laika</h3>
+        <p class="card-slogan">Veterinaria a domicilio</p>
+        <ul class="card-features">
+          <li><i class="fas fa-check-circle"></i> Consultas en casa</li>
+          <li><i class="fas fa-check-circle"></i> Programa de adopción</li>
+          <li><i class="fas fa-check-circle"></i> Vacunación a domicilio</li>
+          <li><i class="fas fa-check-circle"></i> Eutanasia humanitaria</li>
+        </ul>
+        <div class="card-offer">
+          <p><i class="fas fa-gift"></i> <strong>Promoción:</strong> 10% descuento en primera visita</p>
         </div>
-        <h3 class="card-title">Bienvenidos</h3>
-        <a href="https://puntovet.com.co/" target="_blank">
-          <span class="badge">Punto.Vet</span>
-        </a>
-        <img src="{% static 'img/productos.png' %}" class="card-img-top w-50 d-block mx-auto" alt="...">
-        <p class="card-description">Queremos que te informes sobre nosotros los cuales nos especializamos en tener un buen ambiente tanto para los clientes y para las mascotas.</p>
-        <div class="card-footer">
-          <div class="card-time">
-            <i class="fa fa-calendar-o"></i>
-            <p>2 Dias</p>
-          </div>
+      </div>
+      <div class="card-footer">
+        <a href="https://laika.com.co/" target="_blank" class="card-button">Visitar sitio web <i class="fas fa-external-link-alt"></i></a>
+        <div class="card-contact">
+          <p><i class="fas fa-phone"></i> (601) 555 3456</p>
+          <p><i class="fas fa-map-marker-alt"></i> Todo Colombia</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 - Caninos y Felinos -->
+    <div class="card premium">
+      <div class="card-badge">Especializado</div>
+      <div class="card-header">
+        <img src="{% static 'img/caninosYfelinos.png' %}" class="card-logo" alt="Caninos y Felinos">
+        <div class="card-rating">
+          <span class="stars">★★★★★</span>
+          <span class="review-count">4.9 (182 reseñas)</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Caninos y Felinos</h3>
+        <p class="card-slogan">Medicina veterinaria avanzada</p>
+        <ul class="card-features">
+          <li><i class="fas fa-check-circle"></i> Cardiología veterinaria</li>
+          <li><i class="fas fa-check-circle"></i> Oftalmología especializada</li>
+          <li><i class="fas fa-check-circle"></i> Fisioterapia animal</li>
+          <li><i class="fas fa-check-circle"></i> Cirugía laparoscópica</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <a href="https://caninosyfelinos.com.co/" target="_blank" class="card-button">Visitar sitio web <i class="fas fa-external-link-alt"></i></a>
+        <div class="card-contact">
+          <p><i class="fas fa-phone"></i> (601) 555 7890</p>
+          <p><i class="fas fa-map-marker-alt"></i> Bogotá, Cali</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6 - Animal Pets -->
+    <div class="card">
+      <div class="card-header">
+        <img src="{% static 'img/animalpets.png' %}" class="card-logo" alt="Animal Pets">
+        <div class="card-rating">
+          <span class="stars">★★★☆☆</span>
+          <span class="review-count">3.9 (45 reseñas)</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Animal Pets</h3>
+        <p class="card-slogan">Encuentra a tu compañero ideal</p>
+        <ul class="card-features">
+          <li><i class="fas fa-check-circle"></i> Adopción responsable</li>
+          <li><i class="fas fa-check-circle"></i> Venta de mascotas</li>
+          <li><i class="fas fa-check-circle"></i> Asesoría pre-adopción</li>
+          <li><i class="fas fa-check-circle"></i> Seguimiento post-venta</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <a href="https://www.animalpets.live/" target="_blank" class="card-button">Visitar sitio web <i class="fas fa-external-link-alt"></i></a>
+        <div class="card-contact">
+          <p><i class="fas fa-phone"></i> (601) 555 2345</p>
+          <p><i class="fas fa-map-marker-alt"></i> Bogotá, Medellín</p>
         </div>
       </div>
     </div>
   </div>
-
+</div>
 {% endblock %}

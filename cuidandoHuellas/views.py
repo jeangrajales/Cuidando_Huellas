@@ -622,6 +622,11 @@ def producto_compra(request):
 def pagina_administrador(request):
     if not request.session.get('pista') or request.session['pista'].get('rol') != 1:  # Asume que 1 es admin
         return redirect('pagina_principal')
+    try:
+        # Obtener el objeto usuario completo
+        usuario_admin = Usuario.objects.get(id_usuario=request.session['pista']['id'])
+    except Usuario.DoesNotExist:
+        return redirect('pagina_principal')
     
     # Obtener estadísticas
     reportes_pendientes = Reporte.objects.filter(revisado=False).count()
@@ -636,6 +641,7 @@ def pagina_administrador(request):
         'reportes_pendientes_count': reportes_pendientes,
         'usuarios_activos': usuarios_activos,
         'ultimos_reportes': ultimos_reportes,
+        'usuario_admin': usuario_admin,
     }
     return render(request, 'administrador/pagina_administrador.html', context)
 
