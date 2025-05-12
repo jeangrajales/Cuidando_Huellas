@@ -47,8 +47,6 @@ urlpatterns = [
     path('eliminar_mascotas_perdidas/<int:publicacion_id>',views.eliminar_mascotas_perdidas, name="eliminar_mascotas_perdidas"),
     path('listar_mascotas_adopcion/',views.listar_mascotas_adopcion, name="listar_mascotas_adopcion"),
     path('eliminar_mascotas_adopcion/<int:publicacion_id>/', views.eliminar_mascotas_adopcion, name='eliminar_mascotas_adopcion'),
-
-    path('panel-administrador/', views.panel_administrador, name='pagina_administrador'),
     path('administrador/reportes/', views.listar_reportes, name='listar_reportes'),
     path('administrador/reportes/<int:reporte_id>/', views.ver_reporte, name='ver_reporte'),
     path('administrador/reportes/<int:reporte_id>/resolver/', views.resolver_reporte, name='resolver_reporte'),

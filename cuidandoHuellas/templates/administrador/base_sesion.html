@@ -26,16 +26,28 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'mascotas_perdidas' %}active{% endif %}" href="{% url 'mascotas_perdidas' %}">Mascotas Perdidas</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'pagina_usuario' %}active{% endif %}" href="{% url 'pagina_usuario' %}">
+                            <i class="fas fa-home me-2"></i> Inicio
+                        </a>
+                      </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'mascotas_perdidas' %}active{% endif %}" href="{% url 'mascotas_perdidas' %}">
+                            <i class="fas fa-paw me-2"></i> Mascotas Perdidas
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'productos_usuarios' %}active{% endif %}" href="{% url 'productos_usuarios' %}">Productos</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'productos_usuarios' %}active{% endif %}" href="{% url 'productos_usuarios' %}">
+                            <i class="fas fa-shopping-bag me-2"></i> Productos
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'veterinarias_asociadas' %}active{% endif %}" href="{% url 'veterinarias_asociadas' %}">Veterinarias Asociadas</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'veterinarias_asociadas' %}active{% endif %}" href="{% url 'veterinarias_asociadas' %}">
+                            <i class="fas fa-clinic-medical me-2"></i>Veterinarias Asociadas
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'adopciones' %}active{% endif %}" href="{% url 'adopciones' %}">Adopciones</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'adopciones' %}active{% endif %}" href="{% url 'adopciones' %}">
+                            <i class="fas fa-heart me-2"></i>Adopciones</a>
                     </li>
                 </ul>
                 
@@ -112,7 +124,7 @@
 {% block contenido %} 
 {% endblock %}
 
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
