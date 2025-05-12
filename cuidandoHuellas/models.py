@@ -1,11 +1,10 @@
+# Create your models here.
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 import re
 from django.contrib.auth.hashers import make_password , check_password
-
 from .validators import *
-# Create your models here.
 from django.core.validators import RegexValidator
 from django.core.validators import MinValueValidator
 
@@ -62,7 +61,6 @@ class Usuario(models.Model):
     def __str__(self):
         return f"{self.nombre_completo} - {self.correo}"    
     
-
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key= True)
     nombre_producto = models.CharField(max_length=250)
@@ -95,9 +93,7 @@ class Producto(models.Model):
 
     def __str__(self):
         return f"{self.id_producto} - {self.nombre_producto} - {self.descripcion} - {self.precio} - {self.foto_producto}"
-    
-    
-
+        
 class Carrito(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     
@@ -123,9 +119,6 @@ class DetalleFactura(models.Model):
     cantidad = models.PositiveIntegerField()
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
     
-from django.core.validators import RegexValidator
-from django.db import models
-
 class PublicacionMascota(models.Model):
     TIPO_PUBLICACION = (
         ('perdida', 'Mascota Perdida'),
@@ -202,7 +195,6 @@ class PublicacionMascota(models.Model):
     def __str__(self):
         return f"Publicación de {self.usuario.nombre_completo} - {self.fecha_publicacion.strftime('%d/%m/%Y')}"
 
-
 class FotoMascota(models.Model):
     publicacion = models.ForeignKey(PublicacionMascota, on_delete=models.CASCADE, related_name='fotos')
     imagen = models.ImageField(
@@ -234,7 +226,7 @@ class Reporte(models.Model):
     )
     motivo = models.TextField(blank=True, null=True)
     fecha_reporte = models.DateTimeField(auto_now_add=True)
-    resuelto = models.BooleanField(default=False)
+    revisado = models.BooleanField(default=False)
     
     class Meta:
         ordering = ['-fecha_reporte']

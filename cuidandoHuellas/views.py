@@ -12,7 +12,6 @@ from decimal import Decimal
 from django.http import HttpResponse
 import os
 from PIL import Image
-from io import BytesIO
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.hashers import make_password
 from django.utils.timezone import now
@@ -26,9 +25,7 @@ from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 import re
 # -------------------
-@session_required_and_rol_permission(1)  # Solo para rol 1 (admin)
-def panel_administrador(request):
-    return render(request, 'administrador/pagina_administrador.html')
+
 
 def iniciar_sesion(request):
     if request.method == "POST":
@@ -53,7 +50,7 @@ def iniciar_sesion(request):
                 if q.rol == 1:  
                     return redirect("pagina_administrador")
                 elif q.rol == 2:
-                    return render(request, "usuarios/pagina_usuario.html")
+                    return redirect("pagina_usuario")
             else:
                 # Contraseña incorrecta
                 messages.error(request, "Usuario o contraseña incorrectos...")
@@ -89,15 +86,15 @@ def registrarse(request):
         correo = request.POST.get("correo")
         contraseña = request.POST.get("contraseña")
         confirmar_contraseña = request.POST.get("confirmar_contraseña")
-
+        
         if Usuario.objects.filter(correo=correo).exists():
             messages.error(request, "El correo electrónico ya está registrado")
             return render(request, 'usuarios/registrarse.html')
-
+        
         if contraseña.strip() != confirmar_contraseña:
             messages.error(request, "Las contraseñas no coinciden")
             return render(request, 'usuarios/registrarse.html')
-
+        
         crear_usuario = Usuario(
             nombre_completo=nombre_completo,
             telefono=telefono,
@@ -105,19 +102,28 @@ def registrarse(request):
             correo=correo,
             contraseña=contraseña  # Contraseña encriptada
         )
-
+        
         try:
             crear_usuario.full_clean()
             crear_usuario.save()
-            messages.success(request, "Cuenta creada exitosamente, por favor inicia sesión.")
-            return render(request,'usuarios/pagina_usuario.html')
+            
+            # Iniciar sesión directamente en la sesión
+            request.session['pista'] = {
+                'id': crear_usuario.id_usuario,
+                'nombre_completo': crear_usuario.nombre_completo,
+                'correo': crear_usuario.correo,
+                'rol': crear_usuario.rol  # Asumiendo que tienes un campo de rol
+            }
+            
+            messages.success(request, "Cuenta creada exitosamente. Disfruta de nuestros Servicios")
+            return redirect('pagina_usuario')
         
         except ValidationError as e:
             for field, error_list in e.message_dict.items():
                 for error in error_list:
                     messages.error(request, f"{field}: {error}")
             return render(request, 'usuarios/registrarse.html')
-
+    
     return render(request, "usuarios/registrarse.html")
 
 @session_required_and_rol_permission(1, 2, 3)
@@ -255,6 +261,7 @@ def mascotas_perdidas(request):
         "publicaciones": publicaciones
     })
 
+@session_required_and_rol_permission(1,2,3)
 def adopciones(request):
     publicaciones = PublicacionMascota.objects.filter(tipo_publicacion='adopcion').order_by('-fecha_publicacion')
     return render(request, "usuarios/adopciones.html", {
@@ -585,7 +592,6 @@ def configuracion(request):
     return render(request, 'usuarios/configuracion.html')
 
 
-
 def eliminar_cuenta(request):
     if request.method == 'POST':
         confirmacion = request.POST.get('confirmacion')
@@ -630,7 +636,7 @@ def pagina_administrador(request):
     
     # Obtener estadísticas
     reportes_pendientes = Reporte.objects.filter(revisado=False).count()
-    usuarios_activos = Usuario.objects.filter(activo=True).count()
+
     
     # Últimos 5 reportes no revisados
     ultimos_reportes = Reporte.objects.filter(revisado=False).select_related(
@@ -639,7 +645,6 @@ def pagina_administrador(request):
     
     context = {
         'reportes_pendientes_count': reportes_pendientes,
-        'usuarios_activos': usuarios_activos,
         'ultimos_reportes': ultimos_reportes,
         'usuario_admin': usuario_admin,
     }
@@ -669,7 +674,6 @@ def listar_productos(request):
     list_productos = Producto.objects.all()
     contexto = {"dato_producto": list_productos}
     return render(request, 'administrador/productos/listar_productos.html', contexto)
-
 
 @session_required_and_rol_permission(1)
 def agregar_productos(request):
@@ -774,7 +778,7 @@ def eliminar_productos(request, id_producto):
     try:
         traer_producto = Producto.objects.get(pk = id_producto)
         traer_producto.delete()
-        messages.success(request, "El producto se ha eliminado correctamente")
+        messages.error(request, "El producto se ha eliminado correctamente")
     except Producto.DoesNotExist:
         messages.warning(request, "Error: El producto no existe")
     return redirect('listar_productos')
@@ -897,14 +901,17 @@ def aumentar_cantidad(request, item_id):
         # Asegúrate de que item.producto es un objeto Producto
         producto = item.producto
 
-        # Verificar el stock del producto
-        if item.cantidad >= producto.cantidad:
-            messages.error(request, f"Solo quedan {producto.cantidad} unidades disponibles.")
+        # Calcular la nueva cantidad propuesta
+        nueva_cantidad = item.cantidad + 1
 
-        # Aumentar la cantidad
-        item.cantidad += 1
-        item.save()
-        messages.success(request, f"Cantidad aumentada para {producto.nombre_producto}.")
+        # Verificar si hay suficiente stock disponible
+        if nueva_cantidad > producto.cantidad:
+            messages.error(request, f"Solo quedan {producto.cantidad} unidades disponibles de {producto.nombre_producto}.")
+        else:
+            # Aumentar la cantidad
+            item.cantidad = nueva_cantidad
+            item.save()
+            messages.success(request, f"Cantidad aumentada para {producto.nombre_producto}.")
     except ItemCarrito.DoesNotExist:
         messages.error(request, "El ítem no existe.")
     except Exception as e:
@@ -941,6 +948,7 @@ def vaciar_carrito(request):
         usuario = Usuario.objects.get(id_usuario=usuario_sesion["id"])
         carrito = Carrito.objects.get(usuario=usuario)
         carrito.items.all().delete()
+        messages.success(request, "Carrito Vaciado Correctamente")
     except (Usuario.DoesNotExist, Carrito.DoesNotExist):
         pass
     return redirect('productos_usuarios')
@@ -1055,7 +1063,7 @@ def eliminar_publicacion(request, publicacion_id):
 # ------------------- VISTAS PARA REPORTES -------------------
 @session_required_and_rol_permission(1)  # Solo admin
 def listar_reportes(request):
-    reportes = Reporte.objects.filter(resuelto=False).select_related(
+    reportes = Reporte.objects.filter(revisado=False).select_related(
         'publicacion', 
         'usuario_reportero',
         'publicacion__usuario'
@@ -1084,9 +1092,8 @@ def ver_reporte(request, reporte_id):
 def resolver_reporte(request, reporte_id):
     if request.method == 'POST':
         reporte = get_object_or_404(Reporte, id=reporte_id)
-        reporte.resuelto = True
+        reporte.revisado = True
         reporte.save()
-        
         messages.success(request, 'Reporte marcado como resuelto.')
     return redirect('listar_reportes')
 
@@ -1112,7 +1119,7 @@ def reportar_publicacion(request):
             existe = Reporte.objects.filter(
                 publicacion=publicacion,
                 usuario_reportero=usuario_reportero,
-                resuelto=False
+                revisado=False
             ).exists()
             
             if existe:

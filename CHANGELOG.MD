@@ -16,7 +16,16 @@
 ---
 
 ### CHANGELOG
+
 ---
+
+## [ch2.30.26-Alpha.1] - 2025-05-12
+
+## Fixed
+
+- Se corrigieron errores de mensajes y de carrito
+---
+
 
 ## [ch2.30.25-Alpha.1] - 2025-05-11
 
