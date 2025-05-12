@@ -15,6 +15,16 @@
 <body>
     <div class="container">
         <h1 class="text-center my-4">Productos</h1>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             {% for data in dato_producto %}
             <div class="col">
@@ -42,14 +52,14 @@
                         <a href="{% url 'eliminar_productos' data.id_producto %}">
                             <button class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
                         </a>
-                        <a href="{% url 'editar_productos' data.id_producto %}">
-                            <button class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></button>
-                        </a>
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal{{ data.id_producto }}">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
                     </div>
                 </div>
             </div>
             
-            <!-- Modal para el producto -->
+            <!-- Modal para ver el producto -->
             <div class="modal fade" id="productModal{{ data.id_producto }}" tabindex="-1" aria-labelledby="productModalLabel{{ data.id_producto }}" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -87,13 +97,103 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <a href="{% url 'editar_productos' data.id_producto %}" class="btn btn-warning">
+                            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal{{ data.id_producto }}" data-bs-dismiss="modal">
                                 <i class="fa-solid fa-pen-to-square me-1"></i> Editar
-                            </a>
+                            </button>
                             <a href="{% url 'eliminar_productos' data.id_producto %}" class="btn btn-danger">
                                 <i class="fa-solid fa-trash-can me-1"></i> Eliminar
                             </a>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal para editar el producto -->
+            <div class="modal fade" id="editProductModal{{ data.id_producto }}" tabindex="-1" aria-labelledby="editProductModalLabel{{ data.id_producto }}" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning bg-opacity-25">
+                            <h5 class="modal-title" id="editProductModalLabel{{ data.id_producto }}">Editar Producto: {{ data.nombre_producto }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{% url 'editar_productos' data.id_producto %}" enctype="multipart/form-data" id="editForm{{ data.id_producto }}">
+                                {% csrf_token %}
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre del Producto</label>
+                                    <input type="text" name="nombre_producto" value="{{ data.nombre_producto }}" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Descripción</label>
+                                    <textarea class="form-control" name="descripcion" rows="3" required>{{ data.descripcion }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Precio</label>
+                                    <input type="number" name="precio" value="{{ data.precio }}" class="form-control" min="0.01" step="0.01" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Cantidad</label>
+                                    <input type="number" name="cantidad" value="{{ data.cantidad }}" class="form-control" min="1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Categoría</label>
+                                    <select class="form-select" name="categoria">
+                                        <option {% if data.categoria == 'Alimento Mascotas' %}selected{% endif %}>Alimento Mascotas</option>
+                                        <option {% if data.categoria == 'Accesorios Mascotas' %}selected{% endif %}>Accesorios Mascotas</option>
+                                        <option {% if data.categoria == 'Ropa Mascotas' %}selected{% endif %}>Ropa Mascotas</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Estado</label>
+                                    <select class="form-select" name="estado">
+                                        <option {% if data.estado == 'Disponible' %}selected{% endif %}>Disponible</option>
+                                        <option {% if data.estado == 'No Disponible' %}selected{% endif %}>No Disponible</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Imagen del Producto</label>
+                                    
+                                    {% if data.foto_producto %}
+                                        <div class="current-image-container mb-3 border p-3 rounded">
+                                            <img src="{{ data.foto_producto.url }}" alt="Imagen actual del producto" 
+                                                class="img-thumbnail d-block mb-2" style="max-width: 150px;">
+                                            <p class="text-muted mb-2">Imagen actual del producto</p>
+                                            
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" name="eliminar_foto" id="eliminar_foto{{ data.id_producto }}">
+                                                <label class="form-check-label text-danger" for="eliminar_foto{{ data.id_producto }}">
+                                                    <i class="fas fa-trash-alt me-1"></i> Eliminar esta imagen
+                                                </label>
+                                            </div>
+                                            
+                                            <hr class="my-3">
+                                            
+                                            <div class="new-image-section">
+                                                <label class="form-label">¿Desea cambiar la imagen?</label>
+                                                <input type="file" name="foto_producto" class="form-control" accept="image/jpeg, image/png, image/gif">
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle me-2"></i> Este producto no tiene imagen actualmente
+                                        </div>
+                                        <input type="file" name="foto_producto" class="form-control" accept="image/jpeg, image/png, image/gif">
+                                    {% endif %}
+                                    
+                                    <div class="form-text mt-2">
+                                        <i class="fas fa-info-circle me-1"></i> Formatos aceptados: JPG, PNG, GIF. Tamaño máximo: 5MB
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" form="editForm{{ data.id_producto }}" class="btn btn-warning">
+                                <i class="fa-solid fa-save me-1"></i> Guardar Cambios
+                            </button>
                         </div>
                     </div>
                 </div>
