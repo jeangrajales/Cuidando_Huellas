@@ -28,47 +28,52 @@ import re
 
 
 def iniciar_sesion(request):
+    datos_form = {}  # Diccionario para mantener los datos del formulario
+    
     if request.method == "POST":
         correo = request.POST.get("correo")
         contraseña = request.POST.get("contraseña")
-
+        
+        # Guardamos los datos del formulario (excepto la contraseña por seguridad)
+        datos_form = {'correo': correo}
+        
         try:
             q = Usuario.objects.get(correo=correo)
             # Validar la contraseña encriptada
             if check_password(contraseña, q.contraseña):
                 # Todo OK si la contraseña coincide, crear sesión y redirigir
                 request.session["pista"] = {
-                "foto_perfil": q.foto_perfil.url if q.foto_perfil else None,
-                "telefono": q.telefono,
-                "id": q.id_usuario,
-                "rol": q.rol,
-                "nombre_completo": q.nombre_completo,
-                "es_administrador": q.es_administrador,  # Usando la propiedad
-            }# Autenticación: creamos la variable session
+                    "foto_perfil": q.foto_perfil.url if q.foto_perfil else None,
+                    "telefono": q.telefono,
+                    "id": q.id_usuario,
+                    "rol": q.rol,
+                    "nombre_completo": q.nombre_completo,
+                    "es_administrador": q.es_administrador,
+                }
                 messages.success(request, "Bienvenido a Cuidando Huellas !!")
-
-                if q.rol == 1:  
+                
+                if q.rol == 1:
                     return redirect("pagina_administrador")
                 elif q.rol == 2:
                     return redirect("pagina_usuario")
             else:
                 # Contraseña incorrecta
                 messages.error(request, "Usuario o contraseña incorrectos...")
-                return redirect("iniciar_sesion")
-
+                return render(request, "usuarios/iniciar_sesion.html", {'datos_form': datos_form})
+                
         except Usuario.DoesNotExist:
             # Usuario no existe
-            request.session["pista"] = None  # Autenticación: vaciamos la variable session
+            request.session["pista"] = None
             messages.error(request, "El usuario no existe")
-            return redirect("iniciar_sesion")
+            return render(request, "usuarios/iniciar_sesion", {'datos_form': datos_form})
     else:
         # Capturamos la variable sesión
         verificar = request.session.get("pista", False)
         if verificar:
             return redirect("pagina_principal")
-        else:
-            return render(request, "usuarios/iniciar_sesion.html")
-        
+    
+    return render(request, "usuarios/iniciar_sesion.html", {'datos_form': datos_form})
+
 def cerrar_sesion(request):
     try:
         messages.success(request, "Cerrado correctamente la sesion")
@@ -80,50 +85,58 @@ def cerrar_sesion(request):
 
 def registrarse(request):
     if request.method == "POST":
-        nombre_completo = request.POST.get("nombre_completo")
-        telefono = request.POST.get("telefono")
-        ciudad = request.POST.get("ciudad")
-        correo = request.POST.get("correo")
+        # Obtener los datos del formulario
+        form_data = {
+            'nombre_completo': request.POST.get("nombre_completo"),
+            'telefono': request.POST.get("telefono"),
+            'ciudad': request.POST.get("ciudad"),
+            'correo': request.POST.get("correo"),
+        }
+        
         contraseña = request.POST.get("contraseña")
         confirmar_contraseña = request.POST.get("confirmar_contraseña")
-        
-        if Usuario.objects.filter(correo=correo).exists():
+
+        # Verificar si el correo ya existe
+        if Usuario.objects.filter(correo=form_data['correo']).exists():
             messages.error(request, "El correo electrónico ya está registrado")
-            return render(request, 'usuarios/registrarse.html')
-        
-        if contraseña.strip() != confirmar_contraseña:
+            return render(request, 'usuarios/registrarse.html', {'form_data': form_data})
+
+        # Verificar que las contraseñas coincidan
+        if contraseña.strip() != confirmar_contraseña.strip():
             messages.error(request, "Las contraseñas no coinciden")
-            return render(request, 'usuarios/registrarse.html')
-        
-        crear_usuario = Usuario(
-            nombre_completo=nombre_completo,
-            telefono=telefono,
-            ciudad=ciudad,
-            correo=correo,
-            contraseña=contraseña  # Contraseña encriptada
-        )
-        
+            return render(request, 'usuarios/registrarse.html', {'form_data': form_data})
+
         try:
+            # Crear el usuario
+            crear_usuario = Usuario(
+                nombre_completo=form_data['nombre_completo'],
+                telefono=form_data['telefono'],
+                ciudad=form_data['ciudad'],
+                correo=form_data['correo'],
+                contraseña=contraseña  # Contraseña encriptada
+            )
+
             crear_usuario.full_clean()
             crear_usuario.save()
-            
-            # Iniciar sesión directamente en la sesión
+
+            # Iniciar sesión directamente
             request.session['pista'] = {
                 'id': crear_usuario.id_usuario,
                 'nombre_completo': crear_usuario.nombre_completo,
                 'correo': crear_usuario.correo,
-                'rol': crear_usuario.rol  # Asumiendo que tienes un campo de rol
+                'rol': crear_usuario.rol
             }
-            
+
             messages.success(request, "Cuenta creada exitosamente. Disfruta de nuestros Servicios")
             return redirect('pagina_usuario')
-        
+
         except ValidationError as e:
             for field, error_list in e.message_dict.items():
                 for error in error_list:
                     messages.error(request, f"{field}: {error}")
-            return render(request, 'usuarios/registrarse.html')
-    
+            return render(request, 'usuarios/registrarse.html', {'form_data': form_data})
+
+    # Si es GET, mostrar formulario vacío
     return render(request, "usuarios/registrarse.html")
 
 @session_required_and_rol_permission(1, 2, 3)

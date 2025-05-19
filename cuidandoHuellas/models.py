@@ -39,12 +39,12 @@ class Usuario(models.Model):
     )
     
     def clean(self):
-        # Validar dominio del correo
-        if not re.match(r'^[\w\.-]+@(gmail\.com|hotmail\.com|outlook\.com)$', self.correo):
-            raise ValidationError({'correo': 'Solo se permiten correos de gmail.com, hotmail.com o outlook.com.'})
+        # Validar que el correo tenga un formato válido (cualquier dominio)
+        if not re.match(r'^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,}$', self.correo):
+            raise ValidationError({'correo': 'Ingrese un correo electrónico válido.'})
         
         self.contraseña = self.contraseña.strip()
-
+        
         # Validar contraseña con letras y números
         if not re.match(r'^(?=.*[A-Za-z])(?=.*\d).+$', self.contraseña):
             raise ValidationError({'contraseña': 'Debe contener letras y números.'})

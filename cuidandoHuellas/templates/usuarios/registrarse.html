@@ -43,7 +43,8 @@
                           placeholder="Nombre Completo" required autofocus
                           class="form-control rounded-pill border-0 shadow-sm px-4 text-center"
                           pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
-                          title="Solo se permiten letras y espacios" />
+                          title="Solo se permiten letras y espacios"
+                          value="{{ form_data.nombre_completo|default:'' }}" />
                       </div>
 
                       <div class="form-group mb-3">
@@ -51,28 +52,29 @@
                           placeholder="Número de celular" required
                           pattern="[0-9]{10}" maxlength="10" inputmode="numeric"
                           class="form-control rounded-pill border-0 shadow-sm px-4 text-center"
-                          title="Ingresa un número de 10 dígitos" />
+                          title="Ingresa un número de 10 dígitos"
+                          value="{{ form_data.telefono|default:'' }}" />
                       </div>
 
                       <div class="form-group mb-3">
                         <select id="ciudad" name="ciudad" required autofocus
                           class="form-control rounded-pill border-0 shadow-sm px-4 form-select text-center">
                           <option value="">Selecciona ciudad de residencia</option>
-                          <option value="bogota">Bogotá</option>
-                          <option value="medellin">Medellín</option>
-                          <option value="cali">Cali</option>
-                          <option value="barranquilla">Barranquilla</option>
-                          <option value="cartagena">Cartagena</option>
-                          <option value="bucaramanga">Bucaramanga</option>
-                          <option value="pereira">Pereira</option>
-                          <option value="santamarta">Santa Marta</option>
-                          <option value="cucuta">Cúcuta</option>
-                          <option value="ibague">Ibagué</option>
-                          <option value="manizales">Manizales</option>
-                          <option value="neiva">Neiva</option>
-                          <option value="villavicencio">Villavicencio</option>
-                          <option value="pasto">Pasto</option>
-                          <option value="monteria">Montería</option>
+                          <option value="bogota" {% if form_data.ciudad == 'bogota' %}selected{% endif %}>Bogotá</option>
+                          <option value="medellin" {% if form_data.ciudad == 'medellin' %}selected{% endif %}>Medellín</option>
+                          <option value="cali" {% if form_data.ciudad == 'cali' %}selected{% endif %}>Cali</option>
+                          <option value="barranquilla" {% if form_data.ciudad == 'barranquilla' %}selected{% endif %}>Barranquilla</option>
+                          <option value="cartagena" {% if form_data.ciudad == 'cartagena' %}selected{% endif %}>Cartagena</option>
+                          <option value="bucaramanga" {% if form_data.ciudad == 'bucaramanga' %}selected{% endif %}>Bucaramanga</option>
+                          <option value="pereira" {% if form_data.ciudad == 'pereira' %}selected{% endif %}>Pereira</option>
+                          <option value="santamarta" {% if form_data.ciudad == 'santamarta' %}selected{% endif %}>Santa Marta</option>
+                          <option value="cucuta" {% if form_data.ciudad == 'cucuta' %}selected{% endif %}>Cúcuta</option>
+                          <option value="ibague" {% if form_data.ciudad == 'ibague' %}selected{% endif %}>Ibagué</option>
+                          <option value="manizales" {% if form_data.ciudad == 'manizales' %}selected{% endif %}>Manizales</option>
+                          <option value="neiva" {% if form_data.ciudad == 'neiva' %}selected{% endif %}>Neiva</option>
+                          <option value="villavicencio" {% if form_data.ciudad == 'villavicencio' %}selected{% endif %}>Villavicencio</option>
+                          <option value="pasto" {% if form_data.ciudad == 'pasto' %}selected{% endif %}>Pasto</option>
+                          <option value="monteria" {% if form_data.ciudad == 'monteria' %}selected{% endif %}>Montería</option>
                         </select>
                       </div>
 
@@ -84,7 +86,8 @@
                           required
                           class="form-control rounded-pill border-0 shadow-sm px-4 text-center"
                           pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|outlook\.com)$"
-                          title="Solo se permiten correos de gmail.com, hotmail.com o outlook.com"/>
+                          title="Solo se permiten correos de gmail.com, hotmail.com o outlook.com"
+                          value="{{ form_data.correo|default:'' }}" />
                       </div>
 
                       <div class="form-group mb-3 position-relative">

@@ -19,13 +19,19 @@
 
 ---
 
+## [ch2.30.27-Alpha.1] - 2025-05-19
+
+## Fixed
+
+- Se corrigieron `iniciar_sesion` y `registrarse`que al marcar error no se borre un formulario.
+---
+
 ## [ch2.30.26-Alpha.1] - 2025-05-12
 
 ## Fixed
 
 - Se corrigieron errores de mensajes y de carrito
 ---
-
 
 ## [ch2.30.25-Alpha.1] - 2025-05-11
 
