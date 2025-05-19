@@ -126,8 +126,7 @@ def registrarse(request):
                 'correo': crear_usuario.correo,
                 'rol': crear_usuario.rol
             }
-
-            messages.success(request, "Cuenta creada exitosamente. Disfruta de nuestros Servicios")
+            messages.success(request, "Bienvenido " +  crear_usuario.nombre_completo  + ", Disfruta de nuestros Servicios")
             return redirect('pagina_usuario')
 
         except ValidationError as e:
@@ -264,7 +263,13 @@ def editar_usuario(request):
     return render(request, 'usuarios/editar_usuario.html', context)
 
 def pagina_principal(request):
-    return render(request, 'pagina_principal.html')
+    publicaciones = PublicacionMascota.objects.all().order_by('-fecha_publicacion')
+    productos = Producto.objects.all()  # Obtenemos todos los productos
+    return render(request, "pagina_principal.html", {
+        "publicaciones": publicaciones,
+        "productos": productos  # Pasamos los productos al contexto
+    })
+
     
 
 @session_required_and_rol_permission(1,2,3)
