@@ -169,76 +169,69 @@
           </div>
         </div>
       </div>
+     
 
       <!-- Publicación 1 (Card de Bootstrap) -->
-      <div class="row g-4 mb-4"> <!-- `g-4` añade espacio entre columnas -->
-        <!-- Publicación 1 -->
-        <div class="col-md-4">
-          <div class="card h-100"> <!-- `h-100` iguala alturas -->
-            <div class="card-header bg-white d-flex align-items-center">
-              <img src="{% static 'img/jeanu.png' %}" class="profile-pic rounded-circle me-2">
-              <h5 class="mb-0">Jean Ronaldo</h5>
-            </div>
-            <img src="{% static 'img/mascotas.jpg' %}" class="post-image card-img-top">
-            <div class="card-body">
-              <p class="card-text">¡Se me perdio saliendo del apartamento, estabamos en el parque y se me escapo, ayuda urgente! #triste</p>
-              <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-danger">❤️ 44</button>
-                <button class="btn btn-sm btn-outline-secondary">💬 4</button>
+      <div class="container mt-4">
+        <div class="row">
+          {% for publicacion in publicaciones|slice:":3" %}
+          <div class="col-md-4 mb-4">
+            <div class="card h-100 border rounded-3 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+              <!-- Header con usuario -->
+              <div class="card-header bg-white d-flex align-items-center border-0">
+                {% if publicacion.usuario.foto_perfil %}
+                    <img src="{{ publicacion.usuario.foto_perfil.url }}?v={{ publicacion.usuario.id }}" 
+                        class="user-avatar me-2 rounded-circle"
+                        alt="Usuario"
+                        style="width: 40px; height: 40px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'img/frame_user.png' %}" 
+                        class="user-avatar me-2"
+                        alt="Usuario">
+                {% endif %}
+                <h5 class="mb-0">{{ publicacion.usuario.nombre_completo }}</h5>
+              </div>
+              
+              <!-- Imagen de la publicación -->
+              {% with fotos=publicacion.fotos.all %}
+                {% if fotos %}
+                  <img src="{{ fotos.0.imagen.url }}" class="post-image" style="height: 240px; object-fit: cover;">
+                {% else %}
+                  <img src="{% static 'img/sin_foto.jpg' %}" class="post-image" style="height: 240px; object-fit: cover;">
+                {% endif %}
+              {% endwith %}
+              
+              <!-- Cuerpo de la publicación -->
+              <div class="card-body">
+                <p class="card-text">{{ publicacion.descripcion }}</p>
+                {% if publicacion.hashtags %}
+                  <p class="text-primary fw-medium">#{{ publicacion.hashtags }}</p>
+                {% endif %}
+              </div>
+              
+              <!-- Footer con botones de interacción -->
+              <div class="card-footer bg-white border-0">
+                <div class="d-flex">
+                  <button class="btn me-2" style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 20px;">
+                    <span style="color: #e74c3c;">❤️</span> {{ publicacion.likes|default:"0" }}
+                  </button>
+                  <button class="btn" style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 20px;">
+                    <span>💬</span> {{ publicacion.comentarios|default:"0" }}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100"> <!-- `h-100` iguala alturas -->
-            <div class="card-header bg-white d-flex align-items-center">
-              <img src="{% static 'img/pablo.png' %}" class="profile-pic rounded-circle me-2">
-              <h5 class="mb-0">Pablo Emilio</h5>
-            </div>
-            <img src="{% static 'img/mascota_adopcion.jpg' %}" class="post-image card-img-top">
-            <div class="card-body">
-              <p class="card-text">Ultima vez visto en el sena, salio corriendo y no lo volvi a ver, por favor si saben algo, se los agradezco.</p>
-              <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-danger">❤️ 12</button>
-                <button class="btn btn-sm btn-outline-secondary">💬 100</button>
-              </div>
-            </div>
+          {% empty %}
+          <div class="col-12 text-center py-5">
+            <p class="lead text-muted">No hay publicaciones disponibles.</p>
           </div>
-        </div>    <div class="col-md-4">
-          <div class="card h-100"> <!-- `h-100` iguala alturas -->
-            <div class="card-header bg-white d-flex align-items-center">
-              <img src="{% static 'img/aurelio.png' %}" class="profile-pic rounded-circle me-2">
-              <h5 class="mb-0">Aurelio Gonzalo</h5>
-            </div>
-            <img src="{% static 'img/mascota_perdida.jpg' %}" class="post-image card-img-top">
-            <div class="card-body">
-              <p class="card-text">¡Se da en adopcion motivos me voy para españa por mucho tiempo y no tengo quien se haga responsable, me gustaria que tenga una familia responsable,se llama Max! 🎾 #Adopcion</p>
-              <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-danger">❤️ 24</button>
-                <button class="btn btn-sm btn-outline-secondary">💬 230</button>
-              </div>
-            </div>
-          </div>
-      </div>
-      <!-- Historias (Stories) con scroll horizontal -->
-      <div class="mb-4">
-        <h5 class="mb-3">Más Publicaciones</h5>
-        <div class="d-flex overflow-auto gap-3 pb-2">
-          <div class="text-center">
-            <img src="{% static 'img/mascota_perdida.jpg' %}" class="rounded-circle" width="60" height="60" style="object-fit: cover; border: 2px solid #397bff;">
-            <small class="d-block">Max</small>
-          </div>
-          <div class="text-center">
-            <img src="{% static 'img/mascota_perdida.jpg' %}" class="rounded-circle" width="60" height="60" style="object-fit: cover; border: 2px solid #397bff;">
-            <small class="d-block">Luna</small>
-          </div>
-          <div class="text-center">
-            <img src="{% static 'img/mascota_perdida.jpg' %}" class="rounded-circle" width="60" height="60" style="object-fit: cover; border: 2px solid #397bff;">
-            <small class="d-block">Pacheli</small>
-          </div>
+          {% endfor %}
         </div>
       </div>
-    </div>
+      
+      
+      
   </section>
 
   <section class="py-5 bg-light">
@@ -247,60 +240,52 @@
       
       <!-- Fila 1 -->
       <div class="row g-4 mb-4">
-        <!-- Producto 1 -->
-        <div class="col-lg-4 col-md-6">
-          <div class="card product-card h-100">
-            <img src="{% static  'img/producto_baño_seco.png' %}" class="card-img-top product-img" alt="Alimento para perros">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <h5 class="card-title">Alimento Premium para Perros</h5>
-                <span class="price-tag">$24.990</span>
-              </div>
-              <p class="card-text">Nutrición balanceada con proteína de salmón y vegetales. Ideal para razas medianas.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="badge bg-success">Disponible</span>
-                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Producto 2 -->
-        <div class="col-lg-4 col-md-6">
-          <div class="card product-card h-100">
-            <img src="{% static 'img/producto gato.png' %}" class="card-img-top product-img" alt="Rascador para gatos">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <h5 class="card-title">Rascador de 3 Niveles</h5>
-                <span class="price-tag">$39.990</span>
-              </div>
-              <p class="card-text">Estructura de sisal y felpa con plataformas para saltar. ¡A los gatos les encanta!</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="badge bg-warning text-dark">Últimas unidades</span>
-                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
+        {% for producto in productos|slice:":3" %}
+          <!-- Producto {{ forloop.counter }} -->
+          <div class="col-lg-4 col-md-6">
+            <div class="card product-card h-100">
+              {% if producto.foto_producto %}
+                <img src="{{ producto.foto_producto.url }}" class="card-img-top product-img" alt="{{ producto.nombre_producto }}">
+              {% else %}
+                <img src="{% static 'img/producto_baño_seco.png' %}" class="card-img-top product-img" alt="Imagen predeterminada">
+              {% endif %}
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                  <h5 class="card-title">{{ producto.nombre_producto }}</h5>
+                  <span class="price-tag">${{ producto.precio|floatformat:0 }}</span>
+                </div>
+                <p class="card-text">{{ producto.descripcion|truncatechars:80|default:"Sin descripción disponible." }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  {% if producto.cantidad > 0 %}
+                    <span class="badge bg-success">Disponible</span>
+                  {% else %}
+                    <span class="badge bg-danger">Agotado</span>
+                  {% endif %}
+                  <a href="{% url 'agregar_al_carrito' producto.id_producto %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-cart-plus"></i> Añadir
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <!-- Producto 3 -->
-        <div class="col-lg-4 col-md-6">
-          <div class="card product-card h-100">
-            <img src="{% static 'img/Perfume.png' %}" class="card-img-top product-img" alt="Juguete para perros">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <h5 class="card-title">Juguete Dental para Perros</h5>
-                <span class="price-tag">$12.990</span>
-              </div>
-              <p class="card-text">Material resistente que limpia dientes y reduce el estrés. Tamaño M.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="badge bg-success">Disponible</span>
-                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
-              </div>
+        {% empty %}
+          <!-- Si no hay productos disponibles -->
+          <div class="col-12">
+            <div class="alert alert-info text-center">
+              <i class="bi bi-info-circle me-2"></i>
+              No hay productos disponibles en este momento.
             </div>
           </div>
-        </div>
-      </div>     
+        {% endfor %}
+      
+        <!-- Si quieres mostrar un botón para ver más productos cuando hay más de 3 -->
+        {% if productos.count > 3 %}
+          <div class="col-12 text-center mt-3">
+            <a href="{% url 'productos_usuarios' %}" class="btn btn-primary">
+              Ver todos los productos
+            </a>
+          </div>
+        {% endif %}
       </div>
     </div>
   </section>
@@ -386,6 +371,7 @@
         </div>
     </div>
     
+    
   </section>
 
   <footer class="footer">
@@ -434,6 +420,7 @@
             <p>© Cuidandohuellas@gmail.com. Todos los derechos reservados.</p>
         </div>
     </div>
+
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

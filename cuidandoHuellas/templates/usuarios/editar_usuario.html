@@ -71,6 +71,17 @@
                                 <hr class="my-4">
                                 
                                 <!-- Cambio de contraseña -->
+                                  <!-- Mensajes -->
+                            {% if messages %}
+                            <div class="mt-4">
+                                {% for message in messages %}
+                                <div class="alert alert-dismissible {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                                 <h5 class="mb-3 fw-bold">Cambiar Contraseña</h5>
                                 <p class="text-muted small mb-4">Complete solo si desea cambiar su contraseña</p>
                                 
@@ -121,17 +132,7 @@
                                 </div>
                             </form>
                             
-                            <!-- Mensajes -->
-                            {% if messages %}
-                            <div class="mt-4">
-                                {% for message in messages %}
-                                <div class="alert alert-dismissible {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
+                           
                         </div>
                     </div>
                 </div>
