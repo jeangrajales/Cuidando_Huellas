@@ -60,7 +60,7 @@
             <div class="card post-form mb-4">
                 <div class="card-body">
                     <div class="post-trigger" data-bs-toggle="modal" data-bs-target="#publicacionModal">
-                        <span class="text-muted">¿Comparta información de tu mascota, {{ request.session.pista.nombre_completo }}?</span>
+                        <span class="text-muted">{{ request.session.pista.nombre_completo }}, ¿Quieres Compartir informacion de tu mascota?</span>
                     </div>
                     <div class="post-options">
                         <div class="post-option" data-bs-toggle="modal" data-bs-target="#publicacionModal">
@@ -528,4 +528,6 @@ document.querySelectorAll('[id^="reportarForm"]').forEach(form => {
     });
 });
 </script>
+<script src="{% static 'js/tiempo_messages.js' %}"></script>   
+
 {% endblock %}

@@ -19,6 +19,18 @@
 
 ---
 
+## [ch2.32.28-Alpha.1] - 2025-05-20
+
+## Added
+
+- Se agrego en el formulario registrarse Los terminos y condiciones
+
+## Fixed
+
+- Se corrigio el Estilo de Listar mascotas perdidas
+
+---
+
 ## [ch2.31.27-Alpha.1] - 2025-05-19
 
 ## Added
