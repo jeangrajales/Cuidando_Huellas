@@ -1,11 +1,14 @@
 function togglePassword(inputId) {
-    const passwordInput = document.getElementById(inputId);
-    const toggleIcon = document.getElementById(`toggleIcon${inputId === 'inputPassword' ? 'Password' : 'ConfirmPassword'}`);
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
-    } else {
-      passwordInput.type = "password";
-      toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
-    }
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById('toggleIcon' + inputId);
+  
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    input.type = "password";
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
   }
+}

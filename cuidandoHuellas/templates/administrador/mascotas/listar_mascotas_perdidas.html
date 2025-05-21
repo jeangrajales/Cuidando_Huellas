@@ -9,7 +9,8 @@
     <title>Mascotas Perdidas</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/usuarios/mascotas_perdidas.css' %}">
+    <link rel="stylesheet" href="{% static 'css/administrador/mascotas/listar_mascotas_perdidas.css' %}">
+
 </head>
 <body>
 
@@ -27,32 +28,42 @@
 
     <!-- Contenedor principal -->
     <div class="container">
-        <h1 class="text-center my-4">Mascotas Perdidas</h1>
+        <div class="text-center">
+            <h1 class="mb-4">Mascotas Perdidas</h1>
+        </div>
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-4">
             {% for publicacion in dato_mascotas_perdidas %}
                 <div class="col">
                     <div class="card h-100">
-                        <div class="card-right d-flex align-items-center justify-content-center p-3">
+                        <div class="card-header">
+                            <h5 class="m-0">{{ publicacion.nombre_mascota }}</h5>
+                            <span class="badge bg-white text-dark">{{ publicacion.fecha_publicacion|date:"d/m/Y" }}</span>
+                        </div>
+                        <div class="card-right d-flex align-items-center justify-content-center">
                             {% if publicacion.fotos.first %}
                                 <img src="{{ publicacion.fotos.first.imagen.url }}" class="rounded-circle lost-pet-img" alt="Mascota">
                             {% else %}
                                 <div class="rounded-circle lost-pet-img bg-secondary d-flex align-items-center justify-content-center text-white">
-                                    <i class="fas fa-exclamation fa-2x"></i>
+                                    <i class="fas fa-paw fa-2x"></i>
                                 </div>
                             {% endif %}
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Nombre: {{ publicacion.nombre_mascota }}</h5>
-                            <p class="card-text">Raza: {{ publicacion.raza }}</p>
-                            <p class="card-text">Descripción: {{ publicacion.descripcion }}</p>
-                            <p class="card-text">Fecha: {{ publicacion.fecha_publicacion|date:"d/m/Y" }}</p>
+                            <div class="pet-info-group">
+                                <span class="pet-info-label">Raza:</span>
+                                <span class="pet-info-value">{{ publicacion.raza }}</span>
+                            </div>
+                            <div class="pet-info-group mt-2">
+                                <span class="pet-info-label">Descripción:</span>
+                                <span class="pet-info-value">{{ publicacion.descripcion }}</span>
+                            </div>
                         </div>
-                        <div class="card-footer d-flex mx-auto gap-5">
-                            <a href="{% url 'eliminar_mascotas_perdidas' publicacion.id %}" class="btn btn-danger btn-sm">
+                        <div class="card-footer d-flex justify-content-center gap-3">
+                            <a href="{% url 'eliminar_mascotas_perdidas' publicacion.id %}" class="btn btn-danger" data-bs-toggle="tooltip" title="Eliminar">
                                 <i class="fa-solid fa-trash-can"></i>
                             </a>
-                            <a href="" class="btn btn-warning btn-sm">
+                            <a href="" class="btn btn-warning" data-bs-toggle="tooltip" title="Editar">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                         </div>
@@ -61,12 +72,21 @@
             {% endfor %}
         </div>
 
-        <a href="" class="btn btn-danger btn-sm d-block w-25 mx-auto mt-5 mb-5">
-            Agregar Mascota Perdida
-        </a>
+        <div class="text-center">
+            <a href="" class="btn btn-add">
+                <i class="fas fa-plus me-2"></i>Agregar Mascota Perdida
+            </a>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Inicializar tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
 </body>
 </html>
 {% endblock %}

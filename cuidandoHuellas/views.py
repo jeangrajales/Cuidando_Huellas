@@ -59,13 +59,13 @@ def iniciar_sesion(request):
             else:
                 # Contraseña incorrecta
                 messages.error(request, "Usuario o contraseña incorrectos...")
-                return render(request, "usuarios/iniciar_sesion.html", {'datos_form': datos_form})
+                return redirect("iniciar_sesion", {'datos_form': datos_form})
                 
         except Usuario.DoesNotExist:
             # Usuario no existe
             request.session["pista"] = None
             messages.error(request, "El usuario no existe")
-            return render(request, "usuarios/iniciar_sesion", {'datos_form': datos_form})
+            return render(request, "usuarios/iniciar_sesion.html", {'datos_form': datos_form})
     else:
         # Capturamos la variable sesión
         verificar = request.session.get("pista", False)

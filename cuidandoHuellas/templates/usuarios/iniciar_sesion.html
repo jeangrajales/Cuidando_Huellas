@@ -46,7 +46,7 @@
                         <input id="inputPassword" type="password" name="contraseña" placeholder="Contraseña" required 
                           class="form-control rounded-pill border-0 shadow-sm px-4 text-danger text-center"/>
                         <span class="position-absolute top-50 end-0 translate-middle-y me-4" style="cursor: pointer;" onclick="togglePassword('inputPassword')">
-                          <i id="toggleIconPassword" class="fas fa-eye"></i>
+                          <i id="toggleIconinputPassword" class="fas fa-eye"></i>
                         </span>
                       </div>
                       <div class="text-start mb-3">                             
@@ -97,22 +97,10 @@
     </div>
 
     <!-- Scripts -->
-    <script>
-      function togglePassword(inputId) {
-        const input = document.getElementById(inputId);
-        const icon = document.getElementById('toggleIconPassword');
-        if (input.type === "password") {
-          input.type = "text";
-          icon.classList.remove('fa-eye');
-          icon.classList.add('fa-eye-slash');
-        } else {
-          input.type = "password";
-          icon.classList.remove('fa-eye-slash');
-          icon.classList.add('fa-eye');
-        }
-      }
-    </script>
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>   
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script> 
     <script src="{% static 'js/bootstrap.bundle.min.js.map' %}"></script> 
+    <script src="{% static 'js/tiempo_messages.js' %}"></script>   
+    <script src="{% static 'js/mostrar_contraseña.js' %}"></script>   
+
   </body> 
 </html>
