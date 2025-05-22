@@ -1,0 +1,40 @@
+.card-shadow {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    border: none;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+.table thead {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+}
+.btn-action {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+.alert-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+}
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+.user-name {
+    display: flex;
+    align-items: center;
+}
+.users-icon-brown {
+    color: #cd9775; /* Solo para el icono de usuarios */
+}
