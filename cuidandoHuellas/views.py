@@ -19,6 +19,12 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.contrib.auth import logout
 from django.http import JsonResponse
+from .models import TicketSoporte, RespuestaTicket, EstadoTicket, PreguntaFrecuente, CategoriaTicket
+from .forms import TicketSoporteForm, RespuestaTicketForm, FiltroTicketsForm
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.db.models import Case, When, Value, IntegerField
+
 # Create your views here.
 
 # Usuarios
@@ -873,6 +879,15 @@ def editar_productos(request, id_producto):
 def modal_carrito(request):
     return render(request,'usuarios/modal_carrito.html')
 
+def soporte(request):
+    return render(request,'usuarios/soporte.html')
+
+def suspender_cuenta(request):
+    return render(request,'usuarios/suspender_cuenta.html')
+
+def notificaciones(request):
+    return render(request,'usuarios/notificaciones.html')
+
 @session_required_and_rol_permission(1,2,3)
 def agregar_al_carrito(request, id_producto):
     id_usuario = request.session.get("pista", {}).get("id", None)
@@ -1168,3 +1183,234 @@ def reportar_publicacion(request):
             }, status=500)
     
     return JsonResponse({'success': False}, status=400)
+
+def configuracion_cuenta(request):
+    """Vista para la configuración de cuenta, que incluye la sección de soportes"""
+    # Obtener tickets del usuario
+    tickets = TicketSoporte.objects.filter(usuario=request.user).order_by('-fecha_creacion')[:5]
+    
+    # Obtener preguntas frecuentes
+    preguntas_frecuentes = PreguntaFrecuente.objects.filter(activo=True)[:5]
+    
+    # Estados para mostrar como badges
+    estados = EstadoTicket.objects.all()
+    
+    # Categorías para el formulario de nuevo ticket
+    categorias = CategoriaTicket.objects.filter(activo=True)
+    
+    context = {
+        'tickets': tickets,
+        'preguntas_frecuentes': preguntas_frecuentes,
+        'estados': estados,
+        'categorias': categorias,
+    }
+    
+    return render(request, 'administrador/configuracion_cuenta.html', context)
+
+
+def lista_tickets(request):
+    """Vista para listar todos los tickets de soporte del usuario"""
+    # Inicializar el formulario de filtrado
+    filtro_form = FiltroTicketsForm(request.GET)
+    
+    # Obtener todos los tickets del usuario
+    tickets = TicketSoporte.objects.filter(usuario=request.user)
+    
+    # Aplicar filtros si se proporcionan
+    if filtro_form.is_valid():
+        # Filtrar por estado
+        if estado := filtro_form.cleaned_data.get('estado'):
+            tickets = tickets.filter(estado__nombre__icontains=estado)
+        
+        # Filtrar por categoría
+        if categoria := filtro_form.cleaned_data.get('categoria'):
+            tickets = tickets.filter(categoria=categoria)
+        
+        # Buscar por número o asunto
+        if busqueda := filtro_form.cleaned_data.get('busqueda'):
+            tickets = tickets.filter(
+                Q(numero_ticket__icontains=busqueda) | 
+                Q(asunto__icontains=busqueda)
+            )
+        
+        # Ordenar resultados
+        orden = filtro_form.cleaned_data.get('orden', 'reciente')
+        if orden == 'reciente':
+            tickets = tickets.order_by('-fecha_creacion')
+        elif orden == 'antiguo':
+            tickets = tickets.order_by('fecha_creacion')
+        elif orden == 'prioridad':
+            # Ordenar por prioridad (urgente, alta, media, baja) y luego por fecha
+            tickets = tickets.annotate(
+                prioridad_orden=Case(
+                    When(prioridad='urgente', then=Value(0)),
+                    When(prioridad='alta', then=Value(1)),
+                    When(prioridad='media', then=Value(2)),
+                    When(prioridad='baja', then=Value(3)),
+                    default=Value(4),
+                    output_field=IntegerField()
+                )
+            ).order_by('prioridad_orden', '-fecha_creacion')
+    else:
+        # Ordenar por defecto (más recientes primero)
+        tickets = tickets.order_by('-fecha_creacion')
+    
+    # Paginación
+    paginator = Paginator(tickets, 10)  # 10 tickets por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Estados para mostrar como badges
+    estados = EstadoTicket.objects.all()
+    
+    context = {
+        'page_obj': page_obj,
+        'filtro_form': filtro_form,
+        'estados': estados,
+    }
+    
+    return render(request, 'administrador/tickets/lista_tickets.html', context)
+
+def crear_ticket(request):
+    """Vista para crear un nuevo ticket de soporte"""
+    if request.method == 'POST':
+        form = TicketSoporteForm(request.POST, request.FILES)
+        if form.is_valid():
+            ticket = form.save(commit=False)
+            ticket.usuario = request.user
+            
+            # Asignar estado inicial (Pendiente)
+            estado_pendiente = EstadoTicket.objects.filter(nombre__icontains='pendiente').first()
+            if not estado_pendiente:
+                # Si no existe el estado pendiente, crear uno
+                estado_pendiente = EstadoTicket.objects.create(
+                    nombre='Pendiente',
+                    color='bg-warning',
+                    orden=1
+                )
+            
+            ticket.estado = estado_pendiente
+            ticket.save()
+            
+            messages.success(request, f'Ticket #{ticket.numero_ticket} creado exitosamente.')
+            return redirect('detalle_ticket', ticket_id=ticket.id)
+    else:
+        form = TicketSoporteForm()
+    
+    context = {
+        'form': form,
+    }
+    
+    return render(request, 'administrador/tickets/crear_ticket.html', context)
+
+
+def detalle_ticket(request, ticket_id):
+    """Vista para ver el detalle de un ticket y responder"""
+    ticket = get_object_or_404(TicketSoporte, id=ticket_id, usuario=request.user)
+    respuestas = ticket.respuestas.all().order_by('fecha_creacion')
+    
+    # Formulario para responder
+    if request.method == 'POST':
+        form = RespuestaTicketForm(request.POST, request.FILES)
+        if form.is_valid():
+            respuesta = form.save(commit=False)
+            respuesta.ticket = ticket
+            respuesta.usuario = request.user
+            respuesta.es_respuesta_admin = False  # El usuario no es admin
+            respuesta.save()
+            
+            messages.success(request, 'Tu respuesta ha sido enviada.')
+            return redirect('detalle_ticket', ticket_id=ticket.id)
+    else:
+        form = RespuestaTicketForm()
+    
+    context = {
+        'ticket': ticket,
+        'respuestas': respuestas,
+        'form': form,
+    }
+    
+    return render(request, 'administrador/tickets/detalle_ticket.html', context)
+
+    
+def cerrar_ticket(request, ticket_id):
+    """Vista para cerrar un ticket de soporte"""
+    ticket = get_object_or_404(TicketSoporte, id=ticket_id, usuario=request.user)
+    
+    # Buscar estado "Cerrado" o "Resuelto"
+    estado_cerrado = EstadoTicket.objects.filter(
+        Q(nombre__icontains='cerrado') | Q(nombre__icontains='resuelto')
+    ).first()
+    
+    if not estado_cerrado:
+        # Si no existe el estado, crear uno
+        estado_cerrado = EstadoTicket.objects.create(
+            nombre='Cerrado',
+            color='bg-secondary',
+            orden=99
+        )
+    
+    # Actualizar el ticket
+    ticket.estado = estado_cerrado
+    ticket.fecha_cierre = timezone.now()
+    ticket.save()
+    
+    messages.success(request, f'El ticket #{ticket.numero_ticket} ha sido cerrado.')
+    return redirect('lista_tickets')
+
+
+def preguntas_frecuentes(request):
+    """Vista para mostrar todas las preguntas frecuentes agrupadas por categoría"""
+    # Obtener todas las categorías que tienen preguntas asociadas
+    categorias = CategoriaTicket.objects.filter(
+        activo=True,
+        preguntas_frecuentes__activo=True
+    ).distinct()
+    
+    # Preparar diccionario de categorías con sus preguntas
+    categorias_con_preguntas = {}
+    for categoria in categorias:
+        preguntas = PreguntaFrecuente.objects.filter(
+            categoria=categoria,
+            activo=True
+        ).order_by('orden')
+        categorias_con_preguntas[categoria] = preguntas
+    
+    # Preguntas sin categoría
+    preguntas_sin_categoria = PreguntaFrecuente.objects.filter(
+        categoria__isnull=True,
+        activo=True
+    ).order_by('orden')
+    
+    if preguntas_sin_categoria:
+        categorias_con_preguntas['General'] = preguntas_sin_categoria
+    
+    context = {
+        'categorias_con_preguntas': categorias_con_preguntas,
+    }
+    
+    return render(request, 'administrador/tickets/preguntas_frecuentes.html', context)
+
+
+def buscar_pregunta(request):
+    """Vista para buscar en las preguntas frecuentes (AJAX)"""
+    query = request.GET.get('q', '')
+    if not query or len(query) < 3:
+        return JsonResponse({'results': []})
+    
+    preguntas = PreguntaFrecuente.objects.filter(
+        Q(pregunta__icontains=query) | Q(respuesta__icontains=query),
+        activo=True
+    )[:5]
+    
+    results = []
+    for pregunta in preguntas:
+        results.append({
+            'id': pregunta.id,
+            'pregunta': pregunta.pregunta,
+            'respuesta': pregunta.respuesta[:150] + '...' if len(pregunta.respuesta) > 150 else pregunta.respuesta,
+            'url': f"#pregunta-{pregunta.id}"
+        })
+    
+    return JsonResponse({'results': results})
+

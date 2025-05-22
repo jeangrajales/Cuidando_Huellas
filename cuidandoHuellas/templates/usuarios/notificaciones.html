@@ -1,0 +1,90 @@
+{% extends 'administrador/base_sesion.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/usuarios/configuracion.css' %}">
+
+{% block titulo %} Configuración de Cuenta {% endblock %}
+
+{% block contenido %}
+{% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+            <div>{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Menú lateral -->
+        <div class="col-md-3 mb-4">
+            <div class="config-menu card shadow-sm">
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="#preferencias" class="list-group-item list-group-item-action active" data-bs-toggle="tab">
+                            <i class="fas fa-bell me-2"></i>Notificaciones
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+  <!-- Sección Notificaciones -->
+        <div class="tab-pane fade show active" id="preferencias">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Preferencias de Notificaciones</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="notificacionesEmail">
+                            <label class="form-check-label" for="notificacionesEmail">
+                                Recibir notificaciones por correo electrónico
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="notificacionesSMS">
+                            <label class="form-check-label" for="notificacionesSMS">
+                                Recibir notificaciones por SMS
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-info text-white">
+                        <i class="fas fa-save me-1"></i>Guardar preferencias
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
+<script>
+    // Activar la primera pestaña por defecto (Soportes)
+    document.addEventListener('DOMContentLoaded', function() {
+        // Seleccionar el enlace de Soportes
+        var primerEnlace = document.querySelector('a[href="#soportes"]');
+        if (primerEnlace) {
+            primerEnlace.classList.add('active');
+            // Activar el contenido correspondiente
+            var primerContenido = document.querySelector('#soportes');
+            if (primerContenido) {
+                primerContenido.classList.add('show', 'active');
+            }
+        }
+    });
+
+    // Previsualización de imagen de perfil (si existe)
+    const profileImage = document.getElementById('profileImage');
+    if (profileImage) {
+        profileImage.addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById('profilePreview').src = reader.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        });
+    }
+</script>
+{% endblock %}

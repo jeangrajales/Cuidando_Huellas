@@ -18,6 +18,17 @@
 ### CHANGELOG
 
 ---
+## [ch2.33.28-Alpha.1] - 2025-05-21
+
+## Added
+
+- Se agrego el modulo  `soportes`, `suspender_cuenta`, `notificaciones`. para que los usuarios puedean enviar quejas sobre el funcionamiento de la pagina 
+
+## Fixed 
+
+- Se modifico el contenido de la `base_sesion` para agregar un submenu en el apartado configuraciones y 
+
+---
 
 ## [ch2.32.28-Alpha.1] - 2025-05-20
 
