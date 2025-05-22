@@ -19,17 +19,12 @@
         <div class="col-md-3 mb-4">
             <div class="config-menu card shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title mb-4"><i class="fas fa-cog me-2"></i>Configuración</h5>
+                    
                     <div class="list-group">
                         <a href="#soportes" class="list-group-item list-group-item-action" data-bs-toggle="tab">
                             <i class="fas fa-shield-alt me-2"></i>Soportes
                         </a>
-                        <a href="#preferencias" class="list-group-item list-group-item-action" data-bs-toggle="tab">
-                            <i class="fas fa-bell me-2"></i>Notificaciones
-                        </a>
-                        <a href="#cuenta" class="list-group-item list-group-item-action text-danger" data-bs-toggle="tab">
-                            <i class="fas fa-exclamation-triangle me-2"></i>Eliminar Cuenta
-                        </a>
+
                     </div>
                 </div>
             </div>
@@ -175,84 +170,7 @@
                     </div>
                 </div>
 
-                <!-- Sección Notificaciones -->
-                <div class="tab-pane fade" id="preferencias">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Preferencias de Notificaciones</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="notificacionesEmail">
-                                    <label class="form-check-label" for="notificacionesEmail">
-                                        Recibir notificaciones por correo electrónico
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="notificacionesSMS">
-                                    <label class="form-check-label" for="notificacionesSMS">
-                                        Recibir notificaciones por SMS
-                                    </label>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-info text-white">
-                                <i class="fas fa-save me-1"></i>Guardar preferencias
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Sección Eliminar Cuenta -->
-                <div class="tab-pane fade" id="cuenta">
-                    <div class="card shadow-sm border-danger">
-                        <div class="card-header bg-danger text-white">
-                            <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Eliminar Cuenta</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="alert alert-danger">
-                                <h5><i class="fas fa-radiation me-2"></i>¡Advertencia!</h5>
-                                <p class="mb-0">Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados del sistema.</p>
-                            </div>
-                            <form method="POST" action="{% url 'eliminar_cuenta' %}">
-                                {% csrf_token %}
-                                <div class="mb-3">
-                                    <label class="form-label">Ingresa tu contraseña para confirmar</label>
-                                    <input type="password" class="form-control" name="confirmacion" required>
-                                </div>
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fas fa-trash-alt me-1"></i>Eliminar cuenta permanentemente
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Confirmación -->
-<div class="modal fade" id="confirmarEliminacion" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title"><i class="fas fa-exclamation-circle me-2"></i>Confirmar Eliminación</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>¿Estás absolutamente seguro de que deseas eliminar tu cuenta?</p>
-                <p class="text-danger"><strong>Esta acción no se puede deshacer.</strong></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger">Confirmar Eliminación</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     // Activar la primera pestaña por defecto (Soportes)

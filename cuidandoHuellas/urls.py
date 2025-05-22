@@ -51,6 +51,22 @@ urlpatterns = [
     path('administrador/reportes/<int:reporte_id>/', views.ver_reporte, name='ver_reporte'),
     path('administrador/reportes/<int:reporte_id>/resolver/', views.resolver_reporte, name='resolver_reporte'),
     path('reportar-publicacion/', views.reportar_publicacion, name='reportar_publicacion'),
+    path('soporte/', views.soporte, name='soporte'),
+    path('suspender_cuenta', views.suspender_cuenta, name='suspender_cuenta'),
+    path('notificaciones/', views.notificaciones, name='notificaciones'),
+
+    # Vista principal de configuración de cuenta (incluye sección soportes)
+    path('configuracion/', views.configuracion_cuenta, name='configuracion_cuenta'),
+    
+    # Rutas para gestión de tickets de soporte
+    path('soportes/tickets/', views.lista_tickets, name='lista_tickets'),
+    path('soportes/tickets/crear/', views.crear_ticket, name='crear_ticket'),
+    path('soportes/tickets/<int:ticket_id>/', views.detalle_ticket, name='detalle_ticket'),
+    path('soportes/tickets/<int:ticket_id>/cerrar/', views.cerrar_ticket, name='cerrar_ticket'),
+    
+    # Rutas para preguntas frecuentes
+    path('soportes/faq/', views.preguntas_frecuentes, name='preguntas_frecuentes'),
+    path('soportes/faq/buscar/', views.buscar_pregunta, name='buscar_pregunta'),
 ]
     
       

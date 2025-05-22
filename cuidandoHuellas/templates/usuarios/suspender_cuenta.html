@@ -1,0 +1,108 @@
+{% extends 'administrador/base_sesion.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/usuarios/configuracion.css' %}">
+
+{% block titulo %} Configuración de Cuenta {% endblock %}
+
+{% block contenido %}
+{% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+            <div>{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Menú lateral -->
+        <div class="col-md-3 mb-4">
+            <div class="config-menu card shadow-sm">
+                <div class="card-body">
+                    <div class="list-group">                       
+                        </a>
+                        <a href="#cuenta" class="list-group-item list-group-item-action text-danger" data-bs-toggle="tab">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Suspender Cuenta
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                <!-- Sección Eliminar Cuenta -->
+                <div class="tab-pane fade show active" id="cuenta">
+                    <div class="card shadow-sm border-danger">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Suspender Cuenta</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-danger">
+                                <h5><i class="fas fa-radiation me-2"></i>¡Advertencia!</h5>
+                                <p class="mb-0">Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados del sistema.</p>
+                            </div>
+                            <form method="POST" action="{% url 'eliminar_cuenta' %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label class="form-label">Ingresa tu contraseña para confirmar</label>
+                                    <input type="password" class="form-control" name="confirmacion" required>
+                                </div>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt me-1"></i>Suspender cuenta permanentemente
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="confirmarEliminacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="fas fa-exclamation-circle me-2"></i>Confirmar Eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás absolutamente seguro de que deseas eliminar tu cuenta?</p>
+                <p class="text-danger"><strong>Esta acción no se puede deshacer.</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger">Confirmar Eliminación</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Activar la primera pestaña por defecto (Soportes)
+    document.addEventListener('DOMContentLoaded', function() {
+        // Seleccionar el enlace de Soportes
+        var primerEnlace = document.querySelector('a[href="#soportes"]');
+        if (primerEnlace) {
+            primerEnlace.classList.add('active');
+            // Activar el contenido correspondiente
+            var primerContenido = document.querySelector('#soportes');
+            if (primerContenido) {
+                primerContenido.classList.add('show', 'active');
+            }
+        }
+    });
+
+    // Previsualización de imagen de perfil (si existe)
+    const profileImage = document.getElementById('profileImage');
+    if (profileImage) {
+        profileImage.addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById('profilePreview').src = reader.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        });
+    }
+</script>
+{% endblock %}
