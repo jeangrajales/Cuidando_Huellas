@@ -17,8 +17,14 @@
 
 ### CHANGELOG
 
+## [ch2.33.30-Alpha.1] - 2025-05-21
+
+## Fixed
+
+- Se corrigio el Estilo de Listar usurios y adopciones para darles un estado mas limpio.
+
 ---
-## [ch2.33.28-Alpha.1] - 2025-05-21
+## [ch2.33.29-Alpha.1] - 2025-05-21
 
 ## Added
 

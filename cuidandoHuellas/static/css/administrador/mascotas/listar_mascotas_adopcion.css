@@ -1,0 +1,94 @@
+/* Estilos personalizados para el tema café claro */
+:root {
+    --cafe-claro: #D7CCC8;
+    --cafe-medio: #f6f3f2;
+    --cafe-oscuro: #5D4037;
+    --beige: #EFEBE9;
+}
+
+body {
+    background-color: var(--beige);
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    background-color: var(--cafe-claro);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-right {
+    background-color: var(--cafe-medio);
+    height: 200px;
+}
+
+.lost-pet-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid var(--beige);
+}
+
+.card-title {
+    color: var(--cafe-oscuro);
+    font-weight: 600;
+}
+
+.card-text {
+    color: var(--cafe-oscuro);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.card-footer {
+    background-color: var(--cafe-medio);
+    border-top: none;
+}
+
+.btn-danger {
+    background-color: #ff0000;
+}
+
+.btn-warning {
+    background-color: #717164;
+    border-color: #BCAAA4;
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #efef0e;
+    border-color: #A1887F;
+    color: white;
+}
+
+.btn-success {
+    background-color: var(--cafe-medio);
+    border-color: var(--cafe-medio);
+}
+
+.btn-success:hover {
+    background-color: var(--cafe-oscuro);
+    border-color: var(--cafe-oscuro);
+}
+
+h1 {
+    color: var(--cafe-oscuro);
+    font-weight: 700;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 3px;
+    background-color: var(--cafe-medio);
+    margin: 10px auto;
+}
