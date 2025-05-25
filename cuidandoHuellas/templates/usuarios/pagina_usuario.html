@@ -78,6 +78,32 @@
                     </div>
                 </div>
             </div>
+       
+        <!-- Botón de notificaciones -->
+        <button type="button" class="btn btn-primary position-relative" data-bs-toggle="modal" data-bs-target="#notificacionesModal">
+            <i class="fas fa-bell"></i>
+            <span id="contador-notificaciones" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                0
+            </span>
+        </button>
+
+        <!-- Modal de Notificaciones -->
+        <div class="modal fade" id="notificacionesModal" tabindex="-1" aria-labelledby="notificacionesModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Notificaciones</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul id="lista-notificaciones" class="list-group">
+                            <!-- Las notificaciones se insertarán aquí con JavaScript -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
             <!-- Modal para Crear Publicación -->
             <div class="modal fade" id="publicacionModal" tabindex="-1" aria-labelledby="publicacionModalLabel" aria-hidden="true">
@@ -266,18 +292,113 @@
                 </div>
                 {% endif %}
 
+
                 <div class="card-footer bg-white">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <button class="btn btn-sm btn-outline-primary me-2">
-                                <i class="fas fa-thumbs-up me-1"></i> Me gusta
+    <div class="d-flex justify-content-between">
+        <div>
+            <button class="btn btn-sm btn-outline-primary me-2">
+                <i class="fas fa-thumbs-up me-1"></i> Me gusta
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="toggleComentarios({{ publicacion.id }})">
+                <i class="fas fa-comment me-1"></i> Comentar (<span id="contador-comentarios-{{ publicacion.id }}">{{ publicacion.comentarios.count }}</span>)
+            </button>
+        </div>
+    </div>
+    
+    <!-- Sección de comentarios -->
+    <div id="seccion-comentarios-{{ publicacion.id }}" class="comentarios-section mt-3" style="display: none;">
+        <!-- Formulario para agregar comentario -->
+        <div class="comentario-form border-top pt-3">
+            <form id="form-comentario-{{ publicacion.id }}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="publicacion_id" value="{{ publicacion.id }}">
+                
+                <div class="d-flex align-items-start">
+                    {% if request.session.pista.foto_perfil %}
+                        <img src="{{ request.session.pista.foto_perfil }}?v={{ request.session.pista.id }}" 
+                             class="rounded-circle me-2" 
+                             style="width: 32px; height: 32px; object-fit: cover;"
+                             alt="Tu foto">
+                    {% else %}
+                        <img src="{% static 'img/frame_user.png' %}" 
+                             class="rounded-circle me-2" 
+                             style="width: 32px; height: 32px;"
+                             alt="Usuario">
+                    {% endif %}
+                    
+                    <div class="flex-grow-1">
+                        <textarea name="texto" 
+                                  class="form-control mb-2" 
+                                  rows="2" 
+                                  placeholder="Escribe un comentario..." 
+                                  maxlength="500"
+                                  id="textarea-comentario-{{ publicacion.id }}"></textarea>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <input type="file" 
+                                       name="imagen" 
+                                       id="imagen-comentario-{{ publicacion.id }}" 
+                                       accept="image/*" 
+                                       style="display: none;"
+                                       onchange="previewImageComentario(this, {{ publicacion.id }})">
+                                
+                                <button type="button" 
+                                        class="btn btn-sm btn-outline-secondary me-2"
+                                        onclick="document.getElementById('imagen-comentario-{{ publicacion.id }}').click()">
+                                    <i class="fas fa-camera"></i> Foto
+                                </button>
+                                
+                                <small class="text-muted">
+                                    <span id="contador-caracteres-{{ publicacion.id }}">0</span>/500
+                                </small>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                <i class="fas fa-paper-plane"></i> Comentar
                             </button>
-                            <button class="btn btn-sm btn-outline-secondary">
-                                <i class="fas fa-comment me-1"></i> Comentar
-                            </button>
+                        </div>
+                        
+                        <!-- Preview de imagen -->
+                        <div id="preview-imagen-{{ publicacion.id }}" class="mt-2" style="display: none;">
+                            <div class="position-relative d-inline-block">
+                                <img id="img-preview-{{ publicacion.id }}" 
+                                     class="img-thumbnail" 
+                                     style="max-width: 150px; max-height: 150px;">
+                                <button type="button" 
+                                        class="btn btn-danger btn-sm position-absolute top-0 end-0"
+                                        onclick="removeImagePreview({{ publicacion.id }})"
+                                        style="transform: translate(50%, -50%);">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </form>
+        </div>
+        
+        <!-- Lista de comentarios -->
+        <div id="lista-comentarios-{{ publicacion.id }}" class="comentarios-lista mt-3">
+            <!-- Los comentarios se cargarán aquí dinámicamente -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ver imagen de comentario -->
+<div class="modal fade" id="modalImagenComentario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Imagen del comentario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="imagenComentarioModal" class="img-fluid" src="">
+            </div>
+        </div>
+    </div>
+</div>
             </div>
 
             <!-- Modal para Editar Publicación -->
@@ -527,6 +648,244 @@ document.querySelectorAll('[id^="reportarForm"]').forEach(form => {
         return true;
     });
 });
+
+// JavaScript para comentarios - Agregar antes del cierre del script existente
+
+// Función para mostrar/ocultar comentarios
+function toggleComentarios(publicacionId) {
+    const seccion = document.getElementById(`seccion-comentarios-${publicacionId}`);
+    
+    if (seccion.style.display === 'none') {
+        seccion.style.display = 'block';
+        cargarComentarios(publicacionId);
+    } else {
+        seccion.style.display = 'none';
+    }
+}
+
+// Función para cargar comentarios
+function cargarComentarios(publicacionId) {
+    fetch(`/comentarios/${publicacionId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const lista = document.getElementById(`lista-comentarios-${publicacionId}`);
+                lista.innerHTML = '';
+                
+                data.comentarios.forEach(comentario => {
+                    const comentarioHTML = crearComentarioHTML(comentario, publicacionId);
+                    lista.insertAdjacentHTML('beforeend', comentarioHTML);
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Función para crear HTML de comentario
+function crearComentarioHTML(comentario, publicacionId) {
+    const fotoPerfil = comentario.foto_perfil || "{% static 'img/frame_user.png' %}";
+    const imagenComentario = comentario.imagen ? 
+        `<div class="mt-2">
+            <img src="${comentario.imagen}" 
+                 class="img-thumbnail comentario-imagen" 
+                 style="max-width: 200px; cursor: pointer;" 
+                 onclick="verImagenComentario('${comentario.imagen}')">
+         </div>` : '';
+    
+    const botonEliminar = comentario.es_propio ? 
+        `<button class="btn btn-sm btn-outline-danger ms-2" 
+                 onclick="eliminarComentario(${comentario.id}, ${publicacionId})"
+                 title="Eliminar comentario">
+            <i class="fas fa-trash"></i>
+         </button>` : '';
+    
+    return `
+        <div class="comentario-item border-bottom pb-2 mb-2" id="comentario-${comentario.id}">
+            <div class="d-flex align-items-start">
+                <img src="${fotoPerfil}" 
+                     class="rounded-circle me-2" 
+                     style="width: 32px; height: 32px; object-fit: cover;">
+                
+                <div class="flex-grow-1">
+                    <div class="bg-light rounded p-2">
+                        <strong class="small">${comentario.usuario}</strong>
+                        ${comentario.texto ? `<p class="mb-0 small">${comentario.texto}</p>` : ''}
+                        ${imagenComentario}
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <small class="text-muted">${comentario.fecha}</small>
+                        <div>
+                            ${botonEliminar}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Función para preview de imagen
+function previewImageComentario(input, publicacionId) {
+    const preview = document.getElementById(`preview-imagen-${publicacionId}`);
+    const img = document.getElementById(`img-preview-${publicacionId}`);
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Función para remover preview de imagen
+function removeImagePreview(publicacionId) {
+    document.getElementById(`imagen-comentario-${publicacionId}`).value = '';
+    document.getElementById(`preview-imagen-${publicacionId}`).style.display = 'none';
+}
+
+// Función para ver imagen de comentario en modal
+function verImagenComentario(imagenUrl) {
+    document.getElementById('imagenComentarioModal').src = imagenUrl;
+    new bootstrap.Modal(document.getElementById('modalImagenComentario')).show();
+}
+
+// Función para eliminar comentario
+function eliminarComentario(comentarioId, publicacionId) {
+    if (confirm('¿Estás seguro de eliminar este comentario?')) {
+        fetch(`/eliminar-comentario/${comentarioId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`comentario-${comentarioId}`).remove();
+                actualizarContadorComentarios(publicacionId, -1);
+            } else {
+                alert('Error al eliminar el comentario');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al eliminar el comentario');
+        });
+    }
+}
+
+// Función para actualizar contador de comentarios
+function actualizarContadorComentarios(publicacionId, cambio) {
+    const contador = document.getElementById(`contador-comentarios-${publicacionId}`);
+    const valorActual = parseInt(contador.textContent);
+    contador.textContent = valorActual + cambio;
+}
+
+// Event listeners para formularios de comentarios
+document.addEventListener('DOMContentLoaded', function() {
+    // Manejar envío de formularios de comentarios
+    document.querySelectorAll('[id^="form-comentario-"]').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const publicacionId = formData.get('publicacion_id');
+            const texto = formData.get('texto').trim();
+            
+            // Validación
+            if (!texto && !formData.get('imagen')) {
+                alert('Debes escribir un comentario o subir una imagen');
+                return;
+            }
+            
+            if (texto.length > 500) {
+                alert('El comentario no puede exceder 500 caracteres');
+                return;
+            }
+            
+            // Enviar comentario
+            fetch('/agregar-comentario/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Limpiar formulario
+                    this.reset();
+                    removeImagePreview(publicacionId);
+                    
+                    // Agregar comentario a la lista
+                    const lista = document.getElementById(`lista-comentarios-${publicacionId}`);
+                    const comentarioHTML = crearComentarioHTML(data.comentario, publicacionId);
+                    lista.insertAdjacentHTML('afterbegin', comentarioHTML);
+                    
+                    // Actualizar contador
+                    actualizarContadorComentarios(publicacionId, 1);
+                    
+                    // Resetear contador de caracteres
+                    document.getElementById(`contador-caracteres-${publicacionId}`).textContent = '0';
+                    
+                } else {
+                    alert(data.error || 'Error al agregar el comentario');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al agregar el comentario');
+            });
+        });
+    });
+    
+    // Contador de caracteres para textareas
+    document.querySelectorAll('[id^="textarea-comentario-"]').forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            const publicacionId = this.id.split('-')[2];
+            const contador = document.getElementById(`contador-caracteres-${publicacionId}`);
+            contador.textContent = this.value.length;
+            
+            // Cambiar color si se acerca al límite
+            if (this.value.length > 450) {
+                contador.classList.add('text-danger');
+            } else {
+                contador.classList.remove('text-danger');
+            }
+        });
+    });
+});
+function obtenerNotificaciones() {
+    fetch('/obtener-notificaciones/')
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const lista = document.getElementById('lista-notificaciones');
+            const contador = document.getElementById('contador-notificaciones');
+            
+            lista.innerHTML = '';  // Limpiar lista
+            
+            data.notificaciones.forEach(notificacion => {
+                lista.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>${notificacion.mensaje}</span>
+                        <small class="text-muted">${notificacion.fecha}</small>
+                    </li>
+                `;
+            });
+
+            // Actualizar contador de notificaciones
+            contador.textContent = data.notificaciones.length;
+            contador.style.display = data.notificaciones.length > 0 ? 'inline' : 'none';
+        }
+    })
+    .catch(error => console.error('Error obteniendo notificaciones:', error));
+}
+// Cargar notificaciones cuando el modal se abra
+document.getElementById('notificacionesModal').addEventListener('show.bs.modal', obtenerNotificaciones);
 </script>
 <script src="{% static 'js/tiempo_messages.js' %}"></script>   
 

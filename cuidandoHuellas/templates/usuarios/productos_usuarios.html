@@ -27,18 +27,26 @@
     </div>
 
     <!-- Header with search and cart -->
-    <div class="row align-items-center mb-4">
-        <div class="col-md-8">
-            <h2 class="section-title">Nuestros Productos</h2>
-            <p class="text-muted">Encuentra todo lo que necesitas para tus mascotas</p>
-        </div>
-        <div class="col-md-4 d-flex justify-content-md-end">
-            <a href="#modalCarrito" data-bs-toggle="modal" class="btn btn-outline-primary cart-btn">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="ms-2">Ver Carrito</span>
-            </a>
-        </div>
+  <div class="row align-items-center mb-4">
+    <div class="col-md-8">
+        <h2 class="section-title">Nuestros Productos</h2>
+        <p class="text-muted">Encuentra todo lo que necesitas para tus mascotas</p>
     </div>
+    <div class="col-md-4 d-flex justify-content-md-end position-relative">
+        <a href="#modalCarrito" data-bs-toggle="modal" class="btn btn-outline-primary cart-btn position-relative">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="ms-2">Ver Carrito</span>
+            {% if total_items > 0 %}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    style="font-size: 0.85rem; padding: 0.4em 0.6em;">
+                    {{ total_items }}
+                </span>
+
+            {% endif %}
+        </a>
+    </div>
+</div>
+
 
     <!-- Main Banner -->
     <div class="main-banner mb-5">
