@@ -1,0 +1,53 @@
+{% if publicaciones %}
+<div class="row">
+    {% for publicacion in publicaciones %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="dog-card" data-pet-id="{{ publicacion.id }}">
+            <div class="dog-image-container">
+                {% if publicacion.fotos.first %}
+                    <img src="{{ publicacion.fotos.first.imagen.url }}" class="dog-image" alt="{{ publicacion.nombre_mascota|default:'Mascota' }}">
+                {% else %}
+                    <div class="placeholder">
+                        <i class="fas fa-paw fa-3x"></i>
+                    </div>
+                {% endif %}
+                <div class="view-overlay">
+                    <i class="fas fa-eye view-icon"></i>
+                </div>
+            </div>
+            
+            <div class="dog-info">
+                <h3 class="dog-name">{{ publicacion.nombre_mascota|default:"Sin nombre" }}</h3>
+                
+                <div class="dog-details">
+                    {% if publicacion.edad %}
+                        <span class="detail-item"><i class="fas fa-birthday-cake fa-xs"></i> {{ publicacion.edad }} años</span>
+                    {% endif %}
+                    {% if publicacion.sexo %}
+                        <span class="detail-item"><i class="fas fa-venus-mars fa-xs"></i> {{ publicacion.sexo }}</span>
+                    {% endif %}
+                    {% if publicacion.raza %}
+                        <span class="detail-item"><i class="fas fa-dog fa-xs"></i> {{ publicacion.raza }}</span>
+                    {% endif %}
+                </div>
+                
+                <p class="dog-description">{{ publicacion.descripcion|truncatechars:120 }}</p>
+                
+                {% if publicacion.contacto %}
+                    <div class="contact-info">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>{{ publicacion.contacto }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-paw"></i>
+    <h4>No hay mascotas disponibles</h4>
+    <p>No encontramos mascotas que coincidan con tus criterios de búsqueda.</p>
+</div>
+{% endif %}

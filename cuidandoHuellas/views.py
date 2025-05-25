@@ -65,7 +65,8 @@ def iniciar_sesion(request):
             else:
                 # Contraseña incorrecta
                 messages.error(request, "Usuario o contraseña incorrectos...")
-                return redirect("iniciar_sesion", {'datos_form': datos_form})
+                return render(request, "usuarios/iniciar_sesion.html", {'datos_form': datos_form})
+                
                 
         except Usuario.DoesNotExist:
             # Usuario no existe
@@ -287,7 +288,36 @@ def mascotas_perdidas(request):
 
 @session_required_and_rol_permission(1,2,3)
 def adopciones(request):
-    publicaciones = PublicacionMascota.objects.filter(tipo_publicacion='adopcion').order_by('-fecha_publicacion')
+    # Obtener parámetros de filtrado del request
+    edad = request.GET.get('edad', '')
+    sexo = request.GET.get('sexo', '')
+    
+    # Filtrar solo publicaciones de adopción
+    publicaciones = PublicacionMascota.objects.filter(tipo_publicacion='adopcion')
+    
+    # Aplicar filtros si existen
+    if edad:
+        if edad == 'cachorro':
+            publicaciones = publicaciones.filter(edad__lte=2)
+        elif edad == 'joven':
+            publicaciones = publicaciones.filter(edad__range=(3, 5))
+        elif edad == 'adulto':
+            publicaciones = publicaciones.filter(edad__range=(6, 8))
+        elif edad == 'mayor':
+            publicaciones = publicaciones.filter(edad__gt=8)
+    
+    if sexo:
+        publicaciones = publicaciones.filter(sexo=sexo)
+    
+    # Ordenar por fecha más reciente primero
+    publicaciones = publicaciones.order_by('-fecha_publicacion')
+    
+    # Si es una petición AJAX, devolver solo el partial
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return render(request, 'usuarios/lista_adopciones.html', {
+            'publicaciones': publicaciones
+        })
+    
     return render(request, "usuarios/adopciones.html", {
         "publicaciones": publicaciones
     })

@@ -84,60 +84,6 @@
     </div>
   </section>
 
-  <section class="features">
-    <div class="container">
-        <h2 class="text-center mb-5">¿Por qué elegir nuestros servicios?</h2>
-        <figcaption>
-          <p class="text-center mb-5" style="color: rgb(0, 0, 0);">En nuestra aplicación podrás encontrar una amplia variedad <br> de servicios diseñados para facilitar el cuidado y bienestar de tu mascota</p>
-        </figcaption>
-        <div class="row features-grid">
-            <!-- Tarjeta 1 -->
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
-                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
-                        <img src="{% static 'img/adopcion.jpg' %}" alt="Adopción" class="w-100 h-100 object-fit-cover">
-                    </div>
-                    <h3>Mascotas en adopción</h3>
-                    <p class="mt-2">Espacio dedicado a conectar mascotas sin hogar con adoptantes responsables.</p>
-                </div>
-            </div>
-            
-            <!-- Tarjeta 2 -->
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
-                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
-                        <img src="{% static 'img/mascotas_perdidas.jpg' %}" alt="Perdidas" class="w-100 h-100 object-fit-cover">
-                    </div>
-                    <h3>Mascotas <br> perdidas</h3>
-                    <p class="mt-2">Sección donde los dueños pueden reportar mascotas extraviadas, indicando detalles como raza, color, ubicación y contacto. La comunidad recibe alertas y puede ayudar en la búsqueda.</p>
-                </div>
-            </div>
-            
-            <!-- Tarjeta 3 -->
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
-                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
-                        <img src="{% static 'img/productos.png' %}" alt="Productos" class="w-100 h-100 object-fit-cover">
-                    </div>
-                    <h3>Productos Mascotas</h3>
-                    <p class="mt-2">En nuestra plataforma, los productos para mascotas abarcan alimentos, accesorios, juguetes, medicamentos e higiene, garantizando su bienestar y felicidad.</p>
-                </div>
-            </div>
-            
-            <!-- Tarjeta 4 -->
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
-                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
-                        <img src="{% static 'img/veterinarias_asociadas.jpg' %}" alt="Veterinarias" class="w-100 h-100 object-fit-cover">
-                    </div>
-                    <h3>Veterinarias Asociadas</h3>
-                    <p class="mt-2">Directorio de veterinarias cercanas que ofrecen servicios de atención, vacunación y rescate para mascotas. Incluye información de contacto, horarios y ubicación.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
   <section class="py-5">
     <div class="container">
       <h2 class="text-center mb-4">🐾 Publicaciones de Mascotas 🐾</h2>
@@ -287,6 +233,59 @@
           </div>
         {% endif %}
       </div>
+    </div>
+  </section>
+  <section class="features">
+    <div class="container">
+        <h2 class="text-center mb-5">¿Por qué elegir nuestros servicios?</h2>
+        <figcaption>
+          <p class="text-center mb-5" style="color: rgb(0, 0, 0);">En nuestra aplicación podrás encontrar una amplia variedad <br> de servicios diseñados para facilitar el cuidado y bienestar de tu mascota</p>
+        </figcaption>
+        <div class="row features-grid">
+            <!-- Tarjeta 1 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
+                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
+                        <img src="{% static 'img/adopcion.jpg' %}" alt="Adopción" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <h3>Mascotas en adopción</h3>
+                    <p class="mt-2">Espacio dedicado a conectar mascotas sin hogar con adoptantes responsables.</p>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 2 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
+                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
+                        <img src="{% static 'img/mascotas_perdidas.jpg' %}" alt="Perdidas" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <h3>Mascotas <br> perdidas</h3>
+                    <p class="mt-2">Sección donde los dueños pueden reportar mascotas extraviadas, indicando detalles como raza, color, ubicación y contacto. La comunidad recibe alertas y puede ayudar en la búsqueda.</p>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 3 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
+                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
+                        <img src="{% static 'img/productos.png' %}" alt="Productos" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <h3>Productos Mascotas</h3>
+                    <p class="mt-2">En nuestra plataforma, los productos para mascotas abarcan alimentos, accesorios, juguetes, medicamentos e higiene, garantizando su bienestar y felicidad.</p>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 4 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 d-flex flex-column align-items-center text-center p-3">
+                    <div class="feature-icon mb-4" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #B79C6F;">
+                        <img src="{% static 'img/veterinarias_asociadas.jpg' %}" alt="Veterinarias" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <h3>Veterinarias Asociadas</h3>
+                    <p class="mt-2">Directorio de veterinarias cercanas que ofrecen servicios de atención, vacunación y rescate para mascotas. Incluye información de contacto, horarios y ubicación.</p>
+                </div>
+            </div>
+        </div>
     </div>
   </section>
 

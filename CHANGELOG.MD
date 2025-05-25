@@ -16,6 +16,15 @@
 ---
 
 ### CHANGELOG
+---
+
+## [ch2.34.30-Alpha.1] - 2025-05-25
+
+## Added
+
+- Se agrego la funcionalidad de filtrar en los productos por edad y sexo.
+
+---
 
 ## [ch2.33.30-Alpha.1] - 2025-05-21
 
@@ -24,6 +33,7 @@
 - Se corrigio el Estilo de Listar usurios y adopciones para darles un estado mas limpio.
 
 ---
+
 ## [ch2.33.29-Alpha.1] - 2025-05-21
 
 ## Added

@@ -13,66 +13,59 @@
 <div class="container my-5">
     <div class="row">
         <!-- Filtros Premium -->
+        <!-- Filtros -->
         <div class="col-lg-3">
             <div class="side-menu">
-                <div class="filter-group">
-                    <h5><i class="fas fa-filter"></i> Filtros</h5>
-                    <div class="filter-title">Edad</div>
-                    <label class="filter-option">
-                        <input type="radio" name="edad" checked>
-                        <span>Todos</span>
-                    </label>
-                    <label class="filter-option">
-                        <input type="radio" name="edad">
-                        <span>Cachorros (1-2 año)</span>
-                    </label>
-                    <label class="filter-option">
-                        <input type="radio" name="edad">
-                        <span>Adultos (8-10 años)</span>
-                    </label>
-                    <label class="filter-option">
-                        <input type="radio" name="edad">
-                        <span>Mayores (+10 años)</span>
-                    </label>
-                </div>
-                
-                <div class="filter-group">
-                    <div class="filter-title">Sexo</div>
-                    <label class="filter-option">
-                        <input type="radio" name="sexo" checked>
-                        <span>Todos</span>
-                    </label>
-                    <label class="filter-option">
-                        <input type="radio" name="sexo">
-                        <span>Hembras</span>
-                    </label>
-                    <label class="filter-option">
-                        <input type="radio" name="sexo">
-                        <span>Machos</span>
-                    </label>
-                </div>
-                
-                <div class="filter-group">
-                    <div class="filter-title">Tamaño</div>
-                    <label class="filter-option">
-                        <input type="radio" name="tamano" checked>
-                        <span>Todos</span>
-                    </label>
-                    <label class="filter-option">
-                        <input type="radio" name="tamano">
-                        <span>Pequeños (0-10 kg)</span>
-                    </label>
-                    <label class="filter-option">
-                        <input type="radio" name="tamano">
-                        <span>Medianos (10-25 kg)</span>
-                    </label>
-                    <label class="filter-option">
-                        <input type="radio" name="tamano">
-                        <span>Grandes (+25 kg)</span>
-                    </label>
-                </div>
+                <form id="filtros-form">
+                    <div class="filter-group">
+                        <h5><i class="fas fa-filter"></i> Filtros</h5>
+                        <div class="filter-title">Edad</div>
+                        <label class="filter-option">
+                            <input type="radio" name="edad" value="" checked>
+                            <span>Todas las edades</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="edad" value="cachorro">
+                            <span>Cachorros (0-2 años)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="edad" value="joven">
+                            <span>Jóvenes (3-5 años)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="edad" value="adulto">
+                            <span>Adultos (6-8 años)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="edad" value="mayor">
+                            <span>Mayores (+8 años)</span>
+                        </label>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <div class="filter-title">Sexo</div>
+                        <label class="filter-option">
+                            <input type="radio" name="sexo" value="" checked>
+                            <span>Todos</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="sexo" value="Hembra">
+                            <span>Hembras</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="sexo" value="Macho">
+                            <span>Machos</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 mt-3">
+                        <i class="fas fa-search me-2"></i> Buscar
+                    </button>
+                </form>
             </div>
         </div>
+
+        
 
         <!-- Publicaciones Premium -->
         <div class="col-lg-9">
@@ -180,5 +173,54 @@
             });
         });
     });
+    
+$(document).ready(function() {
+    // Configurar click para abrir modal (si tienes modales)
+    $(document).on('click', '.dog-image-container', function() {
+        const petId = $(this).closest('.dog-card').attr('data-pet-id');
+        const modal = new bootstrap.Modal(document.getElementById('petModal' + petId));
+        modal.show();
+    });
+
+    // Manejar el envío del formulario de filtros
+    $('#filtros-form').on('submit', function(e) {
+        e.preventDefault();
+        aplicarFiltros();
+    });
+
+    // Aplicar filtros automáticamente al cambiar cualquier opción
+    $('input[type="radio"]').change(function() {
+        aplicarFiltros();
+    });
+
+    function aplicarFiltros() {
+        // Mostrar loader
+        $('#resultados-adopcion').html('<div class="text-center py-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></div>');
+        
+        // Obtener los valores de los filtros
+        const edad = $('input[name="edad"]:checked').val();
+        const sexo = $('input[name="sexo"]:checked').val();
+        
+        // Enviar la solicitud AJAX
+        $.ajax({
+            url: '{% url "adopciones" %}',
+            type: 'GET',
+            data: {
+                'edad': edad,
+                'sexo': sexo
+            },
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(data) {
+                $('#resultados-adopcion').html(data);
+            },
+            error: function(error) {
+                console.error("Error al filtrar:", error);
+                $('#resultados-adopcion').html('<div class="alert alert-danger">Error al aplicar los filtros. Intenta nuevamente.</div>');
+            }
+        });
+    }
+});
 </script>
 {% endblock %}
