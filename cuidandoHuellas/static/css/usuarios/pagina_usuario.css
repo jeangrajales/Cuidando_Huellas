@@ -180,3 +180,184 @@ body {
     color: #dc3545;
     font-size: 0.875em;
 } 
+
+/* Estilos para comentarios - Agregar a tu archivo CSS */
+
+.comentarios-section {
+    border-top: 1px solid #e9ecef;
+}
+
+.comentario-form {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.comentario-item {
+    padding: 10px 0;
+}
+
+.comentario-item:last-child {
+    border-bottom: none !important;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.comentario-imagen {
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.comentario-imagen:hover {
+    transform: scale(1.05);
+}
+
+.comentarios-lista {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.comentarios-lista::-webkit-scrollbar {
+    width: 6px;
+}
+
+.comentarios-lista::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.comentarios-lista::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.comentarios-lista::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Animación para nuevos comentarios */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.comentario-item {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .comentario-form {
+        padding: 10px;
+    }
+    
+    .comentario-imagen {
+        max-width: 150px !important;
+    }
+}
+
+/* Estilos para notificaciones - Agregar a tu archivo CSS */
+
+.notificaciones-dropdown {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e7eb;
+}
+
+.notificaciones-dropdown .dropdown-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 0.75rem 1rem;
+}
+
+.notificacion-item {
+    padding: 0.75rem 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    white-space: normal;
+}
+
+.notificacion-item:hover {
+    background-color: #f8f9fa !important;
+}
+
+.notificacion-item.bg-light {
+    background-color: #e3f2fd !important;
+    border-left: 3px solid #2196f3;
+}
+
+/* Animación para el badge de notificaciones */
+#badge-notificaciones {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Icono de campana con animación cuando hay notificaciones nuevas */
+.text-primary.fa-bell {
+    animation: swing 1s ease-in-out;
+}
+
+@keyframes swing {
+    20% {
+        transform: rotate(15deg);
+    }
+    40% {
+        transform: rotate(-10deg);
+    }
+    60% {
+        transform: rotate(5deg);
+    }
+    80% {
+        transform: rotate(-5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* Scrollbar personalizado para la lista de notificaciones */
+.notificaciones-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notificaciones-dropdown::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.notificaciones-dropdown::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.notificaciones-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .notificaciones-dropdown {
+        width: 300px !important;
+        max-width: 90vw;
+    }
+    
+    .notificacion-item {
+        padding: 0.5rem;
+    }
+}

@@ -24,7 +24,7 @@ from .forms import TicketSoporteForm, RespuestaTicketForm, FiltroTicketsForm
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db.models import Case, When, Value, IntegerField
-
+from django.views.decorators.http import require_POST
 # Create your views here.
 
 # Usuarios
@@ -325,6 +325,7 @@ def adopciones(request):
 @session_required_and_rol_permission(1, 2, 3)
 def pagina_usuario(request):
     sesion = request.session.get("pista", None)
+
 
     if not sesion:
         return redirect("iniciar_sesion")
@@ -627,20 +628,26 @@ def productos_usuarios(request):
     id_usuario = request.session.get("pista", {}).get("id")
 
     carrito = None
+    total_items = 0  # Cantidad total de productos en el carrito
+
     if id_usuario:
         try:
             usuario = Usuario.objects.get(id_usuario=id_usuario)
             carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
+            # Calcular el total de ítems en el carrito
+            total_items = sum(item.cantidad for item in carrito.items.all())
         except Usuario.DoesNotExist:
             carrito = None
 
     contexto = {
         "dato_producto_usuario": list_productos,
         "productos_mas_vendidos": productos_mas_vendidos,
-        "carrito": carrito
+        "carrito": carrito,
+        "total_items": total_items
     }
 
     return render(request, 'usuarios/productos_usuarios.html', contexto)
+
 
 def configuracion(request):
     return render(request, 'usuarios/configuracion.html')
@@ -1443,4 +1450,123 @@ def buscar_pregunta(request):
         })
     
     return JsonResponse({'results': results})
+
+@require_POST
+def agregar_comentario(request):
+    try:
+        publicacion_id = request.POST.get('publicacion_id')
+        texto = request.POST.get('texto', '').strip()
+        imagen = request.FILES.get('imagen')
+        
+        # Validaciones
+        if not publicacion_id:
+            return JsonResponse({'success': False, 'error': 'ID de publicación requerido'})
+        
+        if not texto and not imagen:
+            return JsonResponse({'success': False, 'error': 'Debes escribir un comentario o subir una imagen'})
+        
+        if len(texto) > 500:
+            return JsonResponse({'success': False, 'error': 'El comentario no puede exceder 500 caracteres'})
+        
+        # Obtener publicación y usuario
+        publicacion = get_object_or_404(PublicacionMascota, id=publicacion_id)
+        usuario_id = request.session.get('pista', {}).get('id')
+        usuario = get_object_or_404(Usuario, id_usuario=usuario_id)
+        
+        # Crear comentario
+        comentario = Comentario.objects.create(
+            publicacion=publicacion,
+            usuario=usuario,
+            texto=texto,
+            imagen=imagen
+        )
+        
+        # Crear notificación (solo si no es el mismo usuario)
+        if publicacion.usuario.id_usuario != usuario.id_usuario:
+            Notificacion.objects.create(
+                usuario=publicacion.usuario,
+                tipo='comentario',
+                titulo='Nuevo comentario en tu publicación',
+                mensaje=f'{usuario.nombre_completo} comentó en tu publicación "{publicacion.nombre_mascota}"',
+                publicacion=publicacion,
+                comentario=comentario
+            )
+        
+        # Preparar respuesta
+        response_data = {
+            'success': True,
+            'comentario': {
+                'id': comentario.id,
+                'texto': comentario.texto,
+                'usuario': comentario.usuario.nombre_completo,
+                'foto_perfil': comentario.usuario.foto_perfil.url if comentario.usuario.foto_perfil else None,
+                'fecha': comentario.fecha_comentario.strftime('%d/%m/%Y %H:%M'),
+                'imagen': comentario.imagen.url if comentario.imagen else None,
+                'es_propio': True
+            }
+        }
+        
+        return JsonResponse(response_data)
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+def obtener_comentarios(request, publicacion_id):
+    try:
+        publicacion = get_object_or_404(PublicacionMascota, id=publicacion_id)
+        comentarios = publicacion.comentarios.all()
+        usuario_actual_id = request.session.get('pista', {}).get('id')
+        
+        comentarios_data = []
+        for comentario in comentarios:
+            comentarios_data.append({
+                'id': comentario.id,
+                'texto': comentario.texto,
+                'usuario': comentario.usuario.nombre_completo,
+                'foto_perfil': comentario.usuario.foto_perfil.url if comentario.usuario.foto_perfil else None,
+                'fecha': comentario.fecha_comentario.strftime('%d/%m/%Y %H:%M'),
+                'imagen': comentario.imagen.url if comentario.imagen else None,
+                'es_propio': comentario.usuario.id_usuario == usuario_actual_id
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'comentarios': comentarios_data
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+def eliminar_comentario(request, comentario_id):
+    try:
+        usuario_id = request.session.get('pista', {}).get('id')
+        comentario = get_object_or_404(Comentario, id=comentario_id, usuario__id_usuario=usuario_id)
+        comentario.delete()
+        
+        return JsonResponse({'success': True})
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+
+def obtener_notificaciones(request):
+    try:
+        usuario_id = request.session.get('pista', {}).get('id')
+        usuario = get_object_or_404(Usuario, id_usuario=usuario_id)
+
+        notificaciones = Notificacion.objects.filter(usuario=usuario, leida=False).order_by('-fecha_creacion')
+        
+        notificaciones_data = [
+            {
+                'id': notificacion.id,
+                'mensaje': notificacion.mensaje,
+                'fecha': notificacion.fecha_creacion.strftime('%d/%m/%Y %H:%M')
+            }
+            for notificacion in notificaciones
+        ]
+        
+        return JsonResponse({'success': True, 'notificaciones': notificaciones_data})
+    
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
 

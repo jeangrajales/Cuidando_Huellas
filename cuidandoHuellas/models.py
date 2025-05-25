@@ -345,3 +345,41 @@ class PreguntaFrecuente(models.Model):
         verbose_name = "Pregunta Frecuente"
         verbose_name_plural = "Preguntas Frecuentes"
         ordering = ['orden', 'pregunta']
+
+class Comentario(models.Model):
+    publicacion = models.ForeignKey(PublicacionMascota, on_delete=models.CASCADE, related_name='comentarios')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    texto = models.TextField()
+    imagen = models.ImageField(upload_to='comentarios/', blank=True, null=True)
+    fecha_comentario = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'comentarios'
+        ordering = ['-fecha_comentario']
+    
+    def __str__(self):
+        return f'{self.usuario.nombre_completo} - {self.texto[:50]}'
+    
+# Agregar este modelo a tu models.py
+
+class Notificacion(models.Model):
+    TIPOS = [
+        ('comentario', 'Comentario'),
+        ('publicacion', 'Publicación'),
+    ]
+    
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='notificaciones')
+    tipo = models.CharField(max_length=20, choices=TIPOS)
+    titulo = models.CharField(max_length=255)
+    mensaje = models.TextField()
+    publicacion = models.ForeignKey(PublicacionMascota, on_delete=models.CASCADE, null=True, blank=True)
+    comentario = models.ForeignKey(Comentario, on_delete=models.CASCADE, null=True, blank=True)
+    leida = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'notificaciones'
+        ordering = ['-fecha_creacion']
+    
+    def __str__(self):
+        return f'{self.usuario.nombre_completo} - {self.titulo}'

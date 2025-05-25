@@ -16,6 +16,18 @@
 ---
 
 ### CHANGELOG
+
+---
+
+## [ch2.35.30-Alpha.1] - 2025-05-25
+
+
+## Added
+
+- Se agregó la funcionalidad de comentar publicaciones.
+- Ahora se envían notificaciones cuando comentan una de tus publicaciones.
+- Se agregó una funcionalidad para que, al añadir un producto al carrito, el ícono del carrito muestre automáticamente el total de productos añadidos.
+
 ---
 
 ## [ch2.34.30-Alpha.1] - 2025-05-25
