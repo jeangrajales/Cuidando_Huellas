@@ -34,6 +34,7 @@
                                 <th>Correo</th>
                                 <th>Ubicación</th>
                                 <th>Contacto</th>
+                                <th>Rol</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -51,6 +52,7 @@
                                 <td>{{ datos.correo }}</td>
                                 <td>{{ datos.ciudad }}</td>
                                 <td>{{ datos.telefono }}</td>
+                                <td>{{ datos.get_rol_display }}</td>
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center gap-2">
                                         <form action="{% url 'eliminar_usuarios' datos.id_usuario %}" method="post" 

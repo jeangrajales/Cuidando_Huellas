@@ -30,8 +30,67 @@ from django.views.decorators.http import require_POST
 # Usuarios
 from django.core.exceptions import ValidationError
 import re
+from django.core.mail import send_mail
+from django.conf import settings
 # -------------------
 
+def correos1(request):
+    try:
+        send_mail(
+            "Cuidando Huellas - Pruebas",
+            "Mensaje de prueba para Yoiner: Te quiero, De Valentina....... <strong> desde </strong> Django",
+            settings.EMAIL_HOST_USER,       # correo de la aplicación settings.py
+            ["jean.estudio.7@gmail.com"],    # correo destino
+            fail_silently=False,
+        )
+        return HttpResponse(f"Correo enviado!!")
+    except Exception as e:
+        return HttpResponse(f"Error: {e}")
+    
+def correos2(request):
+    try:
+        html_message = """
+            Hola Profe <strong style='color:red;'>Los mejores </strong> desde mi app Cuidando HUellas...
+            <br>
+            Bienvenido!!
+        """
+        send_mail(
+            "Cuidando_Huellas",
+            "",     # mensaje anterior vacío
+            settings.EMAIL_HOST_USER,         # correo de la aplicación settings.py
+            ["misena.jor@gmail.com"],    # correo destino
+            fail_silently=False,
+            html_message=html_message
+        )
+
+        return HttpResponse("Correo enviado!! Gracias")
+    except Exception as e:
+        return HttpResponse(f"Error: {e}")
+    
+def correos3(request):
+    import os
+    # envío de correo con .zip adjunto
+    
+    subject = "Cuidando Huellas - Backup"
+    body = "Archivo adjunto de la aplicación - Cuidando Huellas"
+    to_emails = ['misena.jor@gmail.com']
+    archivo_adjunto = '/home/tarde/Cuidando_Huellas/db.sqlite3.zip'
+
+    # Ejemplo de un archivo adjunto (podrías leerlo de un archivo real)
+    file_path = archivo_adjunto
+    if os.path.exists(archivo_adjunto):
+        with open(file_path, 'rb') as f:
+            file_content = f.read()
+        attachments = [('db.sqlite3.zip', file_content, 'application/zip')]
+    else:
+        attachments = None
+
+    if send_email_with_attachment(subject, body, to_emails, attachments, settings.EMAIL_HOST_USER):
+        print("Correo electrónico enviado con éxito.")
+        return HttpResponse("Correo electrónico enviado con éxito.")
+    else:
+        print("Error al enviar el correo electrónico.")
+        return HttpResponse("Error al enviar el correo electrónico.")
 
 def iniciar_sesion(request):
     datos_form = {}  # Diccionario para mantener los datos del formulario
