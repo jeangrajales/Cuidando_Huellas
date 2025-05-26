@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.core.mail import EmailMessage
 
 def session_required_and_rol_permission(*roles):
 	def decorador(func):
@@ -19,3 +20,25 @@ def session_required_and_rol_permission(*roles):
 	return decorador
 
 
+def send_email_with_attachment(subject, body, to_emails, attachments=None, from_email=None):
+    """
+    Envía un correo electrónico con posibilidad de archivos adjuntos.
+    """
+
+    email = EmailMessage(
+        subject,
+        body,
+        from_email,
+        to_emails
+    )
+
+    if attachments:
+        for filename, content, mimetype in attachments:
+            email.attach(filename, content, mimetype)
+
+    try:
+        email.send()
+        return True
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+        return False

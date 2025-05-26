@@ -91,6 +91,16 @@ body {
     left: 2px;
 }
 
+.btn_primary{
+    background-color: #a28c68 !important;
+    border-color: #a28c68 !important;
+}
+
+.btn_primary:hover{
+    background-color: #826f53 !important;
+    border-color: #826f53;
+}
+
 /* Tarjetas Rectangulares */
 .dog-card {
     background: white;

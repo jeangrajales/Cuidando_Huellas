@@ -19,8 +19,20 @@
 
 ---
 
-## [ch2.35.30-Alpha.1] - 2025-05-25
+## [ch2.36.31-Alpha.1] - 2025-05-26
 
+## Added
+
+- Se agrego varias funcionalidad para sistema de envio de correos.
+
+## Fixed
+
+- Se corrigio el color del buscar en filtrar para darle un poco de enfoue con la pagina.
+- Se corrigio Administrador para que salga el rol y el boton cerrar sesion.
+
+---
+
+## [ch2.35.30-Alpha.1] - 2025-05-25
 
 ## Added
 
