@@ -19,6 +19,15 @@
 
 ---
 
+## [ch2.37.31-Alpha.1] - 2025-05-27
+
+## Added
+
+- Se agrego modal para confirmar si quieres eliminar tu cuenta.
+- Al agregar productos de administrador se le agrego la funcion de que puedan arrastar la foto y eliminarla
+
+---
+
 ## [ch2.36.31-Alpha.1] - 2025-05-26
 
 ## Added

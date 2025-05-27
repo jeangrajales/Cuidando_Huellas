@@ -87,12 +87,19 @@
                             <label class="form-label">¿Desea cambiar la imagen?</label>
                             <input type="file" name="foto_producto" class="form-control" accept="image/jpeg, image/png, image/gif">
                         </div>
+
                     </div>
                 {% else %}
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle me-2"></i> Este producto no tiene imagen actualmente
                     </div>
-                    <input type="file" name="foto_producto" class="form-control" accept="image/jpeg, image/png, image/gif" required>
+                    <div id="drop-area" class="border rounded p-3 text-center">
+                        <p>Arrastra aquí la imagen del producto o haz clic para seleccionar</p>
+                        <input type="file" id="file-input" name="foto_producto" class="form-control" accept="image/jpeg, image/png, image/gif" hidden>
+                        <button type="button" id="upload-btn" class="btn btn-primary mt-2">Seleccionar archivo</button>
+                        <div id="preview-container" class="mt-3"></div>
+                    </div>
+                    
                 {% endif %}
                 
                 <div class="form-text mt-2">
@@ -103,6 +110,7 @@
         </form>
     </div>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/arrastrar_imagen.js' %}"></script>
 </body>
 </html>
 {% endblock %}
