@@ -19,6 +19,22 @@
 
 ---
 
+## [ch2.38.32-Alpha.1] - 2025-05-28
+
+## Added
+
+- Se implementó la funcionalidad para inhabilitar y habilitar cuentas de usuario, permitiendo un mayor control sobre el acceso a la plataforma.
+
+- Se añadió un modal de confirmación al cerrar sesión, mejorando la experiencia del usuario y evitando cierres accidentales.
+
+- Se integró el historial de facturas de compra tanto en el panel del administrador como en el panel del usuario, permitiendo consultar compras anteriores de manera organizada.
+
+## Fixed
+
+- Se corrigió un error en las vistas que permitía eliminar un producto relacionado con una factura. Ahora, no es posible eliminar un producto si está vinculado a una factura, preservando la integridad de los datos.
+
+---
+
 ## [ch2.37.31-Alpha.1] - 2025-05-27
 
 ## Added

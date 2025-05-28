@@ -1,0 +1,80 @@
+{% extends "administrador/pagina_administrador.html" %}
+{% load static %}
+{% block contenido_admin %}
+
+<link rel="stylesheet" href="{% static 'css/administrador/listar_facturas.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+<h2>Historico Facturas</h2>
+
+{% if facturas %}
+    <ul class="list-group">
+        {% for factura in facturas %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>Fecha:</strong> {{ factura.fecha|date:"Y-m-d H:i" }} <br>
+                <strong>Total:</strong> ${{ factura.total }}
+            </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFactura{{ factura.id }}">
+                Ver Detalles
+            </button>
+        </li>
+
+        <!-- Modal -->
+        <!-- Modal -->
+        <div class="modal fade" id="modalFactura{{ factura.id }}" tabindex="-1" aria-labelledby="modalFacturaLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Factura #{{ factura.id }} - {{ factura.fecha }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Usuario:</strong> {{ factura.usuario.nombre_completo }}</p>
+                        <p><strong>Correo:</strong> {{ factura.usuario.correo }}</p>
+                        <p><strong>Dirección de envío:</strong> {{ factura.usuario.ciudad }}</p>
+                        <p><strong>Total:</strong> ${{ factura.total }}</p>
+
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Imagen</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for d in factura.detalles.all %}
+                                <tr>
+                                    <td>{{ d.producto.nombre_producto }}</td>
+                                    <td>
+                                        <img src="{{ d.producto.foto_producto.url }}" alt="{{ d.producto.nombre_producto }}" class="img-thumbnail" width="80">
+                                    </td>
+                                    <td>{{ d.cantidad }}</td>
+                                    <td>${{ d.subtotal }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No hay detalles para esta factura.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </ul>
+{% else %}
+    <p class="alert alert-warning">No tienes facturas registradas.</p>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

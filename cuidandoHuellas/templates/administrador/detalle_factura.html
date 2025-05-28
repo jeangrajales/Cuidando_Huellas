@@ -1,0 +1,19 @@
+
+<h2>Factura #{{ factura.id }} - {{ factura.fecha }}</h2>
+<p>Usuario: {{ factura.usuario.nombre_completo }}</p>
+<p>Total: ${{ factura.total }}</p>
+
+<table>
+    <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+    </tr>
+    {% for d in detalles %}
+    <tr>
+        <td>{{ d.producto.nombre_producto }}</td>
+        <td>{{ d.cantidad }}</td>
+        <td>${{ d.subtotal }}</td>
+    </tr>
+    {% endfor %}
+</table>
