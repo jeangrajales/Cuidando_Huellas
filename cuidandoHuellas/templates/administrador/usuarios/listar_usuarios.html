@@ -35,6 +35,7 @@
                                 <th>Ubicación</th>
                                 <th>Contacto</th>
                                 <th>Rol</th>
+                                <th class="text-center">Estado</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -54,23 +55,81 @@
                                 <td>{{ datos.telefono }}</td>
                                 <td>{{ datos.get_rol_display }}</td>
                                 <td class="text-center">
+                                    {% if datos.estado == 1 %}
+                                        <span class="text-success fw-bold">
+                                            <i class="fas fa-user-check"></i> Activo
+                                        </span>
+                                    {% else %}
+                                        <span class="text-danger fw-bold">
+                                            <i class="fas fa-user-slash"></i> Inhabilitado
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
                                     <div class="d-flex justify-content-center gap-2">
-                                        <form action="{% url 'eliminar_usuarios' datos.id_usuario %}" method="post" 
-                                              onsubmit="return confirm('¿Está seguro que desea eliminar este usuario?');">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-action" title="Eliminar">
-                                                <i class="fas fa-trash-alt"></i>
+                                        {% if datos.estado == 1 %}
+                                            <!-- Botón para abrir el modal de inhabilitación -->
+                                            <button type="button" class="btn btn-sm btn-outline-warning btn-action" title="Inhabilitar" data-bs-toggle="modal" data-bs-target="#modalInhabilitar{{ datos.id_usuario }}">
+                                                <i class="fas fa-user-slash"></i>
                                             </button>
-                                        </form>
+                                        {% else %}
+                                            <!-- Botón para abrir el modal de confirmación de habilitación -->
+                                            <button type="button" class="btn btn-sm btn-outline-success btn-action" title="Habilitar Usuario" data-bs-toggle="modal" data-bs-target="#modalHabilitar{{ datos.id_usuario }}">
+                                                <i class="fas fa-user-check"></i>
+                                            </button>
+                                        {% endif %}
                                     </div>
                                 </td>
                             </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center py-4 text-muted">
-                                    <i class="fas fa-info-circle me-2"></i> No hay usuarios registrados
-                                </td>
-                            </tr>
+                            
+                            {% if datos.estado == 1 %}
+                            <!-- Modal de Inhabilitación -->
+                            <div class="modal fade" id="modalInhabilitar{{ datos.id_usuario }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-warning text-white">
+                                            <h5 class="modal-title">Inhabilitar usuario: {{ datos.nombre_completo }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form method="POST" action="{% url 'inhabilitar_usuario' datos.id_usuario %}">
+                                            {% csrf_token %}
+                                            <div class="modal-body">
+                                                <label for="motivo" class="form-label">Motivo de inhabilitación:</label>
+                                                <textarea class="form-control" name="motivo" id="motivo" rows="3" required></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger">Confirmar</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if datos.estado == 0 %}
+                            <!-- Modal de Confirmación de Habilitación -->
+                            <div class="modal fade" id="modalHabilitar{{ datos.id_usuario }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-success text-white">
+                                            <h5 class="modal-title">Habilitar usuario: {{ datos.nombre_completo }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>¿Estás seguro de que quieres volver a habilitar a <strong>{{ datos.nombre_completo }}</strong>?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form method="POST" action="{% url 'habilitar_usuario' datos.id_usuario %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success">Sí, habilitar usuario</button>
+                                            </form>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
@@ -83,7 +142,6 @@
         </div>
     </div>
 
-    
 {% else %}
     <div id="notificaciones">
         {% if messages %}

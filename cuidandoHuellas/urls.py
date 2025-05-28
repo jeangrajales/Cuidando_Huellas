@@ -26,7 +26,8 @@ urlpatterns = [
     path('editar_publicacion/<int:publicacion_id>/', views.editar_publicacion, name='editar_publicacion'),
     path('configuracion/', views.configuracion, name='configuracion'),
     path('eliminar_cuenta/', views.eliminar_cuenta, name='eliminar_cuenta'),
-
+    path('inhabilitar_usuario/<int:id_usuario>/', views.inhabilitar_usuario, name='inhabilitar_usuario'),
+    path('habilitar_usuario/<int:id_usuario>/', views.habilitar_usuario, name='habilitar_usuario'),
     # Carrito
    
     path('agregar_al_carrito/<int:id_producto>/', views.agregar_al_carrito, name='agregar_al_carrito'),
@@ -57,6 +58,8 @@ urlpatterns = [
     path('soporte/', views.soporte, name='soporte'),
     path('suspender_cuenta', views.suspender_cuenta, name='suspender_cuenta'),
     path('notificaciones/', views.notificaciones, name='notificaciones'),
+    path('factura/<int:id_factura>/',views.detalle_factura, name='detalle_factura'),
+    path("facturas/", views.listar_facturas, name="listar_facturas"),
 
     # Vista principal de configuración de cuenta (incluye sección soportes)
     path('configuracion/', views.configuracion_cuenta, name='configuracion_cuenta'),

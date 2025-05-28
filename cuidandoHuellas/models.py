@@ -33,6 +33,14 @@ class Usuario(models.Model):
     )
     rol = models.IntegerField(choices=ROLES, default=2)
 
+
+    ESTADOS = (
+        (1, "Activo"),
+        (0, "Inhabilitado")
+    )
+    estado = models.IntegerField(choices=ESTADOS, default=1)  # 1 = Activo, 0 = Inhabilitado
+    motivo_inhabilitacion = models.TextField(null=True, blank=True)  # Razón de inhabilitación
+
     foto_perfil = models.ImageField(
         upload_to='perfiles/',
         null=True,

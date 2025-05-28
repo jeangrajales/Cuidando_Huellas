@@ -1,0 +1,49 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.list-group-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    padding: 15px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.list-group-item:hover {
+    transform: scale(1.02);
+}
+
+.btn-primary {
+    background-color: #28a745;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 2px solid #218838;
+}
+
+.table-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.img-thumbnail {
+    border-radius: 8px;
+    object-fit: cover;
+    width: 80px;
+    height: 80px;
+}
+
+.alert-warning {
+    text-align: center;
+    font-weight: bold;
+}

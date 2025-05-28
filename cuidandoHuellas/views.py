@@ -104,6 +104,12 @@ def iniciar_sesion(request):
         
         try:
             q = Usuario.objects.get(correo=correo)
+
+            # 🔹 Verificar si la cuenta está inhabilitada
+            if q.estado == 0:
+                messages.error(request, f"Tu cuenta ha sido inhabilitada. Motivo: {q.motivo_inhabilitacion}")
+                return render(request, "usuarios/iniciar_sesion.html", {'datos_form': datos_form})
+
             # Validar la contraseña encriptada
             if check_password(contraseña, q.contraseña):
                 # Todo OK si la contraseña coincide, crear sesión y redirigir
@@ -139,6 +145,7 @@ def iniciar_sesion(request):
             return redirect("pagina_principal")
     
     return render(request, "usuarios/iniciar_sesion.html", {'datos_form': datos_form})
+
 
 def cerrar_sesion(request):
     try:
@@ -776,6 +783,35 @@ def listar_usuarios(request):
     contexto = {"dato": list_usuarios}
     return render(request, 'administrador/usuarios/listar_usuarios.html', contexto)
 
+def inhabilitar_usuario(request, id_usuario):
+    if request.method == "POST":
+        usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
+
+        if usuario.rol == 1:  # ⚠ No permitir inhabilitar administradores
+            messages.error(request, "No puedes inhabilitar a un administrador.")
+            return redirect("listar_usuarios")
+
+        motivo = request.POST.get("motivo", "")
+
+        usuario.estado = 0  # Inhabilitado
+        usuario.motivo_inhabilitacion = motivo
+        usuario.save()
+
+        messages.success(request, f"El usuario {usuario.nombre_completo} ha sido inhabilitado.")
+        return redirect("listar_usuarios")
+
+
+def habilitar_usuario(request, id_usuario):
+    usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
+
+    if usuario.estado == 0:  # Solo habilitar si está inhabilitado
+        usuario.estado = 1  # Activar cuenta
+        usuario.motivo_inhabilitacion = None  # Limpiar motivo de inhabilitación
+        usuario.save()
+        messages.success(request, f"La cuenta de {usuario.nombre_completo} ha sido habilitada correctamente.")
+
+    return redirect("listar_usuarios")
+
 @session_required_and_rol_permission(1)
 def eliminar_usuarios(request, id_usuario):
     try:
@@ -896,12 +932,20 @@ def agregar_productos(request):
 @session_required_and_rol_permission(1)
 def eliminar_productos(request, id_producto):
     try:
-        traer_producto = Producto.objects.get(pk = id_producto)
+        traer_producto = get_object_or_404(Producto, pk=id_producto)
+
+        # 🔎 Verificar si el producto está en alguna factura
+        if DetalleFactura.objects.filter(producto=traer_producto).exists():
+            messages.error(request, "No puedes eliminar este producto porque está asociado a una factura.")
+            return redirect("listar_productos")  # Retorna respuesta válida
+
         traer_producto.delete()
-        messages.error(request, "El producto se ha eliminado correctamente")
-    except Producto.DoesNotExist:
-        messages.warning(request, "Error: El producto no existe")
-    return redirect('listar_productos')
+        messages.success(request, "El producto se ha eliminado correctamente.")
+        return redirect("listar_productos")  # 🔹 Se asegura que siempre haya un retorno
+
+    except Exception as e:
+        messages.error(request, f"Error al eliminar producto: {str(e)}")
+        return redirect("listar_productos")  # 🔹 Retorno en caso de error
 
 @session_required_and_rol_permission(1)
 def editar_productos(request, id_producto):
@@ -1144,6 +1188,40 @@ def generar_factura(request):
         messages.error(request, "Ocurrió un error al generar la factura")
         return redirect('productos_usuarios')
     
+def listar_facturas(request):
+    id_usuario = request.session.get("pista", {}).get("id")
+
+    if not id_usuario:
+        return redirect("iniciar_sesion")
+
+    usuario = Usuario.objects.get(id_usuario=id_usuario)
+
+    if usuario.rol == 1:  # Administrador
+        facturas = Factura.objects.all().order_by("-fecha")
+        template = "administrador/listar_facturas.html"
+    else:  # Usuario normal
+        facturas = Factura.objects.filter(usuario=usuario).order_by("-fecha")
+        template = "usuarios/mis_facturas.html"
+
+    return render(request, template, {
+        "facturas": facturas
+    })
+
+
+
+def detalle_factura(request, id_factura):
+    try:
+        factura = Factura.objects.get(pk=id_factura)
+        detalles = factura.detalles.all()
+        return render(request, 'administrador/detalle_factura.html', {
+            'factura': factura,
+            'detalles': detalles
+        })
+    except Factura.DoesNotExist:
+        messages.error(request, "La factura no existe")
+        return redirect('productos_usuarios')
+
+
 def listar_mascotas_perdidas(request):
     list_mascotas_perdidas = PublicacionMascota.objects.all()
     contexto = {"dato_mascotas_perdidas": list_mascotas_perdidas}
