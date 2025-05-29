@@ -45,7 +45,11 @@
                                 <td>
                                     <div class="user-name">
                                         <div class="user-avatar">
-                                            <i class="fas fa-user"></i>
+                                            {% if datos.foto_perfil %}
+                                                <img src="{{ datos.foto_perfil.url }}" alt="Foto de perfil" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                            {% else %}
+                                                <img src="{% static 'img/frame_user.png' %}" alt="Usuario" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                            {% endif %}
                                         </div>
                                         {{ datos.nombre_completo }}
                                     </div>

@@ -16,6 +16,13 @@
 ---
 
 ### CHANGELOG
+---
+
+## [ch2.39.32-Alpha.1] - 2025-05-28
+
+## Added
+
+- Se agrego el mostrar la fotos de los usuarios en el panel administrador de la tabla usuarios.
 
 ---
 
