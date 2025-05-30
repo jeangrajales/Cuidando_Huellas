@@ -8,8 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mascotas en Adopción</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/administrador/mascotas/listar_mascotas_adopcion.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/administrador/mascotas/listar_mascotas_adopcion.css' %}">
+    
 </head>
 <body>
 
@@ -33,43 +34,117 @@
             {% for publicacion in dato_mascotas_adopcion %}
                 <div class="col">
                     <div class="card h-100">
-                        <div class="card-right d-flex align-items-center justify-content-center p-3">
+                        <div class="card-img-container" data-bs-toggle="modal" data-bs-target="#adoptionModal{{ publicacion.id }}">
                             {% if publicacion.fotos.first %}
-                                <img src="{{ publicacion.fotos.first.imagen.url }}" class="rounded-circle lost-pet-img" alt="Mascota">
+                                <img src="{{ publicacion.fotos.first.imagen.url }}" class="card-img-top" alt="{{ publicacion.nombre_mascota }}">
                             {% else %}
-                                <div class="rounded-circle lost-pet-img bg-secondary d-flex align-items-center justify-content-center text-white">
-                                    <i class="fas fa-paw fa-2x"></i>
+                                <div class="bg-light d-flex align-items-center justify-content-center h-100">
+                                    <i class="fas fa-paw text-muted fa-3x"></i>
                                 </div>
                             {% endif %}
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Nombre: {{ publicacion.nombre_mascota }}</h5>
                             <p class="card-text">Raza: {{ publicacion.raza }}</p>
-                            <p class="card-text">Descripción: {{ publicacion.descripcion }}</p>
                             <p class="card-text">Edad: {{ publicacion.edad }}</p>
                             <p class="card-text">Sexo: {{ publicacion.sexo }}</p>
                             <p class="card-text">Contacto: {{ publicacion.contacto }}</p>
                             <p class="card-text">Fecha: {{ publicacion.fecha_publicacion|date:"d/m/Y" }}</p>
                         </div>
-                        <div class="card-footer d-flex justify-content-center gap-3">
-                            <a href="{% url 'eliminar_mascotas_adopcion' publicacion.id %}" class="btn btn-danger btn-sm">
+                        <div class="card-footer d-flex justify-content-between">
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#adoptionModal{{ publicacion.id }}">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <a href="{% url 'eliminar_mascotas_adopcion' publicacion.id %}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Eliminar">
                                 <i class="fa-solid fa-trash-can"></i>
-                            </a>                            
-                            <a href="" class="btn btn-warning btn-sm">
+                            </a>
+                            <a href="" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Editar">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal para ver la mascota en adopción -->
+                <div class="modal fade" id="adoptionModal{{ publicacion.id }}" tabindex="-1" aria-labelledby="adoptionModalLabel{{ publicacion.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-light">
+                                <h5 class="modal-title" id="adoptionModalLabel{{ publicacion.id }}">{{ publicacion.nombre_mascota }} - En Adopción</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6 text-center">
+                                        {% if publicacion.fotos.first %}
+                                            <img src="{{ publicacion.fotos.first.imagen.url }}" class="modal-img img-fluid mb-3" alt="{{ publicacion.nombre_mascota }}">
+                                        {% else %}
+                                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                                                <i class="fas fa-paw text-muted fa-5x"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h4 class="mb-3">Detalles de la Mascota</h4>
+                                        <ul class="pet-details-list">
+                                            <li><strong>ID:</strong> {{ publicacion.id }}</li>
+                                            <li><strong>Nombre:</strong> {{ publicacion.nombre_mascota }}</li>
+                                            <li><strong>Raza:</strong> {{ publicacion.raza }}</li>
+                                            <li><strong>Edad:</strong> {{ publicacion.edad }}</li>
+                                            <li><strong>Sexo:</strong> {{ publicacion.sexo }}</li>
+                                            <li><strong>Contacto:</strong> {{ publicacion.contacto }}</li>
+                                            <li><strong>Fecha de Publicación:</strong> {{ publicacion.fecha_publicacion|date:"d/m/Y" }}</li>
+                                        </ul>
+                                        
+                                        <div class="mt-4">
+                                            <h5>Descripción:</h5>
+                                            <p>{{ publicacion.descripcion }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="" class="btn btn-warning">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Editar
+                                </a>
+                                <a href="{% url 'eliminar_mascotas_adopcion' publicacion.id %}" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash-can me-1"></i> Eliminar
+                                </a>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
 
-        <a href="" class="btn btn-success btn-sm d-block w-25 mx-auto mt-5 mb-5">
-            Agregar Mascota en Adopción
-        </a>
+        <div class="text-center mt-5">
+            <a href="" class="btn btn-success btn-sm d-block w-25 mx-auto">
+                <i class="fas fa-plus me-2"></i>Agregar Mascota en Adopción
+            </a>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Inicializar tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+        
+        // Script para habilitar los modales de Bootstrap
+        document.addEventListener('DOMContentLoaded', function() {
+            var adoptionCards = document.querySelectorAll('.card-img-container');
+            adoptionCards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    var modalId = this.getAttribute('data-bs-target');
+                    var adoptionModal = new bootstrap.Modal(document.querySelector(modalId));
+                    adoptionModal.show();
+                });
+            });
+        });
+    </script>
 </body>
 </html>
 {% endblock %}

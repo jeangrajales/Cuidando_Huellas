@@ -57,26 +57,15 @@
                       </div>
 
                       <div class="form-group mb-3">
-                        <select id="ciudad" name="ciudad" required autofocus
-                          class="form-control rounded-pill border-0 shadow-sm px-4 form-select text-center">
-                          <option value="">Selecciona ciudad de residencia</option>
-                          <option value="bogota" {% if form_data.ciudad == 'bogota' %}selected{% endif %}>Bogotá</option>
-                          <option value="medellin" {% if form_data.ciudad == 'medellin' %}selected{% endif %}>Medellín</option>
-                          <option value="cali" {% if form_data.ciudad == 'cali' %}selected{% endif %}>Cali</option>
-                          <option value="barranquilla" {% if form_data.ciudad == 'barranquilla' %}selected{% endif %}>Barranquilla</option>
-                          <option value="cartagena" {% if form_data.ciudad == 'cartagena' %}selected{% endif %}>Cartagena</option>
-                          <option value="bucaramanga" {% if form_data.ciudad == 'bucaramanga' %}selected{% endif %}>Bucaramanga</option>
-                          <option value="pereira" {% if form_data.ciudad == 'pereira' %}selected{% endif %}>Pereira</option>
-                          <option value="santamarta" {% if form_data.ciudad == 'santamarta' %}selected{% endif %}>Santa Marta</option>
-                          <option value="cucuta" {% if form_data.ciudad == 'cucuta' %}selected{% endif %}>Cúcuta</option>
-                          <option value="ibague" {% if form_data.ciudad == 'ibague' %}selected{% endif %}>Ibagué</option>
-                          <option value="manizales" {% if form_data.ciudad == 'manizales' %}selected{% endif %}>Manizales</option>
-                          <option value="neiva" {% if form_data.ciudad == 'neiva' %}selected{% endif %}>Neiva</option>
-                          <option value="villavicencio" {% if form_data.ciudad == 'villavicencio' %}selected{% endif %}>Villavicencio</option>
-                          <option value="pasto" {% if form_data.ciudad == 'pasto' %}selected{% endif %}>Pasto</option>
-                          <option value="monteria" {% if form_data.ciudad == 'monteria' %}selected{% endif %}>Montería</option>
-                        </select>
+                          <select id="ciudad" name="ciudad" required autofocus
+                              class="form-control rounded-pill border-0 shadow-sm px-4 form-select text-center">
+                              <option value="">Selecciona ciudad de residencia</option>
+                              {% for ciudad in ciudades %}
+                                  <option value="{{ ciudad }}" {% if form_data.ciudad == ciudad %}selected{% endif %}>{{ ciudad }}</option>
+                              {% endfor %}
+                          </select>
                       </div>
+
 
                       <div class="form-group mb-3">
                         <input id="inputEmail"
@@ -138,6 +127,31 @@
         </div>
       </div>
     </main>
+
+    <!-- Modal de verificación de correo -->
+<div class="modal fade" id="validarModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title">Verificación de Correo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Hemos enviado un código a <strong>{{ registro_pendiente.correo }}</strong>.  
+                   Ingresa el código para completar tu registro.</p>
+                
+                <form method="post" action="{% url 'registrarse' %}">
+                    {% csrf_token %}
+                    <input type="text" name="codigo_verificacion" class="form-control text-center mb-3"
+                           placeholder="Código de verificación" required>
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fas fa-check-circle me-2"></i> Validar Código
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Modal de Términos y Condiciones -->
     <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
@@ -243,7 +257,14 @@
   <script src="{% static 'js/mostrar_contraseña.js' %}"></script>
   <script src="{% static 'js/tiempo_messages.js' %}"></script>   
   <script src="{% static 'js/termino_condiciones.js' %}"></script>   
-
+    {% if registro_pendiente %}
+      <script>
+          document.addEventListener("DOMContentLoaded", function() {
+              var modalVerificacion = new bootstrap.Modal(document.getElementById("validarModal"));
+              modalVerificacion.show();
+          });
+      </script>
+    {% endif %}
 
   </body>
 </html>

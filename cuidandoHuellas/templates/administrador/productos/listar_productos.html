@@ -1,4 +1,6 @@
 {% extends 'administrador/pagina_administrador.html' %}
+{% load humanize %}
+
 {% load static %}
 {% block contenido_admin %}
 <!DOCTYPE html>
@@ -41,7 +43,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Nombre: {{ data.nombre_producto }}</h5>
                         <p class="card-text">Categoría: {{ data.categoria }}</p>
-                        <p class="card-text">Precio: ${{ data.precio }} </p>
+                        <p class="card-text">Precio: ${{ data.precio|floatformat:0|intcomma }}</p>
                         <p class="card-text">Cantidad: {{ data.cantidad }}</p>
                         <p class="card-text">Estado: {{ data.estado }}</p>
                     </div>
@@ -84,7 +86,7 @@
                                         <li><strong>ID:</strong> {{ data.id_producto }}</li>
                                         <li><strong>Nombre:</strong> {{ data.nombre_producto }}</li>
                                         <li><strong>Categoría:</strong> {{ data.categoria }}</li>
-                                        <li><strong>Precio:</strong> ${{ data.precio }} </li>
+                                        <li><strong>Precio:</strong> ${{ data.precio|floatformat:0|intcomma }} </li>
                                         <li><strong>Cantidad:</strong> {{ data.cantidad }}</li>
                                         <li><strong>Estado:</strong> <span class="badge {% if data.estado == 'Disponible' %}bg-success{% else %}bg-danger{% endif %}">{{ data.estado }}</span></li>
                                     </ul>
@@ -110,94 +112,103 @@
             </div>
             
             <!-- Modal para editar el producto -->
-            <div class="modal fade" id="editProductModal{{ data.id_producto }}" tabindex="-1" aria-labelledby="editProductModalLabel{{ data.id_producto }}" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header bg-warning bg-opacity-25">
-                            <h5 class="modal-title" id="editProductModalLabel{{ data.id_producto }}">Editar Producto: {{ data.nombre_producto }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="post" action="{% url 'editar_productos' data.id_producto %}" enctype="multipart/form-data" id="editForm{{ data.id_producto }}">
-                                {% csrf_token %}
+        <div class="modal fade" id="editProductModal{{ data.id_producto }}" tabindex="-1" aria-labelledby="editProductModalLabel{{ data.id_producto }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning bg-opacity-25">
+                        <h5 class="modal-title" id="editProductModalLabel{{ data.id_producto }}">Editar Producto: {{ data.nombre_producto }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'editar_productos' data.id_producto %}" enctype="multipart/form-data" id="editForm{{ data.id_producto }}">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Nombre del Producto</label>
+                                <input type="text" name="nombre_producto" value="{{ data.nombre_producto }}" class="form-control" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <textarea class="form-control" name="descripcion" rows="3" required>{{ data.descripcion }}</textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Precio</label>
+                                <input type="number" name="precio" value="{{ data.precio|floatformat:0|intcomma }}" class="form-control" min="0.01" step="0.01" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Cantidad</label>
+                                <input type="number" name="cantidad" value="{{ data.cantidad }}" class="form-control" min="1" required>
+                            </div>
+
+                            <!-- 🚀 Nueva Categoría -->
+                            <div class="mb-3">
+                                <label class="form-label">Categoría</label>
+                                <select class="form-select" name="categoria" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="alimentos" {% if data.categoria == "alimentos" %}selected{% endif %}>Alimentos</option>
+                                    <option value="accesorios" {% if data.categoria == "accesorios" %}selected{% endif %}>Accesorios</option>
+                                    <option value="ropa" {% if data.categoria == "ropa" %}selected{% endif %}>Ropa</option>
+                                    <option value="salud" {% if data.categoria == "salud" %}selected{% endif %}>Salud</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Estado</label>
+                                <select class="form-select" name="estado">
+                                    <option value="disponible" {% if data.estado == "disponible" %}selected{% endif %}>Disponible</option>
+                                    <option value="no_disponible" {% if data.estado == "no_disponible" %}selected{% endif %}>No Disponible</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Imagen del Producto</label>
                                 
-                                <div class="mb-3">
-                                    <label class="form-label">Nombre del Producto</label>
-                                    <input type="text" name="nombre_producto" value="{{ data.nombre_producto }}" class="form-control" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Descripción</label>
-                                    <textarea class="form-control" name="descripcion" rows="3" required>{{ data.descripcion }}</textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Precio</label>
-                                    <input type="number" name="precio" value="{{ data.precio }}" class="form-control" min="0.01" step="0.01" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Cantidad</label>
-                                    <input type="number" name="cantidad" value="{{ data.cantidad }}" class="form-control" min="1" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Categoría</label>
-                                    <select class="form-select" name="categoria">
-                                        <option {% if data.categoria == 'Alimento Mascotas' %}selected{% endif %}>Alimento Mascotas</option>
-                                        <option {% if data.categoria == 'Accesorios Mascotas' %}selected{% endif %}>Accesorios Mascotas</option>
-                                        <option {% if data.categoria == 'Ropa Mascotas' %}selected{% endif %}>Ropa Mascotas</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Estado</label>
-                                    <select class="form-select" name="estado">
-                                        <option {% if data.estado == 'Disponible' %}selected{% endif %}>Disponible</option>
-                                        <option {% if data.estado == 'No Disponible' %}selected{% endif %}>No Disponible</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Imagen del Producto</label>
-                                    
-                                    {% if data.foto_producto %}
-                                        <div class="current-image-container mb-3 border p-3 rounded">
-                                            <img src="{{ data.foto_producto.url }}" alt="Imagen actual del producto" 
-                                                class="img-thumbnail d-block mb-2" style="max-width: 150px;">
-                                            <p class="text-muted mb-2">Imagen actual del producto</p>
-                                            
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" name="eliminar_foto" id="eliminar_foto{{ data.id_producto }}">
-                                                <label class="form-check-label text-danger" for="eliminar_foto{{ data.id_producto }}">
-                                                    <i class="fas fa-trash-alt me-1"></i> Eliminar esta imagen
-                                                </label>
-                                            </div>
-                                            
-                                            <hr class="my-3">
-                                            
-                                            <div class="new-image-section">
-                                                <label class="form-label">¿Desea cambiar la imagen?</label>
-                                                <input type="file" name="foto_producto" class="form-control" accept="image/jpeg, image/png, image/gif">
-                                            </div>
+                                {% if data.foto_producto %}
+                                    <div class="current-image-container mb-3 border p-3 rounded">
+                                        <img src="{{ data.foto_producto.url }}" alt="Imagen actual del producto" 
+                                            class="img-thumbnail d-block mb-2" style="max-width: 150px;">
+                                        <p class="text-muted mb-2">Imagen actual del producto</p>
+                                        
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" name="eliminar_foto" id="eliminar_foto{{ data.id_producto }}">
+                                            <label class="form-check-label text-danger" for="eliminar_foto{{ data.id_producto }}">
+                                                <i class="fas fa-trash-alt me-1"></i> Eliminar esta imagen
+                                            </label>
                                         </div>
-                                    {% else %}
-                                        <div class="alert alert-warning">
-                                            <i class="fas fa-exclamation-triangle me-2"></i> Este producto no tiene imagen actualmente
+                                        
+                                        <hr class="my-3">
+                                        
+                                        <div class="new-image-section">
+                                            <label class="form-label">¿Desea cambiar la imagen?</label>
+                                            <input type="file" name="foto_producto" class="form-control" accept="image/jpeg, image/png, image/gif">
                                         </div>
-                                        <input type="file" name="foto_producto" class="form-control" accept="image/jpeg, image/png, image/gif">
-                                    {% endif %}
-                                    
-                                    <div class="form-text mt-2">
-                                        <i class="fas fa-info-circle me-1"></i> Formatos aceptados: JPG, PNG, GIF. Tamaño máximo: 5MB
                                     </div>
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i> Este producto no tiene imagen actualmente
+                                    </div>
+                                    <input type="file" name="foto_producto" class="form-control" accept="image/jpeg, image/png, image/gif">
+                                {% endif %}
+                                
+                                <div class="form-text mt-2">
+                                    <i class="fas fa-info-circle me-1"></i> Formatos aceptados: JPG, PNG, GIF. Tamaño máximo: 5MB
                                 </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" form="editForm{{ data.id_producto }}" class="btn btn-warning">
-                                <i class="fa-solid fa-save me-1"></i> Guardar Cambios
-                            </button>
-                        </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="editForm{{ data.id_producto }}" class="btn btn-warning">
+                            <i class="fa-solid fa-save me-1"></i> Guardar Cambios
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
+
                         <!-- Modal de confirmación de eliminación -->
             <div class="modal fade" id="confirmDeleteModal{{ data.id_producto }}" tabindex="-1" aria-labelledby="confirmDeleteLabel{{ data.id_producto }}" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">

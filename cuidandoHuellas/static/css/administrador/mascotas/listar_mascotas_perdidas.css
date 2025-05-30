@@ -1,155 +1,68 @@
-:root {
-    --light-brown: #D2B48C;
-    --medium-brown: #A87C5F;
-    --dark-brown: #795548;
-    --cream: #F5F0E6;
-    --light-cream: #FAF7F0;
-}
-
-body {
-    background-color: var(--light-cream);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.container {
-    max-width: 1200px;
-    padding-top: 20px;
-    padding-bottom: 40px;
-}
-
-h1 {
-    color: var(--dark-brown);
-    font-weight: 600;
-    margin-bottom: 30px;
-    position: relative;
-    display: inline-block;
-    padding-bottom: 10px;
-}
-
-h1:after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-    height: 3px;
-    width: 80px;
-    background-color: var(--medium-brown);
-}
-
-.card {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(121, 85, 72, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: white;
-    overflow: hidden;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(121, 85, 72, 0.2);
-}
-
-.card-header {
-    background-color: var(--light-brown);
-    color: white;
-    border-bottom: none;
-    padding: 12px 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.card-right {
-    background-color: var(--cream);
-    padding: 20px !important;
-}
-
-.lost-pet-img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border: 4px solid white;
-    box-shadow: 0 2px 6px rgba(121, 85, 72, 0.2);
-}
-
-.card-body {
-    padding: 20px;
-    background-color: white;
-}
-
-.card-title {
-    color: var(--dark-brown);
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-    border-bottom: 1px solid var(--light-brown);
-    padding-bottom: 8px;
-}
-
-.card-text {
-    color: #5D4037;
-    margin-bottom: 8px;
-    display: flex;
-}
-
-.card-text:before {
-    content: '•';
-    color: var(--medium-brown);
-    font-weight: bold;
-    margin-right: 8px;
-}
-
-.card-footer {
-    background-color: var(--cream);
-    border-top: none;
-    padding: 15px;
-}
-
-.btn-danger {
-    background-color: #C75146;
-    border-color: #C75146;
-}
-
-.btn-warning {
-    background-color: var(--medium-brown);
-    border-color: var(--medium-brown);
-    color: white;
-}
-
-.btn-add {
-    background-color: var(--dark-brown);
-    border-color: var(--dark-brown);
-    color: white;
-    font-weight: 500;
-    padding: 10px 20px;
-    border-radius: 30px;
-    margin-top: 30px;
-    transition: all 0.3s ease;
-}
-
-.btn-add:hover {
-    background-color: #5D4037;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(121, 85, 72, 0.3);
-}
-
-.alert {
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.pet-info-group {
-    margin-bottom: 2px;
-}
-
-.pet-info-label {
-    font-weight: 600;
-    color: var(--dark-brown);
-    margin-right: 5px;
-}
-
-.pet-info-value {
-    color: #5D4037;
-}
+/* Estilos adaptados de las tarjetas de productos */
+        .card-img-container {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .card-img-container img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+            transition: transform 0.3s ease;
+        }
+        
+        .card-img-container:hover img {
+            transform: scale(1.05);
+        }
+        
+        .card-img-container .bg-light {
+            height: 100%;
+            width: 100%;
+        }
+        
+        .card-title, .card-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        .modal-img {
+            max-height: 400px;
+            object-fit: contain;
+        }
+        
+        .pet-details-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .pet-details-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .pet-details-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .pet-info-group {
+            margin-bottom: 0.5rem;
+        }
+        
+        .pet-info-label {
+            font-weight: bold;
+            color: #6c757d;
+        }
+        
+        .pet-info-value {
+            color: #495057;
+        }

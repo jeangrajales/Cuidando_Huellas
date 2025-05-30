@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import check_password
 from . models import *
+import requests
+import time
 from django.contrib import messages
 from .utils import *
 from django.db import IntegrityError
@@ -33,6 +35,32 @@ import re
 from django.core.mail import send_mail
 from django.conf import settings
 # -------------------
+
+def obtener_ciudades():
+    url = "https://api-colombia.com/api/v1/Department"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+
+        data = response.json()
+
+        if not isinstance(data, list):
+            print("⚠ La API no devolvió datos en formato esperado.")
+            return []
+
+        ciudades = []
+        for depto in data:
+            if depto.get("cityCapital") and isinstance(depto["cityCapital"], dict):  
+                ciudades.append(depto["cityCapital"]["name"])  # Extraer capital del departamento
+
+        return ciudades if ciudades else []
+
+    except requests.exceptions.RequestException as e:
+        print(f"⚠ Error al conectar con la API: {e}")
+        return []
+
+
+
 
 def correos1(request):
     try:
@@ -157,59 +185,262 @@ def cerrar_sesion(request):
         return redirect("pagina_principal")
 
 def registrarse(request):
+    ciudades = obtener_ciudades()
+
     if request.method == "POST":
-        # Obtener los datos del formulario
-        form_data = {
-            'nombre_completo': request.POST.get("nombre_completo"),
-            'telefono': request.POST.get("telefono"),
-            'ciudad': request.POST.get("ciudad"),
-            'correo': request.POST.get("correo"),
-        }
-        
-        contraseña = request.POST.get("contraseña")
-        confirmar_contraseña = request.POST.get("confirmar_contraseña")
+        # 🚨 Si el usuario está ingresando el código en el modal
+        if "codigo_verificacion" in request.POST:
+            codigo_ingresado = request.POST.get("codigo_verificacion", "").strip()
+            registro_pendiente = request.session.get("registro_pendiente", {})
 
-        # Verificar si el correo ya existe
-        if Usuario.objects.filter(correo=form_data['correo']).exists():
-            messages.error(request, "El correo electrónico ya está registrado")
-            return render(request, 'usuarios/registrarse.html', {'form_data': form_data})
+            if not registro_pendiente:
+                messages.error(request, "No hay registro pendiente. Completa el formulario nuevamente.")
+                return redirect("registrarse")
 
-        # Verificar que las contraseñas coincidan
-        if contraseña.strip() != confirmar_contraseña.strip():
-            messages.error(request, "Las contraseñas no coinciden")
-            return render(request, 'usuarios/registrarse.html', {'form_data': form_data})
+            if codigo_ingresado != registro_pendiente["codigo_verificacion"]:
+                messages.error(request, "Código incorrecto. Intenta nuevamente.")
+                return render(request, 'usuarios/registrarse.html', {
+                    "registro_pendiente": registro_pendiente,
+                    "validando_codigo": True,
+                    "ciudades": ciudades
+                })
 
-        try:
-            # Crear el usuario
-            crear_usuario = Usuario(
-                nombre_completo=form_data['nombre_completo'],
-                telefono=form_data['telefono'],
-                ciudad=form_data['ciudad'],
-                correo=form_data['correo'],
-                contraseña=contraseña  # Contraseña encriptada
+            # 🚀 Guardar usuario en la base de datos **solo si el código es correcto**
+            nuevo_usuario = Usuario(
+                nombre_completo=registro_pendiente["nombre_completo"],
+                telefono=registro_pendiente["telefono"],
+                ciudad=registro_pendiente["ciudad"],
+                correo=registro_pendiente["correo"],
+                contraseña=registro_pendiente["contraseña"],
+                estado=1  # ✅ Activamos la cuenta después de la validación
             )
 
-            crear_usuario.full_clean()
-            crear_usuario.save()
+            nuevo_usuario.save()
+            del request.session["registro_pendiente"]
 
-            # Iniciar sesión directamente
-            request.session['pista'] = {
-                'id': crear_usuario.id_usuario,
-                'nombre_completo': crear_usuario.nombre_completo,
-                'correo': crear_usuario.correo,
-                'rol': crear_usuario.rol
+            # 🚀 **Iniciar sesión automáticamente**
+            request.session["pista"] = {
+                "id": nuevo_usuario.id_usuario,
+                "nombre_completo": nuevo_usuario.nombre_completo,
+                "correo": nuevo_usuario.correo,
+                "rol": nuevo_usuario.rol
             }
-            messages.success(request, "Bienvenido " +  crear_usuario.nombre_completo  + ", Disfruta de nuestros Servicios")
-            return redirect('pagina_usuario')
+
+            messages.success(request, f"Bienvenido {nuevo_usuario.nombre_completo}, disfruta de nuestros servicios.")
+            return redirect("pagina_usuario")  # 🔥 Redirigir directamente después del registro
+
+        # 🚀 Si el usuario está completando el registro inicial, seguimos con el proceso normal
+        form_data = {
+            'nombre_completo': request.POST.get("nombre_completo", "").strip(),
+            'telefono': request.POST.get("telefono", "").strip(),
+            'ciudad': request.POST.get("ciudad", "").strip(),
+            'correo': request.POST.get("correo", "").strip(),
+        }
+
+        contraseña = request.POST.get("contraseña", "").strip()
+        confirmar_contraseña = request.POST.get("confirmar_contraseña", "").strip()
+
+        if not all(form_data.values()) or not contraseña or not confirmar_contraseña:
+            messages.error(request, "Todos los campos son obligatorios.")
+            return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
+
+        if "registro_pendiente" in request.session:
+            registro_pendiente = request.session["registro_pendiente"]
+            if registro_pendiente["correo"] == form_data["correo"]:
+                messages.error(request, "Este correo ya está registrado pero aún no ha sido verificado. Ingresa el código.")
+                return render(request, 'usuarios/registrarse.html', {
+                    "registro_pendiente": registro_pendiente,
+                    "validando_codigo": True,
+                    "ciudades": ciudades
+                })
+
+        usuario_existente = Usuario.objects.filter(correo=form_data['correo']).first()
+        if usuario_existente:
+            messages.error(request, "El correo ya está registrado.")
+            return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
+
+        if contraseña != confirmar_contraseña:
+            messages.error(request, "Las contraseñas no coinciden.")
+            return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
+
+        try:
+            codigo_verificacion = str(random.randint(100000, 999999))
+
+            send_mail(
+                subject="Verificación de correo",
+                message=f"Tu código de verificación es: {codigo_verificacion}",
+                from_email="tu_correo@gmail.com",
+                recipient_list=[form_data["correo"]],
+                fail_silently=False,
+            )
+
+            request.session["registro_pendiente"] = {
+                **form_data,
+                "contraseña": contraseña,
+                "codigo_verificacion": codigo_verificacion
+            }
+
+            return render(request, 'usuarios/registrarse.html', {
+                "registro_pendiente": request.session["registro_pendiente"],
+                "validando_codigo": True,
+                "ciudades": ciudades
+            })
 
         except ValidationError as e:
             for field, error_list in e.message_dict.items():
                 for error in error_list:
                     messages.error(request, f"{field}: {error}")
-            return render(request, 'usuarios/registrarse.html', {'form_data': form_data})
+            return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
 
-    # Si es GET, mostrar formulario vacío
-    return render(request, "usuarios/registrarse.html")
+    return render(request, "usuarios/registrarse.html", {"ciudades": ciudades})
+
+def validar_codigo(request):
+    """Verifica el código antes de registrar al usuario."""
+    registro_pendiente = request.session.get("registro_pendiente", {})
+
+    if not registro_pendiente:
+        messages.error(request, "No hay registro pendiente. Completa el formulario nuevamente.")
+        return redirect("registrarse")
+
+    if request.method == "POST":
+        codigo_ingresado = request.POST.get("codigo", "").strip()
+
+        if codigo_ingresado != registro_pendiente["codigo_verificacion"]:
+            messages.error(request, "Código incorrecto. Intenta nuevamente.")
+            return render(request, 'usuarios/registrarse.html', {
+                "registro_pendiente": registro_pendiente,
+                "validando_codigo": True,
+                "ciudades": obtener_ciudades()
+            })
+
+        # 🚀 Guardar usuario en la base de datos **solo si el código es correcto**
+        nuevo_usuario = Usuario(
+            nombre_completo=registro_pendiente["nombre_completo"],
+            telefono=registro_pendiente["telefono"],
+            ciudad=registro_pendiente["ciudad"],
+            correo=registro_pendiente["correo"],
+            contraseña=registro_pendiente["contraseña"],
+            estado=1  # ✅ Usuario activado después de validar el código
+        )
+
+        nuevo_usuario.save()
+
+        # 🗑 Eliminar el registro temporal de la sesión
+        del request.session["registro_pendiente"]
+
+        messages.success(request, "Correo verificado con éxito. Ahora puedes acceder.")
+        return redirect("pagina_usuario")  # 🚀 Redirigir al usuario después de validar
+
+    return render(request, "usuarios/registrarse.html", {
+        "registro_pendiente": registro_pendiente,
+        "validando_codigo": True,
+        "ciudades": obtener_ciudades()
+    })
+
+
+def recuperar_contraseña(request):
+    """Maneja el proceso completo de recuperación de contraseña"""
+    
+    if request.method == "POST":
+        # Paso 1: Enviar código al correo
+        if "correo_recuperacion" in request.POST:
+            correo = request.POST.get("correo_recuperacion", "").strip()
+            
+            if not correo:
+                messages.error(request, "Ingresa tu correo electrónico.")
+                return redirect("iniciar_sesion")
+            
+            try:
+                usuario = Usuario.objects.get(correo=correo)
+                
+                # Generar código de 6 dígitos
+                codigo_recuperacion = str(random.randint(100000, 999999))
+                
+                # Enviar código por correo
+                send_mail(
+                    subject="Recuperación de contraseña - Cuidando Huellas",
+                    message=f"Tu código de recuperación es: {codigo_recuperacion}\n\nEste código expira en 10 minutos.",
+                    from_email="tu_correo@gmail.com",
+                    recipient_list=[correo],
+                    fail_silently=False,
+                )
+                
+                # Guardar en sesión para verificar después
+                request.session["recuperacion_pendiente"] = {
+                    "correo": correo,
+                    "codigo_recuperacion": codigo_recuperacion,
+                    "timestamp": time.time()  # Para expiración
+                }
+                
+                messages.success(request, f"Se ha enviado un código de recuperación a {correo}")
+                return redirect("iniciar_sesion")
+                
+            except Usuario.DoesNotExist:
+                messages.error(request, "No existe una cuenta con ese correo electrónico.")
+                return redirect("iniciar_sesion")
+            except Exception as e:
+                messages.error(request, "Error al enviar el código. Intenta nuevamente.")
+                return redirect("iniciar_sesion")
+        
+        # Paso 2: Validar código y cambiar contraseña
+        elif "codigo_recuperacion" in request.POST:
+            codigo_ingresado = request.POST.get("codigo_recuperacion", "").strip()
+            nueva_contraseña = request.POST.get("nueva_contraseña", "").strip()
+            confirmar_contraseña = request.POST.get("confirmar_contraseña", "").strip()
+            
+            recuperacion_pendiente = request.session.get("recuperacion_pendiente", {})
+            
+            if not recuperacion_pendiente:
+                messages.error(request, "Sesión expirada. Solicita un nuevo código.")
+                return redirect("iniciar_sesion")
+            
+            # Verificar si el código ha expirado (10 minutos)
+            tiempo_actual = time.time()
+            tiempo_codigo = recuperacion_pendiente.get("timestamp", 0)
+            if tiempo_actual - tiempo_codigo > 600:  # 600 segundos = 10 minutos
+                del request.session["recuperacion_pendiente"]
+                messages.error(request, "El código ha expirado. Solicita uno nuevo.")
+                return redirect("iniciar_sesion")
+            
+            # Validar código
+            if codigo_ingresado != recuperacion_pendiente["codigo_recuperacion"]:
+                messages.error(request, "Código incorrecto. Intenta nuevamente.")
+                return redirect("iniciar_sesion")
+            
+            # Validar contraseñas
+            if not nueva_contraseña or not confirmar_contraseña:
+                messages.error(request, "Todos los campos son obligatorios.")
+                return redirect("iniciar_sesion")
+            
+            if nueva_contraseña != confirmar_contraseña:
+                messages.error(request, "Las contraseñas no coinciden.")
+                return redirect("iniciar_sesion")
+            
+            # Validar que la contraseña tenga letras y números
+            if not re.match(r'^(?=.*[A-Za-z])(?=.*\d).+$', nueva_contraseña):
+                messages.error(request, "La contraseña debe contener letras y números.")
+                return redirect("iniciar_sesion")
+            
+            try:
+                # Actualizar contraseña
+                usuario = Usuario.objects.get(correo=recuperacion_pendiente["correo"])
+                usuario.contraseña = nueva_contraseña  # Se encriptará automáticamente en el save()
+                usuario.save()
+                
+                # Limpiar sesión
+                del request.session["recuperacion_pendiente"]
+                
+                messages.success(request, "Contraseña actualizada correctamente. Ya puedes iniciar sesión.")
+                return redirect("iniciar_sesion")
+                
+            except Usuario.DoesNotExist:
+                messages.error(request, "Error al actualizar la contraseña.")
+                return redirect("iniciar_sesion")
+            except Exception as e:
+                messages.error(request, "Error al procesar la solicitud.")
+                return redirect("iniciar_sesion")
+    
+    return redirect("iniciar_sesion")
 
 @session_required_and_rol_permission(1, 2, 3)
 def editar_usuario(request):
@@ -682,36 +913,44 @@ def editar_publicacion(request, publicacion_id):
         return redirect('pagina_usuario')
     
 @session_required_and_rol_permission(1,2,3)
-def productos_usuarios(request):
-    # Productos normales
-    list_productos = Producto.objects.all()
+def productos_usuarios(request, categoria=None):
+    # Si se recibe una categoría, filtramos productos por ella
+    if categoria:
+        list_productos = Producto.objects.filter(categoria=categoria)
+        categoria_actual = categoria
+    else:
+        list_productos = Producto.objects.all()  # Si no hay categoría, mostramos todo
+        categoria_actual = "Todos los productos"
     
-    # Productos más vendidos (ordenados por veces_comprado y fecha reciente)
-    productos_mas_vendidos = Producto.objects.filter(veces_comprado__gt=0)\
-                              .order_by('-veces_comprado', '-ultima_compra')[:8]
+    # Productos más vendidos - Solo productos con más de 5 compras, limitado a 4 productos
+    productos_mas_vendidos = Producto.objects.filter(
+        veces_comprado__gt=5  # Solo productos con más de 5 compras
+    ).order_by(
+        '-veces_comprado',  # Ordenar por más vendidos primero
+        '-ultima_compra'    # En caso de empate, ordenar por más reciente
+    )[:5]  # Limitar a solo 4 productos
     
     # Obtener el id del usuario desde la sesión
     id_usuario = request.session.get("pista", {}).get("id")
-
     carrito = None
     total_items = 0  # Cantidad total de productos en el carrito
-
+    
     if id_usuario:
         try:
             usuario = Usuario.objects.get(id_usuario=id_usuario)
             carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
-            # Calcular el total de ítems en el carrito
             total_items = sum(item.cantidad for item in carrito.items.all())
         except Usuario.DoesNotExist:
             carrito = None
-
+    
     contexto = {
-        "dato_producto_usuario": list_productos,
+        "productos": list_productos,
         "productos_mas_vendidos": productos_mas_vendidos,
         "carrito": carrito,
-        "total_items": total_items
+        "total_items": total_items,
+        "categoria_actual": categoria_actual  # Pasamos la categoría actual al template
     }
-
+    
     return render(request, 'usuarios/productos_usuarios.html', contexto)
 
 
@@ -929,6 +1168,11 @@ def agregar_productos(request):
     else:
         return render(request, "administrador/productos/agregar_productos.html")
     
+
+def filtrar_productos(request, categoria):
+    productos = Producto.objects.filter(categoria=categoria)
+    return render(request, 'usuarios/productos_usuarios.html', {"productos": productos, "categoria_actual": categoria})
+
 @session_required_and_rol_permission(1)
 def eliminar_productos(request, id_producto):
     try:
@@ -1126,6 +1370,7 @@ def vaciar_carrito(request):
         pass
     return redirect('productos_usuarios')
 
+
 def generar_factura(request):
     id_usuario = request.session.get('pista', {}).get('id')
 
@@ -1141,6 +1386,13 @@ def generar_factura(request):
             messages.warning(request, "No hay productos en el carrito para facturar")
             return redirect('productos_usuarios')
 
+        # 🔎 **Verificar si hay productos agotados antes del pago**
+        productos_agotados = [item.producto.nombre_producto for item in items if item.producto.cantidad < item.cantidad]
+        if productos_agotados:
+            messages.error(request, f"Los siguientes productos están agotados o con stock insuficiente: {', '.join(productos_agotados)}")
+            return redirect('productos_usuarios')
+
+        # Proceder con el pago si todo está en stock
         total = sum(item.subtotal() for item in items)
 
         # Crear factura
@@ -1153,7 +1405,6 @@ def generar_factura(request):
         # Crear detalles de factura y actualizar contadores
         detalles = []
         for item in items:
-            # Incrementar contador de compras SOLO AQUÍ
             item.producto.veces_comprado += item.cantidad
             item.producto.ultima_compra = timezone.now()
             item.producto.save()
@@ -1166,11 +1417,11 @@ def generar_factura(request):
             )
             detalles.append(detalle)
 
-            # Descontar stock
+            # 🔹 **Descontar stock después de la verificación**
             item.producto.cantidad -= item.cantidad
             item.producto.save()
 
-        # Vaciar carrito
+        # Vaciar carrito después de la compra
         items.delete()
 
         fecha_actual = factura.fecha.strftime('%Y-%m-%d')
@@ -1187,7 +1438,8 @@ def generar_factura(request):
     except (Usuario.DoesNotExist, Carrito.DoesNotExist):
         messages.error(request, "Ocurrió un error al generar la factura")
         return redirect('productos_usuarios')
-    
+
+
 def listar_facturas(request):
     id_usuario = request.session.get("pista", {}).get("id")
 

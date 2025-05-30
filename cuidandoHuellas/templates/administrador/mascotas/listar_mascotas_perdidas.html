@@ -10,7 +10,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/administrador/mascotas/listar_mascotas_perdidas.css' %}">
-
 </head>
 <body>
 
@@ -32,48 +31,91 @@
             <h1 class="mb-4">Mascotas Perdidas</h1>
         </div>
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             {% for publicacion in dato_mascotas_perdidas %}
                 <div class="col">
                     <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="m-0">{{ publicacion.nombre_mascota }}</h5>
-                            <span class="badge bg-white text-dark">{{ publicacion.fecha_publicacion|date:"d/m/Y" }}</span>
-                        </div>
-                        <div class="card-right d-flex align-items-center justify-content-center">
+                        <div class="card-img-container" data-bs-toggle="modal" data-bs-target="#petModal{{ publicacion.id }}">
                             {% if publicacion.fotos.first %}
-                                <img src="{{ publicacion.fotos.first.imagen.url }}" class="rounded-circle lost-pet-img" alt="Mascota">
+                                <img src="{{ publicacion.fotos.first.imagen.url }}" class="card-img-top" alt="{{ publicacion.nombre_mascota }}">
                             {% else %}
-                                <div class="rounded-circle lost-pet-img bg-secondary d-flex align-items-center justify-content-center text-white">
-                                    <i class="fas fa-paw fa-2x"></i>
+                                <div class="bg-light d-flex align-items-center justify-content-center h-100">
+                                    <i class="fas fa-paw text-muted fa-3x"></i>
                                 </div>
                             {% endif %}
                         </div>
                         <div class="card-body">
-                            <div class="pet-info-group">
-                                <span class="pet-info-label">Raza:</span>
-                                <span class="pet-info-value">{{ publicacion.raza }}</span>
-                            </div>
-                            <div class="pet-info-group mt-2">
-                                <span class="pet-info-label">Descripción:</span>
-                                <span class="pet-info-value">{{ publicacion.descripcion }}</span>
-                            </div>
+                            <h5 class="card-title">Nombre: {{ publicacion.nombre_mascota }}</h5>
+                            <p class="card-text">Raza: {{ publicacion.raza }}</p>
+                            <p class="card-text">Fecha: {{ publicacion.fecha_publicacion|date:"d/m/Y" }}</p>
+                            <p class="card-text">Descripción: {{ publicacion.descripcion }}</p>
                         </div>
-                        <div class="card-footer d-flex justify-content-center gap-3">
-                            <a href="{% url 'eliminar_mascotas_perdidas' publicacion.id %}" class="btn btn-danger" data-bs-toggle="tooltip" title="Eliminar">
+                        <div class="card-footer d-flex justify-content-between">
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#petModal{{ publicacion.id }}">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <a href="{% url 'eliminar_mascotas_perdidas' publicacion.id %}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Eliminar">
                                 <i class="fa-solid fa-trash-can"></i>
                             </a>
-                            <a href="" class="btn btn-warning" data-bs-toggle="tooltip" title="Editar">
+                            <a href="" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Editar">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal para ver la mascota perdida -->
+                <div class="modal fade" id="petModal{{ publicacion.id }}" tabindex="-1" aria-labelledby="petModalLabel{{ publicacion.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-light">
+                                <h5 class="modal-title" id="petModalLabel{{ publicacion.id }}">{{ publicacion.nombre_mascota }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6 text-center">
+                                        {% if publicacion.fotos.first %}
+                                            <img src="{{ publicacion.fotos.first.imagen.url }}" class="modal-img img-fluid mb-3" alt="{{ publicacion.nombre_mascota }}">
+                                        {% else %}
+                                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                                                <i class="fas fa-paw text-muted fa-5x"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h4 class="mb-3">Detalles de la Mascota</h4>
+                                        <ul class="pet-details-list">
+                                            <li><strong>ID:</strong> {{ publicacion.id }}</li>
+                                            <li><strong>Nombre:</strong> {{ publicacion.nombre_mascota }}</li>
+                                            <li><strong>Raza:</strong> {{ publicacion.raza }}</li>
+                                            <li><strong>Fecha de Publicación:</strong> {{ publicacion.fecha_publicacion|date:"d/m/Y" }}</li>
+                                        </ul>
+                                        
+                                        <div class="mt-4">
+                                            <h5>Descripción:</h5>
+                                            <p>{{ publicacion.descripcion }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="" class="btn btn-warning">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Editar
+                                </a>
+                                <a href="{% url 'eliminar_mascotas_perdidas' publicacion.id %}" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash-can me-1"></i> Eliminar
+                                </a>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
 
-        <div class="text-center">
-            <a href="" class="btn btn-add">
+        <div class="text-center mt-5">
+            <a href="" class="btn btn-danger btn-sm d-block w-25 mx-auto">
                 <i class="fas fa-plus me-2"></i>Agregar Mascota Perdida
             </a>
         </div>
@@ -86,6 +128,18 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
+        
+        // Script para habilitar los modales de Bootstrap
+        document.addEventListener('DOMContentLoaded', function() {
+            var petCards = document.querySelectorAll('.card-img-container');
+            petCards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    var modalId = this.getAttribute('data-bs-target');
+                    var petModal = new bootstrap.Modal(document.querySelector(modalId));
+                    petModal.show();
+                });
+            });
+        });
     </script>
 </body>
 </html>
