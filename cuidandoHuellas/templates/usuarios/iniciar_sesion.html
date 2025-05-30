@@ -1,106 +1,172 @@
-{% load static %} 
-<!DOCTYPE html> 
-<html lang="es">   
-  <head>     
-    <meta charset="UTF-8" />     
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />     
-    <link rel="stylesheet" href="{% static 'css/usuarios/iniciar_sesion.css' %}" />     
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />     
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css.map' %}" />     
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/usuarios/iniciar_sesion.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css.map' %}" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <title>Iniciar Sesión</title>   
-  </head>   
-  <body>     
+    <title>Iniciar Sesión</title>
+</head>
+<body>
     <!-- Notificaciones -->
-    <div id="notificaciones">       
-      {% if messages %}       
-      {% for message in messages %}       
-      <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center"
-          role="alert">           
-          {{ message }}           
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>       
-      </div>       
-      {% endfor %}       
-      {% endif %}     
-    </div>     
+    <div id="notificaciones">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 
     <!-- Login -->
-    <main class="login-container text-center d-flex justify-content-center align-items-center vh-100">       
-      <div class="container-lg">         
-        <div class="row no-gutter">           
-          <div class="col-md-6 d-none d-md-flex bg-image"></div>           
-          <div class="col-md-6 p-0">             
-            <div class="login d-flex align-items-center py-7">               
-              <div class="container">                 
-                <div class="row">                   
-                  <div class="col-lg-7 col-xl-6 mx-auto">                     
-                    <h3 class="text-center fw-bold mb-4 fs-1">Iniciar Sesión</h3>                     
-                    <form method="post">                       
-                      {% csrf_token %}                       
-                      <div class="form-group mb-3">                         
-                        <input id="inputEmail" type="email" name="correo" placeholder="Correo electrónico" required
-                          class="form-control rounded-pill border-0 shadow-sm px-4 text-center"
-                          value="{{ datos_form.correo|default:'' }}"/>                       
-                      </div>                       
-                      <div class="form-group mb-3 position-relative">
-                        <input id="inputPassword" type="password" name="contraseña" placeholder="Contraseña" required 
-                          class="form-control rounded-pill border-0 shadow-sm px-4 text-danger text-center"/>
-                        <span class="position-absolute top-50 end-0 translate-middle-y me-4" style="cursor: pointer;" onclick="togglePassword('inputPassword')">
-                          <i id="toggleIconinputPassword" class="fas fa-eye"></i>
-                        </span>
-                      </div>
-                      <div class="text-start mb-3">                             
-                        <a href="#" class="text-muted small" data-bs-toggle="modal" data-bs-target="#modalOlvidarContraseña">¿Olvidaste tu contraseña?</a>                         
-                      </div>                                      
-                      <div class="form-check text-start mb-3">                             
-                        <input class="form-check-input" type="checkbox" id="rememberCheck">                             
-                        <label class="form-check-label" for="rememberCheck">Recordar contraseña</label>                         
-                      </div>                       
-                      <button type="submit" class="btn btn-danger btn-block text-uppercase mb-2 rounded-pill shadow-sm btn_color">
-                        Iniciar sesión                       
-                      </button>                       
-                    </form>                     
-                    <div class="d-flex justify-content-between align-items-center mb-3 mt-5">                         
-                      <a href="{% url 'pagina_principal' %}" class="btn btn-danger btn-sm">Volver</a>                         
-                      <a href="{% url 'registrarse' %}" class="text-muted small"><u>Crear cuenta</u></a>                     
-                    </div>                                     
-                  </div>               
-                </div>             
-              </div>           
-            </div>           
-          </div>         
-        </div>       
-      </div>     
+    <main class="login-container text-center d-flex justify-content-center align-items-center vh-100">
+        <div class="container-lg">
+            <div class="row no-gutter">
+                <div class="col-md-6 d-none d-md-flex bg-image"></div>
+                <div class="col-md-6 p-0">
+                    <div class="login d-flex align-items-center py-7">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-7 col-xl-6 mx-auto">
+                                    <h3 class="text-center fw-bold mb-4 fs-1">Iniciar Sesión</h3>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group mb-3">
+                                            <input id="inputEmail" type="email" name="correo" placeholder="Correo electrónico" required class="form-control rounded-pill border-0 shadow-sm px-4 text-center" value="{{ datos_form.correo|default:'' }}"/>
+                                        </div>
+                                        <div class="form-group mb-3 position-relative">
+                                            <input id="inputPassword" type="password" name="contraseña" placeholder="Contraseña" required class="form-control rounded-pill border-0 shadow-sm px-4 text-danger text-center"/>
+                                            <span class="position-absolute top-50 end-0 translate-middle-y me-4" style="cursor: pointer;" onclick="togglePassword('inputPassword')">
+                                                <i id="toggleIconinputPassword" class="fas fa-eye"></i>
+                                            </span>
+                                        </div>
+                                        <div class="text-start mb-3">
+                                            <a href="#" class="text-muted small" data-bs-toggle="modal" data-bs-target="#modalOlvidarContraseña">¿Olvidaste tu contraseña?</a>
+                                        </div>
+                                        <div class="form-check text-start mb-3">
+                                            <input class="form-check-input" type="checkbox" id="rememberCheck">
+                                            <label class="form-check-label" for="rememberCheck">Recordar contraseña</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-danger btn-block text-uppercase mb-2 rounded-pill shadow-sm btn_color">
+                                            Iniciar sesión
+                                        </button>
+                                    </form>
+                                    <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+                                        <a href="{% url 'pagina_principal' %}" class="btn btn-danger btn-sm">Volver</a>
+                                        <a href="{% url 'registrarse' %}" class="text-muted small"><u>Crear cuenta</u></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <!-- Modal para recuperación por celular -->
+    <!-- Modal para recuperación de contraseña -->
     <div class="modal fade" id="modalOlvidarContraseña" tabindex="-1" aria-labelledby="modalOlvidarLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow rounded-4">
-          <div class="modal-header bg-danger text-white">
-            <h5 class="modal-title" id="modalOlvidarLabel">Recuperar Contraseña</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-          </div>
-          <form method="post" action="">
-            {% csrf_token %}
-            <div class="modal-body">
-              <p>Ingresa tu número de celular con el que te registraste para enviarte un código.</p>
-              <input type="text" name="telefono" class="form-control rounded-pill text-center" placeholder="Ej: +57 3001234567" required />
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalOlvidarLabel">Recuperar Contraseña</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                
+                <!-- Paso 1: Solicitar correo -->
+                <div id="paso1-correo" style="display: block;">
+                    <form method="post" action="{% url 'recuperar_contraseña' %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <p class="text-center mb-3">Ingresa tu correo electrónico para recibir el código de recuperación.</p>
+                            <input type="email" name="correo_recuperacion" class="form-control rounded-pill text-center" placeholder="correo@ejemplo.com" required />
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-danger rounded-pill">Enviar código</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Paso 2: Validar código y nueva contraseña -->
+                <div id="paso2-codigo" style="display: none;">
+                    <form method="post" action="{% url 'recuperar_contraseña' %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <p class="text-center mb-3">Ingresa el código que recibiste en tu correo y tu nueva contraseña.</p>
+                            
+                            <div class="mb-3">
+                                <input type="text" name="codigo_recuperacion" class="form-control rounded-pill text-center" placeholder="Código de 6 dígitos" maxlength="6" required />
+                            </div>
+                            
+                            <div class="mb-3 position-relative">
+                                <input id="nuevaPassword" type="password" name="nueva_contraseña" class="form-control rounded-pill text-center" placeholder="Nueva contraseña" required />
+                                <span class="position-absolute top-50 end-0 translate-middle-y me-4" style="cursor: pointer;" onclick="togglePassword('nuevaPassword')">
+                                    <i id="toggleIconnuevaPassword" class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            
+                            <div class="mb-3 position-relative">
+                                <input id="confirmarPassword" type="password" name="confirmar_contraseña" class="form-control rounded-pill text-center" placeholder="Confirmar contraseña" required />
+                                <span class="position-absolute top-50 end-0 translate-middle-y me-4" style="cursor: pointer;" onclick="togglePassword('confirmarPassword')">
+                                    <i id="toggleIconconfirmarPassword" class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            
+                            <small class="text-muted d-block text-center">La contraseña debe contener letras y números</small>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary rounded-pill" onclick="volverPaso1()">Volver</button>
+                            <button type="submit" class="btn btn-success rounded-pill">Actualizar contraseña</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
-              <button type="submit" class="btn btn-danger rounded-pill">Enviar código</button>
-            </div>
-          </form>
         </div>
-      </div>
     </div>
 
     <!-- Scripts -->
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script> 
-    <script src="{% static 'js/bootstrap.bundle.min.js.map' %}"></script> 
-    <script src="{% static 'js/tiempo_messages.js' %}"></script>   
-    <script src="{% static 'js/mostrar_contraseña.js' %}"></script>   
-
-  </body> 
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js.map' %}"></script>
+    <script src="{% static 'js/tiempo_messages.js' %}"></script>
+    <script src="{% static 'js/mostrar_contraseña.js' %}"></script>
+    
+    <script>
+        // Función para mostrar el paso 2 del modal
+        function mostrarPaso2() {
+            document.getElementById('paso1-correo').style.display = 'none';
+            document.getElementById('paso2-codigo').style.display = 'block';
+            document.getElementById('modalOlvidarLabel').textContent = 'Validar Código';
+        }
+        
+        // Función para volver al paso 1
+        function volverPaso1() {
+            document.getElementById('paso1-correo').style.display = 'block';
+            document.getElementById('paso2-codigo').style.display = 'none';
+            document.getElementById('modalOlvidarLabel').textContent = 'Recuperar Contraseña';
+        }
+        
+        // Detectar si hay una recuperación pendiente para mostrar el paso 2
+        {% if request.session.recuperacion_pendiente %}
+            document.addEventListener('DOMContentLoaded', function() {
+                // Mostrar el modal automáticamente
+                var modal = new bootstrap.Modal(document.getElementById('modalOlvidarContraseña'));
+                modal.show();
+                mostrarPaso2();
+            });
+        {% endif %}
+        
+        // Limpiar modal al cerrarlo
+        document.getElementById('modalOlvidarContraseña').addEventListener('hidden.bs.modal', function () {
+            volverPaso1();
+            // Limpiar formularios
+            this.querySelectorAll('form').forEach(form => form.reset());
+        });
+    </script>
+</body>
 </html>

@@ -16,6 +16,21 @@
 ---
 
 ### CHANGELOG
+
+---
+
+## [ch2.40.33-Alpha.1] - 2025-05-29
+
+## Added
+
+- Se agrego funcionalidad de registrarse con correo valido y recuperar contraseña
+- Se agrego funcionalidad de filtrar productos por categorias
+
+## Fixed
+
+- Se corrigio el formato de precio en pesos colombianos
+- Se corrigio que solo salgan 5 productos en la seccion Productos mas vendidos
+
 ---
 
 ## [ch2.39.32-Alpha.1] - 2025-05-28

@@ -1,4 +1,6 @@
 {% extends 'administrador/base_sesion.html' %}
+{% load humanize %}
+
 {% load static %}
 
 {% block estilos_unicos %}
@@ -89,13 +91,32 @@
             <!-- Left Side Navigation -->
             <div class="col-md-3 d-none d-md-block">
                 <div class="category-sidebar">
-                    <h4>Categorías</h4>
+                   <h4>Categorías</h4>
                     <ul class="category-list">
-                        <li><a href="#"><i class="fas fa-paw me-2"></i>Alimentos</a></li>
-                        <li><a href="#"><i class="fas fa-bone me-2"></i>Accesorios</a></li>
-                        <li><a href="#"><i class="fas fa-home me-2"></i>Ropa</a></li>
-                        <li><a href="#"><i class="fas fa-pills me-2"></i>Salud</a></li>
+                        <li><a href="{% url 'productos_usuarios' %}" 
+                            class="{% if categoria_actual == 'Todos los productos' %}active-category{% endif %}">
+                            <i class="fas fa-box-open me-2"></i>Ver Todos</a>
+                        </li>
+                        <li><a href="{% url 'filtrar_productos' 'alimentos' %}" 
+                            class="{% if categoria_actual == 'alimentos' %}active-category{% endif %}">
+                            <i class="fas fa-paw me-2"></i>Alimentos</a>
+                        </li>
+                        <li><a href="{% url 'filtrar_productos' 'accesorios' %}" 
+                            class="{% if categoria_actual == 'accesorios' %}active-category{% endif %}">
+                            <i class="fas fa-bone me-2"></i>Accesorios</a>
+                        </li>
+                        <li><a href="{% url 'filtrar_productos' 'ropa' %}" 
+                            class="{% if categoria_actual == 'ropa' %}active-category{% endif %}">
+                            <i class="fas fa-home me-2"></i>Ropa</a>
+                        </li>
+                        <li><a href="{% url 'filtrar_productos' 'salud' %}" 
+                            class="{% if categoria_actual == 'salud' %}active-category{% endif %}">
+                            <i class="fas fa-pills me-2"></i>Salud</a>
+                        </li>
                     </ul>
+
+
+
                     
                     <h4 class="mt-4">Marcas Populares</h4>
                     <div class="brands-list">
@@ -117,7 +138,7 @@
                         <div class="carousel-item active">
                             <!-- First row of 4 products -->
                             <div class="row mb-4">
-                                {% for producto in dato_producto_usuario|slice:":4" %}
+                                {% for producto in productos|slice:":4" %}
                                     <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
                                         <div class="product-card-v2">
                                             <div class="product-tags">
@@ -140,7 +161,7 @@
                                                             title="Vista rápida"
                                                             data-product-id="{{ producto.id_producto }}"
                                                             data-product-name="{{ producto.nombre_producto }}"
-                                                            data-product-price="{{ producto.precio|floatformat:0 }}"
+                                                            data-product-price="{{ producto.precio_formateado }}"
                                                             data-product-image="{% if producto.foto_producto %}{{ producto.foto_producto.url }}{% else %}{% static 'img/Collar Gato.png' %}{% endif %}"
                                                             data-product-description="{{ producto.descripcion|default:'Descripción no disponible' }}"
                                                             data-product-sold="{{ forloop.counter0|add:5 }}"
@@ -154,7 +175,7 @@
                                             </div>
                                             <div class="product-info">
                                                 <h4 class="product-name">{{ producto.nombre_producto }}</h4>
-                                                <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
+                                                <div class="product-price">{{ producto.precio_formateado }}</div>
                                                 <div class="product-meta">
                                                     <span class="sold-count">
                                                         <i class="fas fa-fire-alt me-1"></i>{{ forloop.counter0|add:5 }} vendidos
@@ -168,7 +189,7 @@
                             
                             <!-- Second row of 4 products -->
                             <div class="row">
-                                {% for producto in dato_producto_usuario|slice:"4:8" %}
+                                {% for producto in productos|slice:"4:8" %}
                                     <div class="col-md-3 col-sm-6">
                                         <div class="product-card-v2">
                                             <div class="product-tags">
@@ -188,7 +209,7 @@
                                                             title="Vista rápida"
                                                             data-product-id="{{ producto.id_producto }}"
                                                             data-product-name="{{ producto.nombre_producto }}"
-                                                            data-product-price="{{ producto.precio|floatformat:0 }}"
+                                                            data-product-price="{{ producto.precio_formateado }}"
                                                             data-product-image="{% if producto.foto_producto %}{{ producto.foto_producto.url }}{% else %}{% static 'img/Collar Gato.png' %}{% endif %}"
                                                             data-product-description="{{ producto.descripcion|default:'Descripción no disponible' }}"
                                                             data-product-sold="{{ forloop.counter0|add:9 }}"
@@ -202,7 +223,7 @@
                                             </div>
                                             <div class="product-info">
                                                 <h4 class="product-name">{{ producto.nombre_producto }}</h4>
-                                                <div class="product-price">${{ producto.precio|floatformat:0 }}</div>
+                                                <div class="product-price">{{ producto.precio_formateado }}</div>
                                                 <div class="product-meta">
                                                     <span class="sold-count">
                                                         <i class="fas fa-fire-alt me-1"></i>{{ forloop.counter0|add:9 }} vendidos
@@ -219,7 +240,7 @@
                         <div class="carousel-item">
                             <!-- First row of 4 products -->
                             <div class="row mb-4">
-                                {% for producto in dato_producto_usuario|slice:"8:12" %}
+                                {% for producto in productos|slice:"8:12" %}
                                     <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
                                         <div class="product-card-v2">
                                             <div class="product-tags">
@@ -267,7 +288,7 @@
                             
                             <!-- Second row of 4 products (if more products exist) -->
                             <div class="row">
-                                {% for producto in dato_producto_usuario|slice:"12:16" %}
+                                {% for producto in productos|slice:"12:16" %}
                                     <div class="col-md-3 col-sm-6">
                                         <div class="product-card-v2">
                                             <div class="product-tags">
@@ -287,7 +308,7 @@
                                                             title="Vista rápida"
                                                             data-product-id="{{ producto.id_producto }}"
                                                             data-product-name="{{ producto.nombre_producto }}"
-                                                            data-product-price="{{ producto.precio|floatformat:0 }}"
+                                                            data-product-price="{{ producto.precio|floatformat:0|intcomma }}"
                                                             data-product-image="{% if producto.foto_producto %}{{ producto.foto_producto.url }}{% else %}{% static 'img/Collar Gato.png' %}{% endif %}"
                                                             data-product-description="{{ producto.descripcion|default:'Descripción no disponible' }}"
                                                             data-product-sold="{{ forloop.counter0|add:17 }}"
@@ -339,12 +360,11 @@
             </div>
         </div>
     </section>
+    </section>
     
-    <!-- New Arrivals Section -->
     <section class="mb-5 new-arrivals-section">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="section-subtitle fs-1">Productos Más Vendidos</h3>
-            <a href="#" class="btn btn-outline-primary">Ver todos los destacados</a>
         </div>
 
         <div class="row">
@@ -373,7 +393,7 @@
                             <button class="action-btn quick-view quick-view-btn" 
                                     data-product-id="{{ producto.id_producto }}"
                                     data-product-name="{{ producto.nombre_producto }}"
-                                    data-product-price="{{ producto.precio|floatformat:0 }}"
+                                    data-product-price="{{ producto.precio|floatformat:0|intcomma }}"
                                     data-product-image="{% if producto.foto_producto %}{{ producto.foto_producto.url }}{% else %}{% static 'img/default-product.png' %}{% endif %}"
                                     data-product-description="{{ producto.descripcion|default:'Descripción no disponible' }}"
                                     data-product-sold="{{ producto.veces_comprado }}"
@@ -401,8 +421,8 @@
                         
                         <h4 class="product-title">{{ producto.nombre_producto }}</h4>
                         
-                        <div class="product-prices">
-                            <span class="new-price">${{ producto.precio|floatformat:0 }}</span>
+                        <div class="product-price">
+                            <span class="new-price">${{ producto.precio|floatformat:0|intcomma }}</span>
                             {% if producto.descuento > 0 %}
                                 <span class="discount-price">${{ producto.precio_sin_descuento|floatformat:0 }}</span>
                             {% endif %}

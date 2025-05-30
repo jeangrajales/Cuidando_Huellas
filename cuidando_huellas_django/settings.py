@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'cuidandoHuellas',
 ]
 
@@ -124,8 +125,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP host
-EMAIL_HOST_USER = "jean.estudio.7@gmail.com"  # Your email address
-EMAIL_HOST_PASSWORD = "yzlgjzokovjzogvw"  # Your email password
+EMAIL_HOST_USER = "cuidandohuellass7@gmail.com"  # Your email address
+EMAIL_HOST_PASSWORD = "jxqsajiukcjogboe"  # Your email password
 EMAIL_PORT = 465  # SMTP port
 EMAIL_USE_SSL = True  # Use SSL for secure connection
 

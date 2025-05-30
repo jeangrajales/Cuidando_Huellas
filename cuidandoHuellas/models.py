@@ -3,22 +3,25 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 import re
+import random
+from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password , check_password
 from django.conf import settings
 from .validators import *
 # Create your models here.
 from django.core.validators import RegexValidator
 from django.core.validators import MinValueValidator
+from django.contrib.humanize.templatetags.humanize import intcomma 
 
 class Usuario(models.Model):
     id_usuario = models.AutoField(primary_key= True)
     nombre_completo = models.CharField(max_length=100)
     ciudad = models.CharField(max_length=100)
     telefono = models.PositiveIntegerField()
-    correo = models.EmailField(max_length=254)
+    correo = models.EmailField(max_length=254, unique=True)
     contraseña = models.CharField(max_length=254)
     foto_perfil = models.ImageField(upload_to='perfiles/', null=True, blank=True)
-    
+    fecha_registro = models.DateTimeField(auto_now_add=True)
     def check_password(self, raw_password):
         return check_password(raw_password, self.contraseña)
     
@@ -68,6 +71,32 @@ class Usuario(models.Model):
     def es_administrador(self):
         return self.rol == 1
 
+    def generar_codigo_verificacion(self):
+        """Genera un código aleatorio de 6 dígitos para verificación de correo."""
+        self.codigo_verificacion = str(random.randint(100000, 999999))
+        self.save()
+
+    def enviar_codigo_por_email(self):
+        """Envía el código de verificación al correo del usuario."""
+        self.generar_codigo_verificacion()
+        mensaje = f"Tu código de verificación es: {self.codigo_verificacion}"
+
+        send_mail(
+            subject="Verificación de correo",
+            message=mensaje,
+            from_email="tu_correo@gmail.com",
+            recipient_list=[self.correo],
+            fail_silently=False,
+        )
+
+    def validar_codigo(self, codigo):
+        """Verifica si el código ingresado es correcto."""
+        if self.codigo_verificacion == codigo:
+            self.estado = 1  # Activamos la cuenta
+            self.codigo_verificacion = None  # Código validado y eliminado
+            self.save()
+            return True
+        return False
     def __str__(self):
         return f"{self.nombre_completo} - {self.correo}"    
     
@@ -84,10 +113,10 @@ class Producto(models.Model):
     )
     descripcion = models.TextField()
     CATEGORIAS = (
-        (0, ""),
-        (1, "Alimentos Mascotas"),
-        (2, "Accesorios Mascotas"),
-        (3, "Ropa Mascotas")
+        ('alimentos', 'Alimentos'),
+        ('accesorios', 'Accesorios'),
+        ('ropa', 'Ropa'),
+        ('salud', 'Salud'),
     )
     ESTADOS = (
         (0, ""),
@@ -100,6 +129,9 @@ class Producto(models.Model):
     estado = models.CharField(max_length=20, choices=ESTADOS, default=0)
     veces_comprado = models.PositiveIntegerField(default=0, verbose_name="Veces comprado")
     ultima_compra = models.DateTimeField(null=True, blank=True, verbose_name="Última compra")
+
+    def precio_formateado(self):
+        return f"${intcomma(int(self.precio))}"
 
     def __str__(self):
         return f"{self.id_producto} - {self.nombre_producto} - {self.descripcion} - {self.precio} - {self.foto_producto}"

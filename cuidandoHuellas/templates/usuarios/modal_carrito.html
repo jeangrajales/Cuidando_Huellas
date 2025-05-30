@@ -1,79 +1,449 @@
-<!-- Modal Carrito -->
+<!-- Modal Carrito (tu código existente con modificaciones) -->
+{% load humanize %}
 <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalCarritoLabel">Tu carrito de compras</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body">
-          {% if carrito and carrito.items.all %}
-            <table class="table align-middle">
-              <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th>Precio</th>
-                  <th>Cantidad</th>
-                  <th>Subtotal</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for item in carrito.items.all %}
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        {% if item.producto.foto_producto %}
-                          <img src="{{ item.producto.foto_producto.url }}" alt="{{ item.producto.nombre_producto }}" width="60" class="me-2 rounded">
-                        {% endif %}
-                        <span>{{ item.producto.nombre_producto }}</span>
-                      </div>
-                    </td>
-                    <td>${{ item.producto.precio|floatformat:0 }}</td>
-                    <td>{{ item.cantidad }}</td>
-                    <td>${{ item.subtotal|floatformat:0 }}</td>
-                    <td>
-                      <a href="{% url 'aumentar_cantidad' item.id %}#modalCarrito" class="btn btn-sm btn-success">+</a>
-                      <a href="{% url 'disminuir_cantidad' item.id %}#modalCarrito" class="btn btn-sm btn-warning">-</a>
-                      <a href="{% url 'eliminar_item' item.id %}#modalCarrito" class="btn btn-sm btn-danger">🗑</a>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            <div class="text-end fw-bold fs-5">Total: ${{ carrito.total|floatformat:0 }}</div>
-          {% else %}
-            <div class="text-center py-4">
-              <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-              <p class="lead">Tu carrito está vacío.</p>
-              <p class="text-muted">Agrega productos para realizar tu compra.</p>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCarritoLabel">Tu carrito de compras</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-          {% endif %}
+            <div class="modal-body">
+                {% if carrito and carrito.items.all %}
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in carrito.items.all %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if item.producto.foto_producto %}
+                                                <img src="{{ item.producto.foto_producto.url }}" alt="{{ item.producto.nombre_producto }}" width="60" class="me-2 rounded">
+                                            {% endif %}
+                                            <span {% if item.producto.cantidad == 0 %} class="text-danger text-decoration-line-through" {% endif %}>
+                                                {{ item.producto.nombre_producto }}
+                                            </span>
+                                        </div>
+                                        {% if item.producto.cantidad == 0 %}
+                                            <p class="text-danger small fw-bold">Producto agotado</p>
+                                        {% endif %}
+                                    </td>
+                                    <td>${{ item.producto.precio|floatformat:0 }}</td>
+                                    <td>{{ item.cantidad }}</td>
+                                    <td>${{ item.subtotal|floatformat:0 }}</td>
+                                    <td>
+                                        {% if item.producto.cantidad > 0 %}
+                                            <a href="{% url 'aumentar_cantidad' item.id %}#modalCarrito" class="btn btn-sm btn-success">+</a>
+                                        {% else %}
+                                            <button class="btn btn-sm btn-secondary" disabled>+</button>
+                                        {% endif %}
+                                        <a href="{% url 'disminuir_cantidad' item.id %}#modalCarrito" class="btn btn-sm btn-warning">-</a>
+                                        <a href="{% url 'eliminar_item' item.id %}#modalCarrito" class="btn btn-sm btn-danger">🗑</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="text-end fw-bold fs-5">Total: ${{ carrito.total|floatformat:0 }}</div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                        <p class="lead">Tu carrito está vacío.</p>
+                        <p class="text-muted">Agrega productos para realizar tu compra.</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                {% if carrito and carrito.items.all %}
+                    <a href="{% url 'vaciar_carrito' %}#modalCarrito" class="btn btn-outline-danger">
+                        <i class="fas fa-trash-alt me-1"></i> Vaciar carrito
+                    </a>
+                    <!-- Cambio aquí: en lugar de ir directo a generar_factura, abrimos el modal de pago -->
+                    <button type="button" class="btn btn-success" onclick="abrirModalPago()">
+                        <i class="fas fa-credit-card me-1"></i> Pagar ahora
+                    </button>
+                {% endif %}
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                    <i class="fas fa-shopping-cart me-1"></i> Seguir Comprando
+                </button>
+            </div>
         </div>
-        <div class="modal-footer">
-          {% if carrito and carrito.items.all %}
-            <a href="{% url 'vaciar_carrito' %}#modalCarrito" class="btn btn-outline-danger">
-              <i class="fas fa-trash-alt me-1"></i> Vaciar carrito
-            </a>
-            <a href="{% url 'generar_factura' %}" class="btn btn-success">
-              <i class="fas fa-cash-register me-1"></i> Pagar ahora
-            </a>
-          {% endif %}
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-            <i class="fas fa-shopping-cart me-1"></i> Seguir Comprando
-          </button>
-        </div>
-      </div>
     </div>
-  </div>
-  
-  <!-- Script para mantener el modal abierto si URL contiene #modalCarrito -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      if (window.location.hash === "#modalCarrito") {
+</div>
+
+<!-- Modal Pasarela de Pagos -->
+<div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalPagoLabel">
+                    🛡️ SecurePay - Procesar Pago
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Resumen de compra -->
+                <div class="card mb-4 border-0 bg-light">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">📋 Resumen de tu compra</h6>
+                        <div class="d-flex justify-content-between">
+                            <span>Total a pagar:</span>
+                            <span class="fw-bold fs-4 text-primary">${{ carrito.total|floatformat:0 }} COP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Métodos de pago -->
+                <div class="row mb-4">
+                    <div class="col-4">
+                        <div class="payment-method card text-center p-3 border-2 cursor-pointer" data-method="card" onclick="seleccionarMetodo('card')">
+                            <div class="fs-2">💳</div>
+                            <div class="mt-2">Tarjeta</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="payment-method card text-center p-3 border-2 cursor-pointer" data-method="pse" onclick="seleccionarMetodo('pse')">
+                            <div class="fs-2">🏦</div>
+                            <div class="mt-2">PSE</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="payment-method card text-center p-3 border-2 cursor-pointer" data-method="nequi" onclick="seleccionarMetodo('nequi')">
+                            <div class="fs-2">📱</div>
+                            <div class="mt-2">Nequi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de pago -->
+                <form id="paymentForm">
+                    {% csrf_token %}
+                    
+                    <!-- Formulario Tarjeta -->
+                    <div id="cardForm">
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">Número de Tarjeta</label>
+                            <input type="text" class="form-control form-control-lg" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="expiry" class="form-label">Vencimiento</label>
+                                    <input type="text" class="form-control" id="expiry" placeholder="MM/AA" maxlength="5">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="4">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cardName" class="form-label">Nombre en la Tarjeta</label>
+                            <input type="text" class="form-control" id="cardName" placeholder="Juan Pérez">
+                        </div>
+                    </div>
+
+                    <!-- Formulario PSE -->
+                    <div id="pseForm" style="display: none;">
+                        <div class="mb-3">
+                            <label for="bank" class="form-label">Seleccionar Banco</label>
+                            <select class="form-select form-select-lg" id="bank">
+                                <option value="">Selecciona tu banco</option>
+                                <option value="bancolombia">Bancolombia</option>
+                                <option value="davivienda">Davivienda</option>
+                                <option value="bbva">BBVA</option>
+                                <option value="scotiabank">Scotiabank</option>
+                                <option value="av_villas">AV Villas</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="docType" class="form-label">Tipo de Documento</label>
+                            <select class="form-select" id="docType">
+                                <option value="cc">Cédula de Ciudadanía</option>
+                                <option value="ce">Cédula de Extranjería</option>
+                                <option value="nit">NIT</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="docNumber" class="form-label">Número de Documento</label>
+                            <input type="text" class="form-control" id="docNumber" placeholder="12345678">
+                        </div>
+                    </div>
+
+                    <!-- Formulario Nequi -->
+                    <div id="nequiForm" style="display: none;">
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Número de Teléfono</label>
+                            <input type="text" class="form-control form-control-lg" id="phone" placeholder="3001234567">
+                        </div>
+                        <div class="mb-3">
+                            <label for="nequiPin" class="form-label">PIN Nequi</label>
+                            <input type="password" class="form-control" id="nequiPin" placeholder="****" maxlength="4">
+                        </div>
+                    </div>
+
+                    <!-- Email común para todos los métodos -->
+                    <div class="mb-4">
+                        <label for="email" class="form-label">Email de confirmación</label>
+                        <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.com" value="{{ user.email|default:'' }}">
+                    </div>
+
+                    <!-- Loading -->
+                    <div class="text-center" id="loading" style="display: none;">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Procesando...</span>
+                        </div>
+                        <div>Procesando pago seguro...</div>
+                    </div>
+                </form>
+
+                <!-- Información de seguridad -->
+                <div class="text-center text-muted mt-3">
+                    <small>
+                        <i class="fas fa-lock text-success me-1"></i>
+                        Conexión segura SSL - Tus datos están protegidos
+                    </small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-arrow-left me-1"></i> Volver al carrito
+                </button>
+                <button type="button" class="btn btn-success btn-lg px-4" onclick="procesarPago()" id="btnPagar">
+                    <i class="fas fa-credit-card me-1"></i> 
+                    Pagar ${{ carrito.total|floatformat:0 }} COP
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Éxito -->
+<div class="modal fade" id="modalExito" tabindex="-1" aria-labelledby="modalExitoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+                <div class="text-success fs-1 mb-3">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="text-success mb-3">¡Pago Exitoso!</h3>
+                <p class="mb-3">Tu transacción se ha procesado correctamente.</p>
+                <p class="mb-4">
+                    <strong>ID de Transacción:</strong> 
+                    <span class="text-primary" id="transactionId"></span>
+                </p>
+                <button type="button" class="btn btn-primary px-4" onclick="continuarCompra()">
+                    Ver Factura
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.payment-method {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.payment-method:hover {
+    border-color: #0d6efd !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.payment-method.active {
+    border-color: #0d6efd !important;
+    background-color: #f8f9ff !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+#loading {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+</style>
+
+<script>
+let metodoSeleccionado = 'card';
+
+function abrirModalPago() {
+    // Cerrar modal del carrito y abrir modal de pago
+    bootstrap.Modal.getInstance(document.getElementById('modalCarrito')).hide();
+    setTimeout(() => {
+        new bootstrap.Modal(document.getElementById('modalPago')).show();
+    }, 300);
+}
+
+function seleccionarMetodo(metodo) {
+    metodoSeleccionado = metodo;
+    
+    // Actualizar estilos visuales
+    document.querySelectorAll('.payment-method').forEach(el => {
+        el.classList.remove('active');
+    });
+    document.querySelector(`[data-method="${metodo}"]`).classList.add('active');
+    
+    // Mostrar/ocultar formularios
+    document.getElementById('cardForm').style.display = metodo === 'card' ? 'block' : 'none';
+    document.getElementById('pseForm').style.display = metodo === 'pse' ? 'block' : 'none';
+    document.getElementById('nequiForm').style.display = metodo === 'nequi' ? 'block' : 'none';
+    
+    // Actualizar texto del botón
+    const btnPagar = document.getElementById('btnPagar');
+    const total = '{{ carrito.total|floatformat:0 }}';
+    
+    switch(metodo) {
+        case 'card':
+            btnPagar.innerHTML = '<i class="fas fa-credit-card me-1"></i> Pagar $' + total + ' COP';
+            break;
+        case 'pse':
+            btnPagar.innerHTML = '<i class="fas fa-university me-1"></i> Pagar con PSE $' + total + ' COP';
+            break;
+        case 'nequi':
+            btnPagar.innerHTML = '<i class="fas fa-mobile-alt me-1"></i> Pagar con Nequi $' + total + ' COP';
+            break;
+    }
+}
+
+function procesarPago() {
+    // Validaciones básicas
+    if (!validarFormulario()) {
+        return;
+    }
+    
+    // Mostrar loading
+    document.getElementById('btnPagar').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    
+    // Simular procesamiento (en producción esto sería una llamada AJAX real)
+    setTimeout(() => {
+        // Generar ID de transacción
+        const transactionId = 'TXN' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        document.getElementById('transactionId').textContent = transactionId;
+        
+        // Cerrar modal de pago y mostrar éxito
+        bootstrap.Modal.getInstance(document.getElementById('modalPago')).hide();
+        setTimeout(() => {
+            new bootstrap.Modal(document.getElementById('modalExito')).show();
+        }, 300);
+        
+        // Resetear estado
+        document.getElementById('btnPagar').style.display = 'block';
+        document.getElementById('loading').style.display = 'none';
+        
+    }, 2000);
+}
+
+function validarFormulario() {
+    const email = document.getElementById('email').value;
+    
+    if (!email || !email.includes('@')) {
+        alert('Por favor ingresa un email válido');
+        return false;
+    }
+    
+    if (metodoSeleccionado === 'card') {
+        const cardNumber = document.getElementById('cardNumber').value;
+        const expiry = document.getElementById('expiry').value;
+        const cvv = document.getElementById('cvv').value;
+        const cardName = document.getElementById('cardName').value;
+        
+        if (!cardNumber || !expiry || !cvv || !cardName) {
+            alert('Por favor completa todos los campos de la tarjeta');
+            return false;
+        }
+    } else if (metodoSeleccionado === 'pse') {
+        const bank = document.getElementById('bank').value;
+        const docNumber = document.getElementById('docNumber').value;
+        
+        if (!bank || !docNumber) {
+            alert('Por favor completa todos los campos de PSE');
+            return false;
+        }
+    } else if (metodoSeleccionado === 'nequi') {
+        const phone = document.getElementById('phone').value;
+        const pin = document.getElementById('nequiPin').value;
+        
+        if (!phone || !pin) {
+            alert('Por favor completa todos los campos de Nequi');
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+function continuarCompra() {
+    // Cerrar modal de éxito y redirigir a generar factura
+    bootstrap.Modal.getInstance(document.getElementById('modalExito')).hide();
+    
+    // Redirigir para generar la factura real
+    window.location.href = "{% url 'generar_factura' %}";
+}
+
+// Formateo de campos
+document.addEventListener('DOMContentLoaded', function() {
+    // Formatear número de tarjeta
+    const cardNumberInput = document.getElementById('cardNumber');
+    if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+    }
+    
+    // Formatear fecha de vencimiento
+    const expiryInput = document.getElementById('expiry');
+    if (expiryInput) {
+        expiryInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        });
+    }
+    
+    // Permitir solo números en CVV
+    const cvvInput = document.getElementById('cvv');
+    if (cvvInput) {
+        cvvInput.addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        });
+    }
+    
+    // Seleccionar método por defecto
+    seleccionarMetodo('card');
+});
+
+// Script original para mantener modal carrito abierto
+document.addEventListener("DOMContentLoaded", function() {
+    if (window.location.hash === "#modalCarrito") {
         var modal = new bootstrap.Modal(document.getElementById('modalCarrito'));
         modal.show();
-      }
-    });
-  </script>
-  
+    }
+});
+</script>

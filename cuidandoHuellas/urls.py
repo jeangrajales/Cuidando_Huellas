@@ -28,6 +28,8 @@ urlpatterns = [
     path('eliminar_cuenta/', views.eliminar_cuenta, name='eliminar_cuenta'),
     path('inhabilitar_usuario/<int:id_usuario>/', views.inhabilitar_usuario, name='inhabilitar_usuario'),
     path('habilitar_usuario/<int:id_usuario>/', views.habilitar_usuario, name='habilitar_usuario'),
+    path('validar-codigo/<int:usuario_id>/', views.validar_codigo, name='validar_codigo'),
+    path('recuperar-contraseña/', views.recuperar_contraseña, name='recuperar_contraseña'),
     # Carrito
    
     path('agregar_al_carrito/<int:id_producto>/', views.agregar_al_carrito, name='agregar_al_carrito'),
@@ -37,6 +39,8 @@ urlpatterns = [
     path('vaciar_carrito/', views.vaciar_carrito, name='vaciar_carrito'),
     path('generar_factura/', views.generar_factura, name='generar_factura'),
     path('modal_carrito/', views.modal_carrito, name="modal_carrito"),
+    path('productos/<str:categoria>/', views.filtrar_productos, name='filtrar_productos'),
+    
 
 
     #Administrador
