@@ -12,8 +12,8 @@
 </head>
 
 {% if request.session.pista %}
-<body class="admin-body">
 
+<body class="admin-body">
   <!-- BARRA LATERAL -->
   <div class="sidebar">
     <div class="sidebar-header">
@@ -68,6 +68,11 @@
         <span>Reportes</span>
         <i class="fas fa-chevron-right arrow"></i>
       </a>
+      <a href="{% url 'backup' %}" class="nav-link">
+            <i class="fas fa-database icon"></i>
+              <span>Copia de Seguridad</span>
+            </i>
+      </a>
       <div class="sidebar-footer">
         <a href="{% url 'pagina_principal' %}" class="nav-link logout-link">
           <i class="fas fa-sign-out-alt icon"></i>
@@ -75,10 +80,11 @@
         </a>
       </div>
       <li>
-        <a class="dropdown-item text-danger" href="{% url 'cerrar_sesion' %}">
-            <i class="fas fa-sign-out-alt me-2"></i>
-            Cerrar Sesión
-        </a>
+      <a href="{% url 'cerrar_sesion' %}" class="nav-link text-danger">
+          <i class="fas fa-sign-out-alt me-2">
+              <span>Cerrar Sesión</span>
+          </i>
+      </a>
       </li>
     </nav>
   </div>
@@ -135,11 +141,23 @@
           <img src="{% static '' %}" alt="Imagen Bienvenida">
         </div>
       </div>
-      {% endblock %}
-    </div>
+      <div id="notificaciones">
+        {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{% if message.tags and message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show text-center"
+              role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {% endfor %}
+          {% endif %}
+          </div>
+        {% endblock %}
+     </div>
   </div>
 
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <script>
     // Efecto hover para los items del menú
     document.querySelectorAll('.nav-link').forEach(link => {

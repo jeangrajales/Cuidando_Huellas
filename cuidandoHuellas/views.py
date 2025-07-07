@@ -61,64 +61,46 @@ def obtener_ciudades():
 
 
 
+# Copia de seguridad manual usando la utilidad de envío de correo con adjuntos
+from .utils import *
+import os, time
 
-def correos1(request):
-    try:
-        send_mail(
-            "Cuidando Huellas - Pruebas",
-            "Mensaje de prueba para Yoiner: Te quiero, De Valentina....... <strong> desde </strong> Django",
-            settings.EMAIL_HOST_USER,       # correo de la aplicación settings.py
-            ["jean.estudio.7@gmail.com"],    # correo destino
-            fail_silently=False,
-        )
-        return HttpResponse(f"Correo enviado!!")
-    except Exception as e:
-        return HttpResponse(f"Error: {e}")
+def backup(request):
+    # configuración de rutas a comprimir:
+    # file_to_compress = '/home/jorgeg/Documentos/repos/cfdcm/adso/2846461/sena/db.sqlite3'
+    file_to_compress = os.path.join(settings.BASE_DIR, 'db.sqlite3')
+    # zip_archive_name = '/home/jorgeg/Documentos/repos/cfdcm/adso/2846461/sena/db.sqlite3.zip'
+    zip_archive_name = os.path.join(settings.BASE_DIR, 'db.sqlite3.zip')
+    compress_file_to_zip(file_to_compress, zip_archive_name)
+    print("...")
+    time.sleep(2)
+    print("Compresión correcta...!")
+    print("...")
     
-def correos2(request):
-    try:
-        html_message = """
-            Hola Profe <strong style='color:red;'>Los mejores </strong> desde mi app Cuidando HUellas...
-            <br>
-            Bienvenido!!
-        """
-        send_mail(
-            "Cuidando_Huellas",
-            "",     # mensaje anterior vacío
-            settings.EMAIL_HOST_USER,         # correo de la aplicación settings.py
-            ["misena.jor@gmail.com"],    # correo destino
-            fail_silently=False,
-            html_message=html_message
-        )
-
-        return HttpResponse("Correo enviado!! Gracias")
-    except Exception as e:
-        return HttpResponse(f"Error: {e}")
-    
-def correos3(request):
-    import os
     # envío de correo con .zip adjunto
-    
+
     subject = "Cuidando Huellas - Backup"
-    body = "Archivo adjunto de la aplicación - Cuidando Huellas"
-    to_emails = ['misena.jor@gmail.com']
-    archivo_adjunto = '/home/tarde/Cuidando_Huellas/db.sqlite3.zip'
+    body = "Copia de Seguridad de la Base de Datos del Proyecto Cuidando Huellas"
+    to_emails = ['cuidandohuellass7@gmail.com']
 
     # Ejemplo de un archivo adjunto (podrías leerlo de un archivo real)
-    file_path = archivo_adjunto
-    if os.path.exists(archivo_adjunto):
+    file_path = zip_archive_name
+    if os.path.exists(zip_archive_name):
         with open(file_path, 'rb') as f:
             file_content = f.read()
         attachments = [('db.sqlite3.zip', file_content, 'application/zip')]
     else:
         attachments = None
 
-    if send_email_with_attachment(subject, body, to_emails, attachments, settings.EMAIL_HOST_USER):
+    if send_email_with_attachment(subject, body, to_emails, attachments):
         print("Correo electrónico enviado con éxito.")
-        return HttpResponse("Correo electrónico enviado con éxito.")
+        messages.success(request, "Correo electrónico enviado con éxito.")
+        return redirect("pagina_administrador")
     else:
         print("Error al enviar el correo electrónico.")
-        return HttpResponse("Error al enviar el correo electrónico.")
+        messages.error(request, "Error al enviar el correo electrónico.")
+        return redirect("pagina_administrador")
+
 
 def iniciar_sesion(request):
     datos_form = {}  # Diccionario para mantener los datos del formulario
