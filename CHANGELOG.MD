@@ -19,6 +19,14 @@
 
 ---
 
+## [ch2.40.34-Alpha.1] - 2025-07-09
+
+## Fixed
+
+- Se corrigieron todos los errores de validaciones con su mensajes de Iniciar sesion y registrarse
+
+---
+
 ## [ch2.40.33-Alpha.1] - 2025-05-29
 
 ## Added

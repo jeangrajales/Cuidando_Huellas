@@ -111,8 +111,18 @@ def iniciar_sesion(request):
         
         # Guardamos los datos del formulario (excepto la contraseña por seguridad)
         datos_form = {'correo': correo}
+
+         # 🛑 Validar campos obligatorios
+        if not correo or not contraseña:
+            messages.error(request, "Todos los campos son obligatorios.")
+            return render(request, "usuarios/iniciar_sesion.html", {'datos_form': datos_form})
+        
+        if not re.match(r'^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,}$', correo):
+            messages.error(request, "El correo ingresado no es válido. Asegúrate de incluir el símbolo '@' y el dominio.")
+            return render(request, "usuarios/iniciar_sesion.html", {'datos_form': datos_form})
         
         try:
+            
             q = Usuario.objects.get(correo=correo)
 
             # 🔹 Verificar si la cuenta está inhabilitada
@@ -170,7 +180,7 @@ def registrarse(request):
     ciudades = obtener_ciudades()
 
     if request.method == "POST":
-        # 🚨 Si el usuario está ingresando el código en el modal
+        #  Si el usuario está ingresando el código en el modal
         if "codigo_verificacion" in request.POST:
             codigo_ingresado = request.POST.get("codigo_verificacion", "").strip()
             registro_pendiente = request.session.get("registro_pendiente", {})
@@ -187,31 +197,39 @@ def registrarse(request):
                     "ciudades": ciudades
                 })
 
-            # 🚀 Guardar usuario en la base de datos **solo si el código es correcto**
             nuevo_usuario = Usuario(
                 nombre_completo=registro_pendiente["nombre_completo"],
                 telefono=registro_pendiente["telefono"],
                 ciudad=registro_pendiente["ciudad"],
                 correo=registro_pendiente["correo"],
                 contraseña=registro_pendiente["contraseña"],
-                estado=1  # ✅ Activamos la cuenta después de la validación
+                estado=1
             )
+            try:
+                nuevo_usuario.full_clean()
+                nuevo_usuario.save()
+                del request.session["registro_pendiente"]
 
-            nuevo_usuario.save()
-            del request.session["registro_pendiente"]
+                request.session["pista"] = {
+                    "id": nuevo_usuario.id_usuario,
+                    "nombre_completo": nuevo_usuario.nombre_completo,
+                    "correo": nuevo_usuario.correo,
+                    "rol": nuevo_usuario.rol
+                }
 
-            # 🚀 **Iniciar sesión automáticamente**
-            request.session["pista"] = {
-                "id": nuevo_usuario.id_usuario,
-                "nombre_completo": nuevo_usuario.nombre_completo,
-                "correo": nuevo_usuario.correo,
-                "rol": nuevo_usuario.rol
-            }
+                messages.success(request, f"Bienvenido {nuevo_usuario.nombre_completo}, disfruta de nuestros servicios.")
+                return redirect("pagina_usuario")
+            except ValidationError as e:
+                for field, errors in e.message_dict.items():
+                    for error in errors:
+                        messages.error(request, f"{field}: {error}")
+                return render(request, 'usuarios/registrarse.html', {
+                    "registro_pendiente": registro_pendiente,
+                    "validando_codigo": True,
+                    "ciudades": ciudades
+                })
 
-            messages.success(request, f"Bienvenido {nuevo_usuario.nombre_completo}, disfruta de nuestros servicios.")
-            return redirect("pagina_usuario")  # 🔥 Redirigir directamente después del registro
-
-        # 🚀 Si el usuario está completando el registro inicial, seguimos con el proceso normal
+        #  Registro inicial
         form_data = {
             'nombre_completo': request.POST.get("nombre_completo", "").strip(),
             'telefono': request.POST.get("telefono", "").strip(),
@@ -226,26 +244,38 @@ def registrarse(request):
             messages.error(request, "Todos los campos son obligatorios.")
             return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
 
-        if "registro_pendiente" in request.session:
-            registro_pendiente = request.session["registro_pendiente"]
-            if registro_pendiente["correo"] == form_data["correo"]:
-                messages.error(request, "Este correo ya está registrado pero aún no ha sido verificado. Ingresa el código.")
-                return render(request, 'usuarios/registrarse.html', {
-                    "registro_pendiente": registro_pendiente,
-                    "validando_codigo": True,
-                    "ciudades": ciudades
-                })
-
-        usuario_existente = Usuario.objects.filter(correo=form_data['correo']).first()
-        if usuario_existente:
-            messages.error(request, "El correo ya está registrado.")
-            return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
-
         if contraseña != confirmar_contraseña:
             messages.error(request, "Las contraseñas no coinciden.")
             return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
 
+        #  Crear instancia temporal para validar con clean()
+        usuario_temp = Usuario(
+            nombre_completo=form_data["nombre_completo"],
+            telefono=form_data["telefono"],
+            ciudad=form_data["ciudad"],
+            correo=form_data["correo"],
+            contraseña=contraseña,
+        )
+
         try:
+            usuario_temp.full_clean()  #  Aquí valida longitud, mayúsculas, etc.
+
+        except ValidationError as e:
+            for field, errors in e.message_dict.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+            return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
+
+        #  Ahora sí validamos si el correo ya está registrado
+        if Usuario.objects.filter(correo=form_data['correo']).exists():
+            messages.error(request, "El correo ya está registrado.")
+            return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
+
+        #  Si todo está bien, enviar código de verificación
+        try:
+            if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', form_data["correo"]):
+                raise ValueError("Correo inválido")
+
             codigo_verificacion = str(random.randint(100000, 999999))
 
             send_mail(
@@ -268,10 +298,12 @@ def registrarse(request):
                 "ciudades": ciudades
             })
 
-        except ValidationError as e:
-            for field, error_list in e.message_dict.items():
-                for error in error_list:
-                    messages.error(request, f"{field}: {error}")
+        except ValueError:
+            messages.error(request, "El correo ingresado no es válido. Asegúrate de incluir el símbolo '@'.")
+            return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
+
+        except Exception as e:
+            messages.error(request, "Ocurrió un error al enviar el correo. Inténtalo más tarde.")
             return render(request, 'usuarios/registrarse.html', {'form_data': form_data, "ciudades": ciudades})
 
     return render(request, "usuarios/registrarse.html", {"ciudades": ciudades})
@@ -403,6 +435,13 @@ def recuperar_contraseña(request):
                 messages.error(request, "La contraseña debe contener letras y números.")
                 return redirect("iniciar_sesion")
             
+            # Validar que la nueva contraseña no sea igual a la anterior
+            usuario = Usuario.objects.get(correo=recuperacion_pendiente["correo"])
+            if check_password(nueva_contraseña, usuario.contraseña):
+                messages.error(request, "La nueva contraseña no puede ser igual a la anterior.")
+                return redirect("iniciar_sesion")
+
+            
             try:
                 # Actualizar contraseña
                 usuario = Usuario.objects.get(correo=recuperacion_pendiente["correo"])
@@ -432,7 +471,7 @@ def editar_usuario(request):
         if not usuario_session:
             messages.error(request, 'Debes iniciar sesión primero')
             return redirect('iniciar_sesion')
-            
+
         usuario_obj = Usuario.objects.get(id_usuario=usuario_session["id"])
     except KeyError:
         messages.error(request, 'Información de sesión incompleta')
@@ -446,31 +485,44 @@ def editar_usuario(request):
 
     if request.method == 'POST':
         try:
-            # Procesar datos básicos
-            usuario_obj.nombre_completo = request.POST.get('name', usuario_obj.nombre_completo)
-            usuario_obj.telefono = request.POST.get('phone', usuario_obj.telefono)
-            usuario_obj.ciudad = request.POST.get('city', usuario_obj.ciudad)
-            
+            nombre = request.POST.get('name', '').strip()
+            telefono = request.POST.get('phone', '').strip()
+            ciudad = request.POST.get('city', '').strip()
+
+            # ✅ Verificación de campos obligatorios
+            if not any([nombre, telefono, ciudad]) and not request.FILES.get('profilePicInput') and not any([
+                request.POST.get('currentPassword', '').strip(),
+                request.POST.get('newPassword', '').strip(),
+                request.POST.get('confirmPassword', '').strip()
+            ]):
+                messages.error(request, 'Todos los campos son obligatorios')
+                return redirect('editar_usuario')
+
+            # Asignar solo si no están vacíos
+            usuario_obj.nombre_completo = nombre or usuario_obj.nombre_completo
+            usuario_obj.telefono = telefono or usuario_obj.telefono
+            usuario_obj.ciudad = ciudad or usuario_obj.ciudad
+
             # Bandera para saber si cambió la foto
             foto_actualizada = False
-            
+
             # Procesar foto de perfil
             if 'profilePicInput' in request.FILES:
                 foto = request.FILES['profilePicInput']
-                
+
                 # Validar imagen
-                if foto.size > 5 * 1024 * 1024:  # 5MB máximo
+                if foto.size > 5 * 1024 * 1024:
                     messages.error(request, 'La imagen es demasiado grande (máximo 5MB)')
                     return redirect('editar_usuario')
-                
+
                 if not foto.name.lower().endswith(('.jpg', '.jpeg', '.png')):
                     messages.error(request, 'Formato no válido. Use JPG, JPEG o PNG.')
                     return redirect('editar_usuario')
-                
+
                 # Guardar la nueva imagen con timestamp para evitar caché
                 timestamp = str(now().timestamp()).replace('.', '')
                 fs = FileSystemStorage()
-                
+
                 # Eliminar imagen anterior si existe
                 if usuario_obj.foto_perfil:
                     try:
@@ -478,49 +530,49 @@ def editar_usuario(request):
                             os.remove(usuario_obj.foto_perfil.path)
                     except Exception as e:
                         print(f"Error eliminando imagen anterior: {str(e)}")
-                
+
                 # Guardar nueva imagen
                 filename = fs.save(
-                    f'perfiles/user_{usuario_obj.id_usuario}_{timestamp}.jpg', 
+                    f'perfiles/user_{usuario_obj.id_usuario}_{timestamp}.jpg',
                     foto
                 )
                 usuario_obj.foto_perfil = filename
                 foto_actualizada = True
                 messages.success(request, 'Foto de perfil actualizada correctamente')
-            
+
             # Procesar cambio de contraseña
             current_password = request.POST.get('currentPassword')
             new_password = request.POST.get('newPassword')
             confirm_password = request.POST.get('confirmPassword')
-            
+
             if current_password or new_password or confirm_password:
                 if not all([current_password, new_password, confirm_password]):
                     messages.error(request, 'Complete todos los campos para cambiar la contraseña')
                     return redirect('editar_usuario')
-                
+
                 if not usuario_obj.check_password(current_password):
                     messages.error(request, 'Contraseña actual incorrecta')
                     return redirect('editar_usuario')
-                
+
                 if new_password != confirm_password:
                     messages.error(request, 'Las nuevas contraseñas no coinciden')
                     return redirect('editar_usuario')
-                
+
                 if len(new_password) < 8:
                     messages.error(request, 'La contraseña debe tener al menos 8 caracteres')
                     return redirect('editar_usuario')
-                
+
                 usuario_obj.contraseña = make_password(new_password)
                 messages.success(request, 'Contraseña actualizada correctamente')
-            
+
             # Guardar todos los cambios
             usuario_obj.save()
-            
+
             # Actualizar sesión con timestamp para evitar caché
             foto_url = usuario_obj.foto_perfil.url if usuario_obj.foto_perfil else None
             if foto_url and foto_actualizada:
                 foto_url += f"?v={timestamp}"
-            
+
             request.session['pista'] = {
                 'id': usuario_obj.id_usuario,
                 'nombre_completo': usuario_obj.nombre_completo,
@@ -530,23 +582,24 @@ def editar_usuario(request):
                 'foto_perfil': foto_url
             }
             request.session.modified = True
-            
+
             # Forzar actualización de publicaciones (opcional)
             if foto_actualizada:
                 from django.db.models import F
                 PublicacionMascota.objects.filter(usuario=usuario_obj).update(
                     fecha_publicacion=F('fecha_publicacion')
                 )
-            
+
             return redirect('pagina_usuario')  # Redirigir a la página de usuario
-            
+
         except Exception as e:
             messages.error(request, f'Error al actualizar: {str(e)}')
             return redirect('editar_usuario')
-    
+
     # GET request - Mostrar formulario
     context = {'usuario': usuario_obj}
     return render(request, 'usuarios/editar_usuario.html', context)
+
 
 def pagina_principal(request):
     publicaciones = PublicacionMascota.objects.all().order_by('-fecha_publicacion')
@@ -555,8 +608,6 @@ def pagina_principal(request):
         "publicaciones": publicaciones,
         "productos": productos  # Pasamos los productos al contexto
     })
-
-    
 
 @session_required_and_rol_permission(1,2,3)
 def mascotas_perdidas(request):

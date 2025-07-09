@@ -58,9 +58,25 @@ class Usuario(models.Model):
         
         self.contraseña = self.contraseña.strip()
         
-        # Validar contraseña con letras y números
-        if not re.match(r'^(?=.*[A-Za-z])(?=.*\d).+$', self.contraseña):
-            raise ValidationError({'contraseña': 'Debe contener letras y números.'})
+        # Validar longitud mínima
+        if len(self.contraseña) < 8:
+            raise ValidationError({'contraseña': 'La contraseña debe tener mínimo 8 caracteres.'})
+
+        # Validar longitud máxima
+        if len(self.contraseña) > 16:
+            raise ValidationError({'contraseña': 'La contraseña solo puede tener máximo 16 caracteres.'})
+
+        # Validar que tenga al menos una letra mayúscula
+        if not re.search(r'[A-Z]', self.contraseña):
+            raise ValidationError({'contraseña': 'La contraseña debe contener al menos una letra mayúscula.'})
+
+        # Validar que tenga al menos una letra minúscula
+        if not re.search(r'[a-z]', self.contraseña):
+            raise ValidationError({'contraseña': 'La contraseña debe contener al menos una letra minúscula.'})
+
+        # Validar que tenga al menos un número
+        if not re.search(r'\d', self.contraseña):
+            raise ValidationError({'contraseña': 'La contraseña debe contener al menos un número.'})
 
     def save(self, *args, **kwargs):
         if not self.contraseña.startswith('pbkdf2_'):
