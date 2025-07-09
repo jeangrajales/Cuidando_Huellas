@@ -8,6 +8,6 @@ setTimeout(function() {
     // Lo elimina completamente después de la animación
     setTimeout(function() {
         alert.remove();
-    }, 500); // Tiempo para que termine la animación fade
+    }, 900); // Tiempo para que termine la animación fade
     }); 
 }, 2000);
