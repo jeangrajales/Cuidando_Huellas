@@ -1,0 +1,153 @@
+{% load static %}
+{% block estilos_unicos %}
+    <link rel="stylesheet" href="{% static 'css/administrador/detalle_reporte.css' %}">
+{% endblock %}
+
+{% block contenido_admin %}
+<div class="container-fluid">
+    <div class="row g-4">
+      <!-- Columna izquierda: Información del ticket -->
+      <div class="col-lg-6">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-headset me-2"></i> Información del Ticket
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">ID del Ticket</h6>
+                  <p class="fw-bold">S-{{ ticket.id|stringformat:"04d" }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Fecha</h6>
+                  <p class="fw-bold">{{ ticket.fecha_creacion|date:"d/m/Y" }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <h6 class="text-muted small">Estado</h6>
+              <span class="badge bg-{{ ticket.estado.color }} py-2 px-3 fs-6">
+                {{ ticket.estado.nombre|capfirst }}
+              </span>
+            </div>
+            <div class="mb-3">
+              <h6 class="text-muted small">Categoría</h6>
+              <p class="fw-bold">{{ ticket.categoria }}</p>
+            </div>
+            <div class="mb-3">
+              <h6 class="text-muted small">Asunto</h6>
+              <div class="alert alert-light border">
+                <p class="mb-0">{{ ticket.asunto }}</p>
+              </div>
+            </div>
+            <div class="mb-3">
+              <h6 class="text-muted small">Descripción</h6>
+              <div class="alert alert-light border">
+                <p class="mb-0">{{ ticket.descripcion }}</p>
+              </div>
+            </div>
+            <div class="mb-3">
+              <h6 class="text-muted small">Archivo adjunto</h6>
+              {% if ticket.archivo_adjunto %}
+                <a href="{{ ticket.archivo_adjunto.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                  <i class="fas fa-paperclip"></i> Ver archivo
+                </a>
+              {% else %}
+                <span class="text-muted">No adjuntado</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Columna derecha: Usuario que reportó -->
+      <div class="col-lg-6">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-info text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-user me-2"></i> Usuario que Solicitó Soporte
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              {% if ticket.usuario.foto_perfil %}
+                <img src="{{ ticket.usuario.foto_perfil.url }}" class="rounded-circle me-3" width="60" height="60" alt="Foto perfil">
+              {% else %}
+                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                  <i class="fas fa-user text-white fs-4"></i>
+                </div>
+              {% endif %}
+              <div>
+                <h5 class="mb-0">{{ ticket.usuario.nombre_completo }}</h5>
+                <span class="text-muted">{{ ticket.usuario.correo }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Teléfono</h6>
+                  <p class="fw-bold">{{ ticket.usuario.telefono|default:"No proporcionado" }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <h6 class="text-muted small">Ciudad</h6>
+                  <p class="fw-bold">{{ ticket.usuario.ciudad|default:"No especificada" }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Botón y textarea para el comentario de resolución -->
+    {% if ticket.estado == 'pendiente' %}
+  <form id="resolverTicketForm">
+    <button type="submit" class="btn btn-success">
+      <i class="fas fa-check"></i> Marcar como resuelto
+    </button>
+    <div id="mensaje-resuelto" style="display:none;" class="alert alert-success mt-3"></div>
+  </form>
+{% else %}
+
+{% endif %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('resolverTicketForm');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      fetch("{% url 'cambiar_estado_ticket' ticket.id %}", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          form.style.display = "none";
+          document.getElementById('mensaje-resuelto').style.display = "block";
+          document.getElementById('mensaje-resuelto').innerText = "El ticket fue marcado como resuelto.";
+          setTimeout(() => window.location.reload(), 1000); // Recarga la página para ver el estado actualizado
+        }
+      });
+    });
+  }
+});
+</script>
+{% endblock %}

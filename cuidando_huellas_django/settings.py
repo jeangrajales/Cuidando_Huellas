@@ -59,6 +59,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'cuidando_huellas_django.wsgi.application'
 
 

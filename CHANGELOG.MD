@@ -17,6 +17,15 @@
 
 ### CHANGELOG
 
+## [ch2.41.34-Alpha.1] - 2025-07-10
+
+## Fixed
+- Se agrego el modulo  `soporte ` en el modulo administrador. 
+
+### Note
+
+- Queda pendiente en mandar el comentario de resolucion del problema al usuario para que el administrador le de respuesta a la inquietud del usuario
+
 ---
 
 ## [ch2.40.34-Alpha.1] - 2025-07-09
