@@ -12,6 +12,7 @@ from .validators import *
 from django.core.validators import RegexValidator
 from django.core.validators import MinValueValidator
 from django.contrib.humanize.templatetags.humanize import intcomma 
+from django.contrib.auth import get_user_model
 
 class Usuario(models.Model):
     id_usuario = models.AutoField(primary_key= True)
@@ -323,6 +324,10 @@ class EstadoTicket(models.Model):
         verbose_name_plural = "Estados de Tickets"
         ordering = ['orden']
 
+from django.utils import timezone
+from django.db import IntegrityError
+import time
+
 class TicketSoporte(models.Model):
     """Modelo para las solicitudes de soporte técnico"""
     PRIORIDAD_CHOICES = (
@@ -333,11 +338,11 @@ class TicketSoporte(models.Model):
     )
     
     numero_ticket = models.CharField(max_length=20, unique=True, editable=False)
-    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tickets')
-    categoria = models.ForeignKey(CategoriaTicket, on_delete=models.PROTECT)
+    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, related_name='tickets')
+    categoria = models.ForeignKey('CategoriaTicket', on_delete=models.PROTECT)
     asunto = models.CharField(max_length=200)
     descripcion = models.TextField()
-    estado = models.ForeignKey(EstadoTicket, on_delete=models.PROTECT, related_name='tickets')
+    estado = models.ForeignKey('EstadoTicket', on_delete=models.PROTECT, related_name='tickets')
     prioridad = models.CharField(max_length=10, choices=PRIORIDAD_CHOICES, default='media')
     archivo_adjunto = models.FileField(upload_to='soportes/', blank=True, null=True)
     
@@ -347,32 +352,37 @@ class TicketSoporte(models.Model):
     
     def __str__(self):
         return f"{self.numero_ticket} - {self.asunto}"
-    
+
     def save(self, *args, **kwargs):
-        # Generar número de ticket si es nuevo
-        if not self.numero_ticket:
-            ultimo_ticket = TicketSoporte.objects.order_by('-id').first()
-            if ultimo_ticket:
-                ultimo_numero = int(ultimo_ticket.numero_ticket.split('-')[1])
-                nuevo_numero = ultimo_numero + 1
-            else:
-                nuevo_numero = 1
-            
-            from django.utils import timezone
+        if not self.pk:  # Solo si es nuevo
             año_actual = timezone.now().year
-            self.numero_ticket = f"S-{año_actual}-{nuevo_numero:03d}"
-        
-        super().save(*args, **kwargs)
-    
-    class Meta:
-        verbose_name = "Ticket de Soporte"
-        verbose_name_plural = "Tickets de Soporte"
-        ordering = ['-fecha_creacion']
+            max_reintentos = 5
+            intento = 0
+
+            while intento < max_reintentos:
+                contador = 1
+                while True:
+                    nuevo_numero = f"S-{año_actual}-{contador:03d}"
+                    if not TicketSoporte.objects.filter(numero_ticket=nuevo_numero).exists():
+                        self.numero_ticket = nuevo_numero
+                        break
+                    contador += 1
+
+                try:
+                    super().save(*args, **kwargs)
+                    return  # éxito
+                except IntegrityError:
+                    intento += 1
+                    time.sleep(0.1)  # pequeña espera antes de reintentar
+
+            raise IntegrityError("No se pudo generar un número de ticket único después de varios intentos.")
+        else:
+            super().save(*args, **kwargs)
 
 class RespuestaTicket(models.Model):
     """Modelo para las respuestas a los tickets de soporte"""
     ticket = models.ForeignKey(TicketSoporte, on_delete=models.CASCADE, related_name='respuestas')
-    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE)
     contenido = models.TextField()
     archivo_adjunto = models.FileField(upload_to='soportes/respuestas/', blank=True, null=True)
     es_respuesta_admin = models.BooleanField(default=False)
@@ -439,3 +449,22 @@ class Notificacion(models.Model):
     
     def __str__(self):
         return f'{self.usuario.nombre_completo} - {self.titulo}'
+
+class Ticket(models.Model):
+    ESTADO_CHOICES = [
+        ('pendiente', 'Pendiente'),
+        ('resuelto', 'Resuelto'),
+    ]
+    CATEGORIA_CHOICES = [
+        ('Problema técnico', 'Problema técnico'),
+        ('Consulta general', 'Consulta general'),
+        ('Reporte de error', 'Reporte de error'),
+        ('Sugerencia', 'Sugerencia'),
+    ]
+    usuario = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    categoria = models.CharField(max_length=50, choices=CATEGORIA_CHOICES)
+    asunto = models.CharField(max_length=255)
+    descripcion = models.TextField()
+    archivo = models.FileField(upload_to='soporte/', blank=True, null=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')

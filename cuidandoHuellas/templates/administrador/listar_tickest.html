@@ -1,0 +1,130 @@
+{% extends "administrador/pagina_administrador.html" %}
+
+{% block contenido_admin %}
+<div class="card-custom">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h5>Tickets de Soporte</h5>
+    <div class="btn-group">
+      <button class="btn btn-sm btn-outline-secondary" id="btnFiltrar">
+        <i class="fas fa-filter me-1"></i>Filtrar
+      </button>
+    </div>
+  </div>
+  
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>#Ticket</th>
+          <th>Asunto</th>
+          <th>Fecha</th>
+          <th>Urgencia</th> <!-- Nueva columna -->
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ticket in tickets %}
+        <tr>
+          <td>{{ ticket.numero_ticket }}</td>
+          <td>{{ ticket.asunto }}</td>
+          <td>{{ ticket.fecha_creacion|date:"d/m/Y" }}</td>
+          <td>
+            {% if ticket.prioridad == 'urgente' %}
+              <span class="badge bg-danger">Urgente</span>
+            {% elif ticket.prioridad == 'alta' %}
+              <span class="badge bg-warning text-dark">Alta</span>
+            {% elif ticket.prioridad == 'media' %}
+              <span class="badge bg-info text-dark">Media</span>
+            {% else %}
+              <span class="badge bg-secondary">Baja</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if ticket.estado.nombre|lower == 'resuelto' %}
+              <span class="badge bg-success">Resuelto</span>
+            {% else %}
+              <span class="badge bg-warning text-dark">{{ ticket.estado.nombre }}</span>
+            {% endif %}
+          </td>
+          <td>
+            <form method="post" action="{% url 'cambiar_estado_ticket' ticket.id %}" style="display:inline;">
+              {% csrf_token %}
+              <select name="nuevo_estado" class="form-select form-select-sm d-inline w-auto" required>
+                {% for estado in estados %}
+                  <option value="{{ estado.id }}" {% if ticket.estado.id == estado.id %}selected{% endif %}>
+                    {{ estado.nombre|capfirst }}
+                  </option>
+                {% endfor %}
+              </select>
+              <button type="submit" class="btn btn-success btn-sm ms-1">
+                <i class="fas fa-sync"></i> Cambiar
+              </button>
+            </form>
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#detalleTicketModal"
+                    data-ticket-id="{{ ticket.id }}">
+              <i class="fas fa-eye me-1"></i>Ver
+            </button>
+            {% if ticket.estado.nombre|lower == 'resuelto' %}
+              <form method="post" action="{% url 'eliminar_ticket' ticket.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este ticket resuelto?');">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center py-4">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            No hay tickets registrados.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal para ver detalles del ticket -->
+<div class="modal fade" id="detalleTicketModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detalles del Ticket</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="detalleTicketContent">
+        <!-- Contenido cargado via AJAX -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <!-- Aquí puedes agregar acciones como "Marcar como resuelto" si lo deseas -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Script para cargar los detalles del ticket via AJAX
+document.getElementById('detalleTicketModal').addEventListener('show.bs.modal', function (event) {
+  var button = event.relatedTarget;
+  var ticketId = button.getAttribute('data-ticket-id');
+  var modal = this;
+  
+  // Cargar los detalles del ticket
+  fetch(`/soportes/${ticketId}/`, {
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.text())
+  .then(html => {
+    modal.querySelector('#detalleTicketContent').innerHTML = html;
+  });
+});
+</script>
+{% endblock %}

@@ -58,6 +58,9 @@ urlpatterns = [
     path('administrador/reportes/<int:reporte_id>/resolver/', views.resolver_reporte, name='resolver_reporte'),
     path('reportar-publicacion/', views.reportar_publicacion, name='reportar_publicacion'),
     path('soporte/', views.soporte, name='soporte'),
+    path('administrador/soportes/', views.listar_tickets, name='listar_tickets'),
+    path('soportes/<int:ticket_id>/', views.detalle_ticket, name='detalle_ticket'),
+    path('soportes/cambiar_estado/<int:ticket_id>/', views.cambiar_estado_ticket, name='cambiar_estado_ticket'),
     path('suspender_cuenta', views.suspender_cuenta, name='suspender_cuenta'),
     path('notificaciones/', views.notificaciones, name='notificaciones'),
     path('factura/<int:id_factura>/',views.detalle_factura, name='detalle_factura'),
@@ -71,20 +74,22 @@ urlpatterns = [
     path('soportes/tickets/crear/', views.crear_ticket, name='crear_ticket'),
     path('soportes/tickets/<int:ticket_id>/', views.detalle_ticket, name='detalle_ticket'),
     path('soportes/tickets/<int:ticket_id>/cerrar/', views.cerrar_ticket, name='cerrar_ticket'),
+    path('administrador/soportes/<int:ticket_id>/eliminar/', views.eliminar_ticket, name='eliminar_ticket'),
     
     # Rutas para preguntas frecuentes
     path('soportes/faq/', views.preguntas_frecuentes, name='preguntas_frecuentes'),
     path('soportes/faq/buscar/', views.buscar_pregunta, name='buscar_pregunta'),
 
     # URLs para comentarios
-    path('agregar-comentario/', views.agregar_comentario, name='agregar_comentario'),
+    #path('agregar-comentario/', views.agregar_comentario, name='agregar_comentario'),
     path('comentarios/<int:publicacion_id>/', views.obtener_comentarios, name='obtener_comentarios'),
     path('eliminar-comentario/<int:comentario_id>/', views.eliminar_comentario, name='eliminar_comentario'),
     path('obtener-notificaciones/',views.obtener_notificaciones, name='obtener_notificaciones'),
+    path("backup/", views.backup, name="backup"),
+    
    
 
 ]
 
-    
-      
-    
+
+

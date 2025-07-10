@@ -27,6 +27,13 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db.models import Case, When, Value, IntegerField
 from django.views.decorators.http import require_POST
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponse
+from .models import Ticket
+from .forms import TicketForm
+from django.contrib import messages
+
 # Create your views here.
 
 # Usuarios
@@ -568,7 +575,9 @@ def editar_usuario(request):
             # Guardar todos los cambios
             usuario_obj.save()
 
+
             # Actualizar sesión con timestamp para evitar caché
+
             foto_url = usuario_obj.foto_perfil.url if usuario_obj.foto_perfil else None
             if foto_url and foto_actualizada:
                 foto_url += f"?v={timestamp}"
@@ -1297,7 +1306,33 @@ def modal_carrito(request):
     return render(request,'usuarios/modal_carrito.html')
 
 def soporte(request):
-    return render(request,'usuarios/soporte.html')
+    if not request.session.get('pista'):
+        return render(request, 'usuarios/no_autenticado.html')
+
+    usuario_id = request.session['pista'].get('id')
+    try:
+        usuario = Usuario.objects.get(id_usuario=usuario_id)
+    except Usuario.DoesNotExist:
+        messages.error(request, "Usuario no válido.")
+        return redirect('pagina_principal')
+
+    if request.method == 'POST':
+        form = TicketSoporteForm(request.POST, request.FILES)
+        if form.is_valid():
+            ticket = form.save(commit=False)
+            ticket.usuario = usuario
+            estado_pendiente = EstadoTicket.objects.filter(nombre__icontains='pendiente').first()
+            if not estado_pendiente:
+                estado_pendiente = EstadoTicket.objects.create(nombre='Pendiente', color='bg-warning', orden=1)
+            ticket.estado = estado_pendiente
+            ticket.save()
+            messages.success(request, "Tu ticket ha sido enviado correctamente.")
+            return redirect('soporte')
+    else:
+        form = TicketSoporteForm()
+
+    tickets = TicketSoporte.objects.filter(usuario=usuario).order_by('-fecha_creacion')
+    return render(request, 'usuarios/soporte.html', {'form': form, 'tickets': tickets})
 
 def suspender_cuenta(request):
     return render(request,'usuarios/suspender_cuenta.html')
@@ -1808,7 +1843,7 @@ def cerrar_ticket(request, ticket_id):
             color='bg-secondary',
             orden=99
         )
-    
+    print("Estado cerrado:", estado_cerrado)
     # Actualizar el ticket
     ticket.estado = estado_cerrado
     ticket.fecha_cierre = timezone.now()
@@ -1874,64 +1909,7 @@ def buscar_pregunta(request):
     return JsonResponse({'results': results})
 
 @require_POST
-def agregar_comentario(request):
-    try:
-        publicacion_id = request.POST.get('publicacion_id')
-        texto = request.POST.get('texto', '').strip()
-        imagen = request.FILES.get('imagen')
-        
-        # Validaciones
-        if not publicacion_id:
-            return JsonResponse({'success': False, 'error': 'ID de publicación requerido'})
-        
-        if not texto and not imagen:
-            return JsonResponse({'success': False, 'error': 'Debes escribir un comentario o subir una imagen'})
-        
-        if len(texto) > 500:
-            return JsonResponse({'success': False, 'error': 'El comentario no puede exceder 500 caracteres'})
-        
-        # Obtener publicación y usuario
-        publicacion = get_object_or_404(PublicacionMascota, id=publicacion_id)
-        usuario_id = request.session.get('pista', {}).get('id')
-        usuario = get_object_or_404(Usuario, id_usuario=usuario_id)
-        
-        # Crear comentario
-        comentario = Comentario.objects.create(
-            publicacion=publicacion,
-            usuario=usuario,
-            texto=texto,
-            imagen=imagen
-        )
-        
-        # Crear notificación (solo si no es el mismo usuario)
-        if publicacion.usuario.id_usuario != usuario.id_usuario:
-            Notificacion.objects.create(
-                usuario=publicacion.usuario,
-                tipo='comentario',
-                titulo='Nuevo comentario en tu publicación',
-                mensaje=f'{usuario.nombre_completo} comentó en tu publicación "{publicacion.nombre_mascota}"',
-                publicacion=publicacion,
-                comentario=comentario
-            )
-        
-        # Preparar respuesta
-        response_data = {
-            'success': True,
-            'comentario': {
-                'id': comentario.id,
-                'texto': comentario.texto,
-                'usuario': comentario.usuario.nombre_completo,
-                'foto_perfil': comentario.usuario.foto_perfil.url if comentario.usuario.foto_perfil else None,
-                'fecha': comentario.fecha_comentario.strftime('%d/%m/%Y %H:%M'),
-                'imagen': comentario.imagen.url if comentario.imagen else None,
-                'es_propio': True
-            }
-        }
-        
-        return JsonResponse(response_data)
-        
-    except Exception as e:
-        return JsonResponse({'success': False, 'error': str(e)})
+
 
 def obtener_comentarios(request, publicacion_id):
     try:
@@ -1964,8 +1942,7 @@ def eliminar_comentario(request, comentario_id):
         usuario_id = request.session.get('pista', {}).get('id')
         comentario = get_object_or_404(Comentario, id=comentario_id, usuario__id_usuario=usuario_id)
         comentario.delete()
-        
-        return JsonResponse({'success': True})
+
         
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
@@ -1992,3 +1969,79 @@ def obtener_notificaciones(request):
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
 
+
+
+
+@require_POST
+def eliminar_ticket(request, ticket_id):
+    ticket = get_object_or_404(TicketSoporte, id=ticket_id)
+    ticket.delete()
+    messages.success(request, "Ticket eliminado correctamente.")
+    return redirect('listar_tickets')
+
+
+@session_required_and_rol_permission(1)
+def listar_tickets(request):
+    if not request.session.get('pista') or request.session['pista'].get('rol') != 1:
+        return redirect('pagina_principal')
+    tickets = TicketSoporte.objects.all().order_by('-fecha_creacion')
+    estados = EstadoTicket.objects.all()
+    return render(request, 'administrador/listar_tickest.html', {'tickets': tickets, 'estados': estados})
+
+def detalle_ticket(request, ticket_id):
+    ticket = get_object_or_404(TicketSoporte, id=ticket_id)
+    return render(request, 'administrador/detalle_tickest.html', {'ticket': ticket})
+
+@require_POST
+def cambiar_estado_ticket(request, ticket_id):
+    ticket = get_object_or_404(TicketSoporte, id=ticket_id)
+    nuevo_estado_id = request.POST.get('nuevo_estado')
+    if nuevo_estado_id:
+        try:
+            nuevo_estado = EstadoTicket.objects.get(id=nuevo_estado_id)
+            ticket.estado = nuevo_estado
+            if nuevo_estado.nombre.lower() == 'resuelto':
+                ticket.fecha_cierre = timezone.now()
+            ticket.save()
+            messages.success(request, "Estado actualizado correctamente.")
+        except EstadoTicket.DoesNotExist:
+            messages.error(request, "Estado no válido.")
+    return redirect('listar_tickets')
+
+# Copia de seguridad manual usando la utilidad de envío de correo con adjuntos
+
+import os, time
+
+def backup(request):
+    # configuración de rutas a comprimir:
+    file_to_compress = os.path.join(settings.BASE_DIR, 'db.sqlite3')
+    zip_archive_name = os.path.join(settings.BASE_DIR, 'db.sqlite3.zip')
+    compress_file_to_zip(file_to_compress, zip_archive_name)    
+    print("...")
+    time.sleep(2)
+    print("Compresión correcta...!")
+    print("...")
+    
+    # envío de correo con .zip adjunto
+
+    subject = "Cuidando Huellas - Backup"
+    body = "Copia de Seguridad de la Base de Datos del Proyecto Cuidando Huellas "
+    to_emails = ['espinosapablo620@gmail.com']
+
+    # Ejemplo de un archivo adjunto (podrías leerlo de un archivo real)
+    file_path = zip_archive_name
+    if os.path.exists(zip_archive_name):
+        with open(file_path, 'rb') as f:
+            file_content = f.read()
+        attachments = [('db.sqlite3.zip', file_content, 'application/zip')]
+    else:
+        attachments = None
+
+    if send_email_with_attachment(subject, body, to_emails, attachments):
+        print("Correo electrónico enviado con éxito.")
+        messages.success(request, "Correo electrónico enviado con éxito.")
+        return redirect("pagina_principal")
+    else:
+        print("Error al enviar el correo electrónico.")
+        messages.error(request, "Error al enviar el correo electrónico.")
+        return redirect("pagina_principal")

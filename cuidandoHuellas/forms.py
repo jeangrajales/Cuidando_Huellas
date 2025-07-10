@@ -2,7 +2,10 @@ from django import forms
 from .models import *
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
-from .models import TicketSoporte, RespuestaTicket, CategoriaTicket
+from .models import TicketSoporte, RespuestaTicket, CategoriaTicket, Ticket
+from cuidandoHuellas.models import CategoriaTicket
+for nombre in ["Problema técnico", "Consulta general", "Reporte de error", "Sugerencia"]:
+    CategoriaTicket.objects.get_or_create(nombre=nombre, activo=True)
 
 class formularioContacto(forms.Form):
     nombre = forms.CharField(max_length=100, required= True)
@@ -37,7 +40,8 @@ class FotoMascotaForm(forms.ModelForm):
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = ['nombre_producto', 'categoria', 'precio', 'cantidad', 'estado', 'descripcion', 'foto_producto']
+        fields = ['nombre_producto', 'categoria', 'precio', 'cantidad', 'estado', 'descripcion', 'foto_producto'
+        ]
         widgets = {
             'descripcion': forms.Textarea(attrs={'rows': 3}),
         }
@@ -48,8 +52,6 @@ class ProductoForm(forms.ModelForm):
 
 
 class TicketSoporteForm(forms.ModelForm):
-    """Formulario para la creación de tickets de soporte"""
-    
     class Meta:
         model = TicketSoporte
         fields = ['categoria', 'asunto', 'descripcion', 'archivo_adjunto', 'prioridad']
@@ -60,13 +62,11 @@ class TicketSoporteForm(forms.ModelForm):
             'archivo_adjunto': forms.FileInput(attrs={'class': 'form-control'}),
             'prioridad': forms.Select(attrs={'class': 'form-select'}),
         }
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Filtrar solo categorías activas
         self.fields['categoria'].queryset = CategoriaTicket.objects.filter(activo=True)
-        
-        # Etiquetas personalizadas
+        self.fields['categoria'].empty_label = "Selecciona una categoría"
         self.fields['categoria'].label = "¿Qué tipo de problema tienes?"
         self.fields['asunto'].label = "Asunto"
         self.fields['descripcion'].label = "Descripción detallada"
@@ -133,3 +133,14 @@ class FiltroTicketsForm(forms.Form):
             'placeholder': 'Buscar por número o asunto...'
         })
     )
+
+class TicketForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = ['categoria', 'asunto', 'descripcion', 'archivo']
+        widgets = {
+            'categoria': forms.Select(attrs={'class': 'form-control'}),
+            'asunto': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'archivo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
